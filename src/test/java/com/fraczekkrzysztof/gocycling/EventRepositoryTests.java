@@ -1,27 +1,19 @@
-package com.fraczekkrzysztof.goonbike;
+package com.fraczekkrzysztof.gocycling;
 
-import com.fraczekkrzysztof.goonbike.dao.EventRepository;
-import com.fraczekkrzysztof.goonbike.entity.Event;
-import org.jcp.xml.dsig.internal.dom.Utils;
+import com.fraczekkrzysztof.gocycling.dao.EventRepository;
+import com.fraczekkrzysztof.gocycling.entity.Event;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest

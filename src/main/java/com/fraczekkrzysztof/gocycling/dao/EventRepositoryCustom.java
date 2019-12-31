@@ -1,11 +1,8 @@
-package com.fraczekkrzysztof.goonbike.dao;
+package com.fraczekkrzysztof.gocycling.dao;
 
-import com.fraczekkrzysztof.goonbike.entity.Event;
+import com.fraczekkrzysztof.gocycling.entity.Event;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
-
-import java.util.List;
 
 public interface EventRepositoryCustom {
     Page<Event> findCurrent(Pageable pageable);

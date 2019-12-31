@@ -1,4 +1,4 @@
-package com.fraczekkrzysztof.goonbike;
+package com.fraczekkrzysztof.gocycling;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

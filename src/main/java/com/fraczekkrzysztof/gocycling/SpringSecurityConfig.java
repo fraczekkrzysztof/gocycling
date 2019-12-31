@@ -1,4 +1,4 @@
-package com.fraczekkrzysztof.goonbike;
+package com.fraczekkrzysztof.gocycling;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

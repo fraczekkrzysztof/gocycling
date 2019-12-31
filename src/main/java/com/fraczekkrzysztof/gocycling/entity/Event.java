@@ -1,8 +1,11 @@
-package com.fraczekkrzysztof.goonbike.entity;
+package com.fraczekkrzysztof.gocycling.entity;
+
+import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "event")
@@ -10,29 +13,35 @@ public class Event implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ev_id")
     private long id;
 
-    @Column(nullable = false)
+    @Column(name = "ev_name", nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(name = "ev_place", nullable = false)
     private String place;
 
-    @Column(nullable = false, columnDefinition = "TIMESTAMP ")
+    @Column(name = "ev_dateAndTime", nullable = false, columnDefinition = "TIMESTAMP ")
     private LocalDateTime dateAndTime;
 
-    @Column(nullable = false, columnDefinition = "TIMESTAMP")
+    @Column(name = "ev_created", nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime created = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "event", cascade = {CascadeType.ALL})
+    @JsonIgnore
+    private List<Confirmation> confirmationList;
 
     public Event() {
     }
 
-    public Event(long id, String name, String place, LocalDateTime dateAndTime, LocalDateTime created) {
+    public Event(long id, String name, String place, LocalDateTime dateAndTime, LocalDateTime created, List<Confirmation> confirmationList) {
         this.id = id;
         this.name = name;
         this.place = place;
         this.dateAndTime = dateAndTime;
         this.created = created;
+        this.confirmationList = confirmationList;
     }
 
     public long getId() {
@@ -75,6 +84,14 @@ public class Event implements Serializable {
         this.created = created;
     }
 
+    public List<Confirmation> getConfirmationList() {
+        return confirmationList;
+    }
+
+    public void setConfirmationList(List<Confirmation> confirmationList) {
+        this.confirmationList = confirmationList;
+    }
+
     public static class Builder {
 
         private long id;
@@ -82,6 +99,7 @@ public class Event implements Serializable {
         private String place;
         private LocalDateTime dateAndTime;
         private LocalDateTime created;
+        private List<Confirmation> confirmationList;
 
         public Builder(){
             //get new Builder instance
@@ -111,8 +129,20 @@ public class Event implements Serializable {
             return this;
         }
 
+        public Builder setConfirmationList(List<Confirmation> confirmationList){
+            this.confirmationList = confirmationList;
+            return this;
+        }
+
         public Event build(){
-            return new Event(id,name,place,dateAndTime,created);
+            Event newEvent = new Event();
+            newEvent.setId(id);
+            newEvent.setName(name);
+            newEvent.setPlace(place);
+            newEvent.setDateAndTime(dateAndTime);
+            newEvent.setCreated(created);
+            newEvent.setConfirmationList(confirmationList);
+            return newEvent;
         }
 
     }

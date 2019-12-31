@@ -1,4 +1,4 @@
-package com.fraczekkrzysztof.goonbike;
+package com.fraczekkrzysztof.gocycling;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
