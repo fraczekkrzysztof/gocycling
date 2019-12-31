@@ -6,11 +6,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import javax.transaction.Transactional;
 
 
-
+@RepositoryRestResource(path = "events")
 @Transactional
 public interface EventRepository extends CrudRepository<Event, Long>, EventRepositoryCustom {
     //this endpoint is available for /events/search/findCurrent

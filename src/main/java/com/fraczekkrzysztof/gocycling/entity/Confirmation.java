@@ -1,10 +1,14 @@
 package com.fraczekkrzysztof.gocycling.entity;
 
+
+
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "confirmation")
-public class Confirmation {
+public class Confirmation implements Serializable {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

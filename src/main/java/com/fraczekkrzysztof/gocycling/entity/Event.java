@@ -1,6 +1,6 @@
 package com.fraczekkrzysztof.gocycling.entity;
 
-import net.minidev.json.annotate.JsonIgnore;
+
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -29,7 +29,6 @@ public class Event implements Serializable {
     private LocalDateTime created = LocalDateTime.now();
 
     @OneToMany(mappedBy = "event", cascade = {CascadeType.ALL})
-    @JsonIgnore
     private List<Confirmation> confirmationList;
 
     public Event() {
