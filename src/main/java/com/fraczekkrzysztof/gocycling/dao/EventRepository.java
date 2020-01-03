@@ -3,6 +3,7 @@ package com.fraczekkrzysztof.gocycling.dao;
 import com.fraczekkrzysztof.gocycling.entity.Event;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -13,7 +14,7 @@ import javax.transaction.Transactional;
 
 @RepositoryRestResource(path = "events")
 @Transactional
-public interface EventRepository extends CrudRepository<Event, Long>, EventRepositoryCustom {
+public interface EventRepository extends JpaRepository<Event, Long>, EventRepositoryCustom {
     //this endpoint is available for /events/search/findCurrent
     @Override
     @Query(nativeQuery = true, value = "select * from public.event where date_and_time>now()", countQuery = "select count(*) from public.event where date_and_time>now()")
