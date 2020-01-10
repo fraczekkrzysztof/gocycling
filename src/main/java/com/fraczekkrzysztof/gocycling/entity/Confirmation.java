@@ -15,11 +15,8 @@ public class Confirmation implements Serializable {
     @Column(name = "con_id")
     private long id;
 
-    @Column(name = " con_email",nullable = false)
-    private String email;
-
-    @Column(name = "con_name", nullable = false)
-    private String name;
+    @Column(name = "con_user_uid", nullable = false)
+    private String userUid;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "con_ev_id")
@@ -29,10 +26,9 @@ public class Confirmation implements Serializable {
 
     }
 
-    public Confirmation(long id, String email, String name, Event event) {
+    public Confirmation(long id, String userUid, Event event) {
         this.id = id;
-        this.email = email;
-        this.name = name;
+        this.userUid = userUid;
         this.event = event;
     }
 
@@ -44,20 +40,12 @@ public class Confirmation implements Serializable {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUserUid() {
+        return userUid;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setUserUid(String userUid) {
+        this.userUid = userUid;
     }
 
     public Event getEvent() {
@@ -71,8 +59,7 @@ public class Confirmation implements Serializable {
     public static class Builder{
 
         private long id;
-        private String email;
-        private String name;
+        private String userUid;
         private Event event;
 
         public Builder(){
@@ -84,13 +71,8 @@ public class Confirmation implements Serializable {
             return this;
         }
 
-        public Builder setEmail(String email){
-            this.email = email;
-            return this;
-        }
-
-        public Builder setName(String name){
-            this.name = name;
+        public Builder serUserUid(String userUid){
+            this.userUid = userUid;
             return this;
         }
 
@@ -102,8 +84,7 @@ public class Confirmation implements Serializable {
         public Confirmation build(){
             Confirmation newConfirmation = new Confirmation();
             newConfirmation.setId(id);
-            newConfirmation.setEmail(email);
-            newConfirmation.setName(name);
+            newConfirmation.setUserUid(userUid);
             newConfirmation.setEvent(event);
             return newConfirmation;
         }
