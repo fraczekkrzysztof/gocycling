@@ -6,7 +6,10 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "confirmation")
+@Table(
+        name = "confirmation",
+        uniqueConstraints = {@UniqueConstraint(columnNames ={"con_user_uid","con_ev_id"})}
+)
 public class Confirmation implements Serializable {
 
 
