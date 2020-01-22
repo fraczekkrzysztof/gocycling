@@ -23,4 +23,8 @@ public interface EventRepository extends JpaRepository<Event, Long>, EventReposi
     @Query(value = "select e from Event e where e.name = :name")
     Page<Event> findByName(@Param("name") String name, Pageable pageable);
 
+    @Override
+    @Query(nativeQuery = true , value = "select * from Event e where e.ev_date_and_time> now() and exists (select 1 from Confirmation c where c.con_ev_id = e.ev_id and c.con_user_uid = :userUid)"
+            ,countQuery = "select count(*) from Event e where e.ev_date_and_time> now() and exists (select 1 from Confirmation c where c.con_ev_id = e.ev_id and c.con_user_uid = :userUid)")
+    Page<Event> findConfirmedByUserUid(String userUid, Pageable pageable);
 }
