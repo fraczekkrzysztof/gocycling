@@ -12,11 +12,14 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Arrays;
+
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -33,7 +36,8 @@ public class ConfirmationServiceTests {
     @Before
     public void before(){
         Confirmation confirmation = new Confirmation.Builder().setId(1).build();
-        when(confirmationRepository.findByUserUidAndEventId(anyString(),anyLong())).thenReturn(confirmation);
+        Page<Confirmation> confirmationPage = new PageImpl<>(Arrays.asList(confirmation));
+        when(confirmationRepository.findByUserUidAndEventId(anyString(),anyLong(),any())).thenReturn(confirmationPage);
         doNothing().when(confirmationRepository).delete(ArgumentMatchers.any(Confirmation.class));
     }
 

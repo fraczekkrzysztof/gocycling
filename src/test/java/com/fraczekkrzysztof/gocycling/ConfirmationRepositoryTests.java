@@ -51,7 +51,7 @@ public class ConfirmationRepositoryTests {
         eventRepository.save(event);
         confirmationRepository.save(confirmation);
         long eventId = event.getId();
-        Confirmation confirmation1 = confirmationRepository.findByUserUidAndEventId("test123", eventId);
+        Confirmation confirmation1 = confirmationRepository.findByUserUidAndEventId("test123", eventId, PageRequest.of(0,5)).getContent().get(0);
         Assert.assertEquals(confirmation.getUserUid(),confirmation1.getUserUid());
         Assert.assertEquals(confirmation.getEvent().getName(),confirmation1.getEvent().getName());
         confirmationRepository.deleteAll();

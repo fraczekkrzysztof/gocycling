@@ -18,7 +18,6 @@ public interface ConfirmationRepository extends JpaRepository<Confirmation,Long>
 
     Page<Confirmation> findByUserUid(@Param("userUid") String userUid, Pageable pageable);
 
-    @RestResource(exported = false)
     @Query("select c from Confirmation c where c.userUid = :userUid and c.event.id=:id")
-    Confirmation findByUserUidAndEventId(@Param("userUid") String userUid, @Param("id") long eventId);
+    Page<Confirmation> findByUserUidAndEventId(@Param("userUid") String userUid, @Param("id") long eventId, Pageable pageable);
 }

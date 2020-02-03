@@ -7,5 +7,5 @@ import org.springframework.data.domain.Pageable;
 public interface ConfirmationRepositorySearch {
 
     Page<Confirmation> findByUserUid(String userUid, Pageable pageable);
-    Confirmation findByUserUidAndEventId(String userUid, long eventId);
+    Page<Confirmation> findByUserUidAndEventId(String userUid, long eventId, Pageable pageable);
 }
