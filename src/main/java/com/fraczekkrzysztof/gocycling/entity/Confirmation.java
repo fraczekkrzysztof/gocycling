@@ -69,7 +69,7 @@ public class Confirmation implements Serializable {
             //return new Builder instance
         }
 
-        public Builder setId(int id){
+        public Builder setId(long id){
             this.id = id;
             return this;
         }
