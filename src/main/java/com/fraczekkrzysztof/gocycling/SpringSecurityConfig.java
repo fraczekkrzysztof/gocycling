@@ -29,7 +29,7 @@ public class SpringSecurityConfig  extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("user").password("$2a$04$06X6Bfk52tsDZwbK61zCmu4gVGuiD.CxcNV4RcyTeISv077QyfWs2").roles("USER");
+        auth.inMemoryAuthentication().withUser("GoCyclingRestUser").password("$2a$04$ZY9JP2S5SqNt9pWcf41L.OEcqXGe7ZyIQ00CF28JH4C4Wye1lpqKK").roles("USER");
     }
 
 
