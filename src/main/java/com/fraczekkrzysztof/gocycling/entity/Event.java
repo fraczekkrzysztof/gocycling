@@ -28,18 +28,22 @@ public class Event implements Serializable {
     @Column(name = "ev_created", nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime created = LocalDateTime.now();
 
+    @Column (name = "ev_details", columnDefinition = "text")
+    private String details;
+
     @OneToMany(mappedBy = "event", cascade = {CascadeType.ALL})
     private List<Confirmation> confirmationList;
 
     public Event() {
     }
 
-    public Event(long id, String name, String place, LocalDateTime dateAndTime, LocalDateTime created, List<Confirmation> confirmationList) {
+    public Event(long id, String name, String place, LocalDateTime dateAndTime, LocalDateTime created, String details, List<Confirmation> confirmationList) {
         this.id = id;
         this.name = name;
         this.place = place;
         this.dateAndTime = dateAndTime;
         this.created = created;
+        this.details = details;
         this.confirmationList = confirmationList;
     }
 
@@ -83,6 +87,14 @@ public class Event implements Serializable {
         this.created = created;
     }
 
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
     public List<Confirmation> getConfirmationList() {
         return confirmationList;
     }
@@ -98,6 +110,7 @@ public class Event implements Serializable {
         private String place;
         private LocalDateTime dateAndTime;
         private LocalDateTime created;
+        private String details;
         private List<Confirmation> confirmationList;
 
         public Builder(){
@@ -133,6 +146,11 @@ public class Event implements Serializable {
             return this;
         }
 
+        public Builder setDetails(String details){
+            this.details = details;
+            return this;
+        }
+
         public Event build(){
             Event newEvent = new Event();
             newEvent.setId(id);
@@ -140,6 +158,7 @@ public class Event implements Serializable {
             newEvent.setPlace(place);
             newEvent.setDateAndTime(dateAndTime);
             newEvent.setCreated(created);
+            newEvent.setDetails(details);
             newEvent.setConfirmationList(confirmationList);
             return newEvent;
         }
