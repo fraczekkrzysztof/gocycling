@@ -31,19 +31,23 @@ public class Event implements Serializable {
     @Column (name = "ev_details", columnDefinition = "text")
     private String details;
 
+    @Column(name = "ev_created_by", nullable = false)
+    private String createdBy;
+
     @OneToMany(mappedBy = "event", cascade = {CascadeType.ALL})
     private List<Confirmation> confirmationList;
 
     public Event() {
     }
 
-    public Event(long id, String name, String place, LocalDateTime dateAndTime, LocalDateTime created, String details, List<Confirmation> confirmationList) {
+    public Event(long id, String name, String place, LocalDateTime dateAndTime, LocalDateTime created, String details, String createdBy, List<Confirmation> confirmationList) {
         this.id = id;
         this.name = name;
         this.place = place;
         this.dateAndTime = dateAndTime;
         this.created = created;
         this.details = details;
+        this.createdBy = createdBy;
         this.confirmationList = confirmationList;
     }
 
@@ -103,6 +107,14 @@ public class Event implements Serializable {
         this.confirmationList = confirmationList;
     }
 
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
     public static class Builder {
 
         private long id;
@@ -111,6 +123,7 @@ public class Event implements Serializable {
         private LocalDateTime dateAndTime;
         private LocalDateTime created;
         private String details;
+        private String createdBy;
         private List<Confirmation> confirmationList;
 
         public Builder(){
@@ -150,6 +163,10 @@ public class Event implements Serializable {
             this.details = details;
             return this;
         }
+        public Builder setCreatedBy(String createdBy){
+            this.createdBy = createdBy;
+            return this;
+        }
 
         public Event build(){
             Event newEvent = new Event();
@@ -160,6 +177,7 @@ public class Event implements Serializable {
             newEvent.setCreated(created);
             newEvent.setDetails(details);
             newEvent.setConfirmationList(confirmationList);
+            newEvent.setCreatedBy(createdBy);
             return newEvent;
         }
 
