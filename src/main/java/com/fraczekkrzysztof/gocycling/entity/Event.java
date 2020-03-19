@@ -34,13 +34,16 @@ public class Event implements Serializable {
     @Column(name = "ev_created_by", nullable = false)
     private String createdBy;
 
+    @Column(name = "ev_canceled")
+    private boolean canceled = false;
+
     @OneToMany(mappedBy = "event", cascade = {CascadeType.ALL})
     private List<Confirmation> confirmationList;
 
     public Event() {
     }
 
-    public Event(long id, String name, String place, LocalDateTime dateAndTime, LocalDateTime created, String details, String createdBy, List<Confirmation> confirmationList) {
+    public Event(long id, String name, String place, LocalDateTime dateAndTime, LocalDateTime created, String details, String createdBy, boolean canceled, List<Confirmation> confirmationList) {
         this.id = id;
         this.name = name;
         this.place = place;
@@ -48,6 +51,7 @@ public class Event implements Serializable {
         this.created = created;
         this.details = details;
         this.createdBy = createdBy;
+        this.canceled = canceled;
         this.confirmationList = confirmationList;
     }
 
@@ -115,6 +119,14 @@ public class Event implements Serializable {
         this.createdBy = createdBy;
     }
 
+    public boolean isCanceled() {
+        return canceled;
+    }
+
+    public void setCanceled(boolean canceled) {
+        this.canceled = canceled;
+    }
+
     public static class Builder {
 
         private long id;
@@ -124,6 +136,7 @@ public class Event implements Serializable {
         private LocalDateTime created;
         private String details;
         private String createdBy;
+        private boolean canceled;
         private List<Confirmation> confirmationList;
 
         public Builder(){
@@ -168,6 +181,11 @@ public class Event implements Serializable {
             return this;
         }
 
+        public Builder setCanceled(boolean canceled){
+            this.canceled = canceled;
+            return this;
+        }
+
         public Event build(){
             Event newEvent = new Event();
             newEvent.setId(id);
@@ -178,6 +196,7 @@ public class Event implements Serializable {
             newEvent.setDetails(details);
             newEvent.setConfirmationList(confirmationList);
             newEvent.setCreatedBy(createdBy);
+            newEvent.setCanceled(canceled);
             return newEvent;
         }
 
