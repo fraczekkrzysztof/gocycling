@@ -16,7 +16,7 @@ import javax.transaction.Transactional;
 public interface EventRepository extends JpaRepository<Event, Long>, EventRepositorySearch {
     //this endpoint is available for /events/search/findCurrent
     @Override
-    @Query(nativeQuery = true, value = "select * from public.event where ev_date_and_time>now()", countQuery = "select count(*) from public.event where ev_date_and_time>now()")
+    @Query(nativeQuery = true, value = "select * from public.event where ev_date_and_time>now() and ev_canceled = false", countQuery = "select count(*) from public.event where ev_date_and_time>now() and ev_canceled = false")
     Page<Event> findCurrent(Pageable pageable);
     //this endpoint is available for events/search/findByName?name=testName
     @Override
