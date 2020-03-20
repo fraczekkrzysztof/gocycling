@@ -25,7 +25,7 @@ public class Event implements Serializable {
     @Column(name = "ev_dateAndTime", nullable = false, columnDefinition = "TIMESTAMP ")
     private LocalDateTime dateAndTime;
 
-    @Column(name = "ev_created", nullable = false, columnDefinition = "TIMESTAMP")
+    @Column(name = "ev_created", nullable = false, columnDefinition = "TIMESTAMP", updatable = false)
     private LocalDateTime created = LocalDateTime.now();
 
     @Column (name = "ev_details", columnDefinition = "text")
