@@ -16,7 +16,7 @@ import javax.transaction.Transactional;
 public interface EventRepository extends JpaRepository<Event, Long>, EventRepositorySearch {
     //this endpoint is available for /events/search/findCurrent
     @Override
-    @Query(nativeQuery = true, value = "select * from public.event where ev_date_and_time>now() and ev_canceled = false", countQuery = "select count(*) from public.event where ev_date_and_time>now() and ev_canceled = false")
+    @Query(value = "select e from Event e where e.dateAndTime > current_timestamp() and canceled=false order by e.dateAndTime")
     Page<Event> findCurrent(Pageable pageable);
     //this endpoint is available for events/search/findByName?name=testName
     @Override
@@ -24,12 +24,11 @@ public interface EventRepository extends JpaRepository<Event, Long>, EventReposi
     Page<Event> findByName(@Param("name") String name, Pageable pageable);
 
     @Override
-    @Query(nativeQuery = true , value = "select * from Event e where e.ev_date_and_time> now() and exists (select 1 from Confirmation c where c.con_ev_id = e.ev_id and c.con_user_uid = :userUid)"
-            ,countQuery = "select count(*) from Event e where e.ev_date_and_time> now() and exists (select 1 from Confirmation c where c.con_ev_id = e.ev_id and c.con_user_uid = :userUid)")
+    @Query(value = "select e from Confirmation as c join c.event as e where e.dateAndTime > current_timestamp()" +
+            "and c.userUid=:userUid order by e.dateAndTime")
     Page<Event> findConfirmedByUserUid(@Param("userUid") String userUid, Pageable pageable);
 
     @Override
-    @Query(nativeQuery = true, value = "select * from Event e where e.ev_created_by = :userUid and  e.ev_date_and_time> now()"
-            , countQuery = "select count(*) from Event e where e.ev_created_by = :userUid and  e.ev_date_and_time> now()")
+    @Query(value = "select e from Event e where e.dateAndTime > current_timestamp() and e.createdBy = :userUid order by e.dateAndTime")
     Page<Event> findByUserUid(@Param("userUid")String userUid, Pageable pageable);
 }
