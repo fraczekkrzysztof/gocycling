@@ -15,15 +15,20 @@ import org.springframework.stereotype.Component;
 public class EventAop {
 
 
-    private NotificationGenerator updateNotificationGenerator;
+    private NotificationGenerator eventNotificationGenerator;
 
     @Autowired
-    public EventAop(@Qualifier("updateEventNotificationGenerator") NotificationGenerator updateNotificationGenerator){
-        this.updateNotificationGenerator = updateNotificationGenerator;
+    public EventAop(@Qualifier("eventNotificationGenerator") NotificationGenerator eventNotificationGenerator){
+        this.eventNotificationGenerator = eventNotificationGenerator;
     }
 
     @Pointcut("execution (* com.fraczekkrzysztof.gocycling.dao.EventRepository.save(..))")
     private void forEventUpdate(){
+        //define pointcut
+    }
+
+    @Pointcut("execution(* com.fraczekkrzysztof.gocycling.rest.EventController.cancelEvent(..))")
+    private void forEventCancel(){
         //define pointcut
     }
 
@@ -32,9 +37,20 @@ public class EventAop {
       for (Object arg : joinPoint.getArgs()){
        if (arg instanceof Event){
            Long id = ((Event)arg).getId();
-           if (id != 0) updateNotificationGenerator.addEventId(((Event)arg).getId());
+           boolean isCanceled = ((Event)arg).isCanceled();
+           if (id != 0 && !isCanceled) eventNotificationGenerator.addEventIdToUpdate(((Event)arg).getId());
        }
       }
+    }
+
+    @Before("forEventCancel()")
+    private  void beforeCancel(JoinPoint joinPoint){
+        for (Object arg : joinPoint.getArgs()){
+            if (arg instanceof Long){
+                long id = (long)arg;
+                eventNotificationGenerator.addEventIdToCancel(id);
+            }
+        }
     }
 
 }

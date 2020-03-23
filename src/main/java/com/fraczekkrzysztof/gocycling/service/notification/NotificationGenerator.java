@@ -2,6 +2,7 @@ package com.fraczekkrzysztof.gocycling.service.notification;
 
 public interface NotificationGenerator {
 
-    void addEventId(long id);
+    void addEventIdToUpdate(long id);
+    void addEventIdToCancel(long id);
     void generateNotification();
 }
