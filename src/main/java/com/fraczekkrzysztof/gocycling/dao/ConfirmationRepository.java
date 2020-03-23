@@ -10,6 +10,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @RepositoryRestResource(path = "confirmations")
 @Transactional
@@ -20,4 +21,8 @@ public interface ConfirmationRepository extends JpaRepository<Confirmation,Long>
 
     @Query("select c from Confirmation c where c.userUid = :userUid and c.event.id=:id")
     Page<Confirmation> findByUserUidAndEventId(@Param("userUid") String userUid, @Param("id") long eventId, Pageable pageable);
+
+    @RestResource(exported = false)
+    @Query("select c from Confirmation c join c.event e where e.id = :id")
+    List<Confirmation> findByEventId(@Param("id")long eventId);
 }
