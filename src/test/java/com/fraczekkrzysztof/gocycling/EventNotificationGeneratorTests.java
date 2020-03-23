@@ -1,31 +1,31 @@
 package com.fraczekkrzysztof.gocycling;
 
-        import com.fraczekkrzysztof.gocycling.dao.ConfirmationRepository;
-        import com.fraczekkrzysztof.gocycling.dao.EventRepository;
-        import com.fraczekkrzysztof.gocycling.dao.NotificationRepository;
-        import com.fraczekkrzysztof.gocycling.entity.Confirmation;
-        import com.fraczekkrzysztof.gocycling.entity.Event;
-        import com.fraczekkrzysztof.gocycling.entity.Notification;
-        import com.fraczekkrzysztof.gocycling.service.notification.NotificationGenerator;
-        import org.junit.Before;
-        import org.junit.Test;
-        import org.junit.runner.RunWith;
-        import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.beans.factory.annotation.Qualifier;
-        import org.springframework.boot.test.context.SpringBootTest;
-        import org.springframework.boot.test.mock.mockito.MockBean;
-        import org.springframework.test.context.junit4.SpringRunner;
+import com.fraczekkrzysztof.gocycling.dao.ConfirmationRepository;
+import com.fraczekkrzysztof.gocycling.dao.EventRepository;
+import com.fraczekkrzysztof.gocycling.dao.NotificationRepository;
+import com.fraczekkrzysztof.gocycling.entity.Confirmation;
+import com.fraczekkrzysztof.gocycling.entity.Event;
+import com.fraczekkrzysztof.gocycling.entity.Notification;
+import com.fraczekkrzysztof.gocycling.service.notification.NotificationGenerator;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
 
-        import java.time.LocalDateTime;
-        import java.util.Arrays;
-        import java.util.List;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
-        import static org.mockito.ArgumentMatchers.any;
-        import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class UpdateEventNotificationGeneratorTests {
+public class EventNotificationGeneratorTests {
 
     @MockBean
     EventRepository eventRepository;
@@ -35,7 +35,7 @@ public class UpdateEventNotificationGeneratorTests {
     NotificationRepository notificationRepository;
 
     @Autowired
-    @Qualifier("updateEventNotificationGenerator")
+    @Qualifier("eventNotificationGenerator")
     NotificationGenerator notificationGenerator;
 
     @Before
@@ -90,11 +90,10 @@ public class UpdateEventNotificationGeneratorTests {
 
     @Test
     public void updateEventNotificationGeneratorTest(){
-        notificationGenerator.addEventId(1);
-        notificationGenerator.addEventId(2);
+        notificationGenerator.addEventIdToUpdate(1);
+        notificationGenerator.addEventIdToUpdate(2);
         notificationGenerator.generateNotification();
         verify(notificationRepository,times(1)).saveAll(any());
         verify(eventRepository,times(1)).findAllById(any());
-        verify(confirmationRepository,times(2)).findByEventId(any());
     }
 }
