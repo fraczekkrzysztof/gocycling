@@ -54,7 +54,8 @@ public class UpdateEventNotificationGenerator implements NotificationGenerator {
         List<Event> eventsToGenerateNotification = eventRepository.findAllById(eventsList);
         List<Notification> notificationToSave = new ArrayList<>();
         eventsToGenerateNotification.stream().forEach(e -> {
-            for (Confirmation c : confirmationRepository.findByEventId(e.getId())){
+            List<Confirmation> byEventId = confirmationRepository.findByEventId(e.getId());
+            for (Confirmation c : byEventId){
                 notificationToSave.add(generateSingleNotification(c,e));
             }
         });
