@@ -6,7 +6,7 @@ import com.fraczekkrzysztof.gocycling.dao.NotificationRepository;
 import com.fraczekkrzysztof.gocycling.entity.Confirmation;
 import com.fraczekkrzysztof.gocycling.entity.Event;
 import com.fraczekkrzysztof.gocycling.entity.Notification;
-import com.fraczekkrzysztof.gocycling.service.notification.NotificationGenerator;
+import com.fraczekkrzysztof.gocycling.service.notification.EventNotificationGenerator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,8 +35,8 @@ public class EventNotificationGeneratorTests {
     NotificationRepository notificationRepository;
 
     @Autowired
-    @Qualifier("eventNotificationGenerator")
-    NotificationGenerator notificationGenerator;
+    @Qualifier("updateEventNotificationGenerator")
+    EventNotificationGenerator notificationGenerator;
 
     @Before
     public void before(){
@@ -90,8 +90,8 @@ public class EventNotificationGeneratorTests {
 
     @Test
     public void updateEventNotificationGeneratorTest(){
-        notificationGenerator.addEventIdToUpdate(1);
-        notificationGenerator.addEventIdToUpdate(2);
+        notificationGenerator.addEventId(1);
+        notificationGenerator.addEventId(2);
         notificationGenerator.generateNotification();
         verify(notificationRepository,times(1)).saveAll(any());
         verify(eventRepository,times(1)).findAllById(any());

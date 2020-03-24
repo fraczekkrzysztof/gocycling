@@ -1,7 +1,7 @@
 package com.fraczekkrzysztof.gocycling.aop;
 
 import com.fraczekkrzysztof.gocycling.entity.Event;
-import com.fraczekkrzysztof.gocycling.service.notification.NotificationGenerator;
+import com.fraczekkrzysztof.gocycling.service.notification.EventNotificationGenerator;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -15,11 +15,14 @@ import org.springframework.stereotype.Component;
 public class EventAop {
 
 
-    private NotificationGenerator eventNotificationGenerator;
+    private EventNotificationGenerator updateEventNotificationGenerator;
+    private EventNotificationGenerator cancelEventNotificationGenerator;
 
     @Autowired
-    public EventAop(@Qualifier("eventNotificationGenerator") NotificationGenerator eventNotificationGenerator){
-        this.eventNotificationGenerator = eventNotificationGenerator;
+    public EventAop(@Qualifier("updateEventNotificationGenerator") EventNotificationGenerator updateEventNotificationGenerator,
+                    @Qualifier("cancelEventNotificationGenerator") EventNotificationGenerator cancelEventNotificationGenerator){
+        this.updateEventNotificationGenerator = updateEventNotificationGenerator;
+        this.cancelEventNotificationGenerator = cancelEventNotificationGenerator;
     }
 
     @Pointcut("execution (* com.fraczekkrzysztof.gocycling.dao.EventRepository.save(..))")
@@ -38,7 +41,7 @@ public class EventAop {
        if (arg instanceof Event){
            Long id = ((Event)arg).getId();
            boolean isCanceled = ((Event)arg).isCanceled();
-           if (id != 0 && !isCanceled) eventNotificationGenerator.addEventIdToUpdate(((Event)arg).getId());
+           if (id != 0 && !isCanceled) updateEventNotificationGenerator.addEventId(((Event)arg).getId());
        }
       }
     }
@@ -48,7 +51,7 @@ public class EventAop {
         for (Object arg : joinPoint.getArgs()){
             if (arg instanceof Long){
                 long id = (long)arg;
-                eventNotificationGenerator.addEventIdToCancel(id);
+                cancelEventNotificationGenerator.addEventId(id);
             }
         }
     }
