@@ -15,6 +15,6 @@ import javax.transaction.Transactional;
 public interface NotificationRepository extends JpaRepository<Notification, Long>, NotificationRepositorySearch {
 
     @Override
-    @Query("select n from Notification n where n.userUid = :userUid order by created desc")
+    @Query("select n from Notification n join n.event e where e.dateAndTime > current_timestamp() and n.userUid = :userUid order by n.created desc")
     Page<Notification> findByUserUid(@Param("userUid") String userUid, Pageable pageable);
 }
