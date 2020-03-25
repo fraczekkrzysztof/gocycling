@@ -33,7 +33,7 @@ public abstract class EventNotificationGenerator {
     }
 
 
-    @Scheduled(initialDelay = 1000, fixedRate = 10000)
+    @Scheduled(initialDelay = 1000, fixedRate = 60000)
     public void generateNotification() {
         logger.info("Starting generating notification");
         List<Long> eventIdsToGenerateNotificationForUpdate = eventsList;
