@@ -21,7 +21,7 @@ public class EventController {
     }
 
     @PutMapping("/cancelEvent")
-    public ResponseEntity<String> deleteByUSerUidAndEventId(@RequestParam("eventId") long eventId) throws Exception {
+    public ResponseEntity<String> cancelEvent(@RequestParam("eventId") long eventId) throws Exception {
         eventService.cancelEvent(eventId);
         return ResponseEntity.status(HttpStatus.OK).body("");
     }
