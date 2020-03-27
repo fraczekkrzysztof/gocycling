@@ -35,7 +35,7 @@ public abstract class EventNotificationGenerator {
 
     @Scheduled(initialDelay = 1000, fixedRate = 60000)
     public void generateNotification() {
-        logger.info("Starting generating notification");
+        logger.debug("Starting generating notification");
         List<Long> eventIdsToGenerateNotificationForUpdate = eventsList;
         List<Notification> toSaveNotification = new ArrayList<>();
         toSaveNotification.addAll(generateNotifications(eventIdsToGenerateNotificationForUpdate));
@@ -43,7 +43,7 @@ public abstract class EventNotificationGenerator {
             notificationRepository.saveAll(toSaveNotification);
         }
         eventsList.removeAll(eventIdsToGenerateNotificationForUpdate);
-        logger.info("Generating finished");
+        logger.debug("Generating finished");
     }
 
     private List<Notification> generateNotifications(List<Long> ids){
