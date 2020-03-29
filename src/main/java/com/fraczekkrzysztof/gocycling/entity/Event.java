@@ -22,6 +22,12 @@ public class Event implements Serializable {
     @Column(name = "ev_place", nullable = false)
     private String place;
 
+    @Column(name = "ev_latitude", nullable = false)
+    private double latitude;
+
+    @Column (name = "ev_longitude", nullable = false)
+    private double longitude;
+
     @Column(name = "ev_dateAndTime", nullable = false, columnDefinition = "TIMESTAMP ")
     private LocalDateTime dateAndTime;
 
@@ -43,10 +49,12 @@ public class Event implements Serializable {
     public Event() {
     }
 
-    public Event(long id, String name, String place, LocalDateTime dateAndTime, LocalDateTime created, String details, String createdBy, boolean canceled, List<Confirmation> confirmationList) {
+    public Event(long id, String name, String place, double latitude, double longitude, LocalDateTime dateAndTime, LocalDateTime created, String details, String createdBy, boolean canceled, List<Confirmation> confirmationList) {
         this.id = id;
         this.name = name;
         this.place = place;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.dateAndTime = dateAndTime;
         this.created = created;
         this.details = details;
@@ -127,11 +135,29 @@ public class Event implements Serializable {
         this.canceled = canceled;
     }
 
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
     public static class Builder {
 
         private long id;
         private String name;
         private String place;
+        private double latitude;
+        private double longitude;
         private LocalDateTime dateAndTime;
         private LocalDateTime created;
         private String details;
@@ -154,6 +180,16 @@ public class Event implements Serializable {
 
         public Builder setPlace(String place){
             this.place = place;
+            return this;
+        }
+
+        public Builder setLatitude(double latitude){
+            this.latitude = latitude;
+            return this;
+        }
+
+        public Builder setLongitude(double longitude){
+            this.longitude = longitude;
             return this;
         }
 
@@ -191,6 +227,8 @@ public class Event implements Serializable {
             newEvent.setId(id);
             newEvent.setName(name);
             newEvent.setPlace(place);
+            newEvent.setLatitude(latitude);
+            newEvent.setLongitude(longitude);
             newEvent.setDateAndTime(dateAndTime);
             newEvent.setCreated(created);
             newEvent.setDetails(details);
