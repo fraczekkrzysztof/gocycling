@@ -31,4 +31,8 @@ public interface EventRepository extends JpaRepository<Event, Long>, EventReposi
     @Override
     @Query(value = "select e from Event e where e.dateAndTime > current_timestamp() and e.createdBy = :userUid order by e.dateAndTime")
     Page<Event> findByUserUid(@Param("userUid")String userUid, Pageable pageable);
+
+    @Override
+    @Query (value = "select e from Notification n join n.event e where n.id = :notificationId")
+    Page<Event> findEventByNotificationId(@Param("notificationId") long notificationId, Pageable pageable);
 }
