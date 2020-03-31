@@ -90,8 +90,8 @@ public class EventNotificationGeneratorTests {
 
     @Test
     public void updateEventNotificationGeneratorTest(){
-        notificationGenerator.addEventId(1);
-        notificationGenerator.addEventId(2);
+        notificationGenerator.addEventIdAndIgnoreUser(1,"56546453");
+        notificationGenerator.addEventIdAndIgnoreUser(2,null);
         notificationGenerator.generateNotification();
         verify(notificationRepository,times(1)).saveAll(any());
         verify(eventRepository,times(1)).findAllById(any());

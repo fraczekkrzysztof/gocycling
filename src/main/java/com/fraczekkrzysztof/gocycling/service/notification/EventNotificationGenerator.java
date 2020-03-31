@@ -10,12 +10,14 @@ import org.slf4j.Logger;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class EventNotificationGenerator {
 
     Logger logger = null;
-    private List<Long> eventsList = new ArrayList<>();
+    private Map<Long,List<String>> eventsWithUserToIgnore = new HashMap<>();
 
     private EventRepository eventRepository;
     private NotificationRepository notificationRepository;
@@ -27,32 +29,49 @@ public abstract class EventNotificationGenerator {
         this.confirmationRepository = confirmationRepository;
     }
 
-    public void addEventId(long id) {
+    public void addEventIdAndIgnoreUser(long id, String userUidToIgnore) {
         logger.info("Retrieve new event. Add to list");
-        eventsList.add(id);
+        List<String> ignoreUsers = eventsWithUserToIgnore.get(id);
+        if (ignoreUsers != null){
+            ignoreUsers.add(userUidToIgnore);
+        } else {
+            ignoreUsers = new ArrayList<>();
+            if(userUidToIgnore != null){
+                ignoreUsers.add(userUidToIgnore);
+            }
+        }
+        eventsWithUserToIgnore.put(id,ignoreUsers);
+
     }
 
 
     @Scheduled(initialDelay = 1000, fixedRate = 60000)
     public void generateNotification() {
         logger.debug("Starting generating notification");
-        List<Long> eventIdsToGenerateNotificationForUpdate = eventsList;
+        Map<Long,List<String>> eventIdsToGenerateNotificationForUpdate = eventsWithUserToIgnore;
         List<Notification> toSaveNotification = new ArrayList<>();
         toSaveNotification.addAll(generateNotifications(eventIdsToGenerateNotificationForUpdate));
         if (!toSaveNotification.isEmpty()){
             notificationRepository.saveAll(toSaveNotification);
         }
-        eventsList.removeAll(eventIdsToGenerateNotificationForUpdate);
+        removeElementFromMap(eventIdsToGenerateNotificationForUpdate);
         logger.debug("Generating finished");
     }
 
-    private List<Notification> generateNotifications(List<Long> ids){
+    private void removeElementFromMap(Map<Long,List<String>> toRemoved){
+        eventsWithUserToIgnore.entrySet().removeIf(entry -> toRemoved.keySet().contains(entry.getKey()));
+    }
+
+    private List<Notification> generateNotifications(Map<Long,List<String>> idsWithUserToignore){
         List<Notification> notificationToSave = new ArrayList<>();
-        if (!ids.isEmpty()){
-            List<Event> eventsToGenerateNotification = eventRepository.findAllById(ids);
+        if (!idsWithUserToignore.isEmpty()){
+            List<Event> eventsToGenerateNotification = eventRepository.findAllById(idsWithUserToignore.keySet());
             eventsToGenerateNotification.stream().forEach(e -> {
-                List<Confirmation> byEventId = confirmationRepository.findByEventId(e.getId());
-                for (Confirmation c : byEventId){
+                List<Confirmation> eventConfirmations = confirmationRepository.findByEventId(e.getId());
+                for (Confirmation c : eventConfirmations){
+                    if (idsWithUserToignore.get(e.getId()).contains(c.getUserUid())){
+                        continue;
+                    }
                     notificationToSave.add(generateSingleNotification(c,e));
                 }
             });

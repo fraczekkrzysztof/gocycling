@@ -1,0 +1,19 @@
+new event
+{
+        "name": "TEST",
+        "place": "TEST",
+        "latitude": 12.1,
+        "longitude": 12.1,
+        "dateAndTime": "2020-03-31T14:00:00",
+        "created": "2020-02-21T14:00:00",
+        "details": "gsgdfgd44432",
+        "createdBy": "1212",
+        "canceled": false
+}
+new conversation
+{
+        "userUid" : "2222",
+        "username" : "ziomek",
+        "message" : "test123",
+        "event" : "api/events/207"
+}
