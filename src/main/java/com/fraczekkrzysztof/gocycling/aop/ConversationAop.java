@@ -31,7 +31,7 @@ public class ConversationAop {
         for (Object arg : joinPoint.getArgs()){
             if (arg instanceof Conversation){
                 Long id = ((Conversation)arg).getId();
-                if (id == 0 ) newConversationNotificationGenerator.addEventId(((Conversation)arg).getEvent().getId());
+                if (id == 0 ) newConversationNotificationGenerator.addEventIdAndIgnoreUser(((Conversation)arg).getEvent().getId(),((Conversation)arg).getUserUid());
             }
         }
     }
