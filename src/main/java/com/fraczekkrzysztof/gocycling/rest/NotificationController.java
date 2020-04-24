@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.NoSuchElementException;
+
 @RestController
 @RequestMapping("api/custom/notifications")
 public class NotificationController {
@@ -25,7 +27,12 @@ public class NotificationController {
 
     @GetMapping("/findMaxNotificationIdForUser")
     public ResponseEntity<Long> findMaxNotificationIdForUser(@RequestParam("userUid") String userUid){
-        long notId = notificationService.getMaxNotificationIdForUser(userUid);
-        return ResponseEntity.status(HttpStatus.OK).body(notId);
+        try{
+            long notId = notificationService.getMaxNotificationIdForUser(userUid);
+            return ResponseEntity.status(HttpStatus.OK).body(notId);
+        } catch (NoSuchElementException e){
+            return ResponseEntity.status(HttpStatus.OK).body(-1l);
+        }
+
     }
 }
