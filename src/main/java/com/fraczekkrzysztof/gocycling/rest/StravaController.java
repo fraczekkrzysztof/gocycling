@@ -2,7 +2,6 @@ package com.fraczekkrzysztof.gocycling.rest;
 
 import com.fraczekkrzysztof.gocycling.external.ExternalOAuthAuthorizer;
 import com.fraczekkrzysztof.gocycling.external.strava.model.AccessTokenRequestDto;
-import com.fraczekkrzysztof.gocycling.external.strava.model.AccessTokenResponseDto;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +23,9 @@ public class StravaController {
     }
 
     @PostMapping("/accessToken")
-    public ResponseEntity<AccessTokenResponseDto> getAccessToken(@RequestBody AccessTokenRequestDto accessTokenRequestDto){
-        return ResponseEntity.status(HttpStatus.OK).body(authorizer.getAccessToken(accessTokenRequestDto));
+    public ResponseEntity<String> getAccessToken(@RequestBody AccessTokenRequestDto accessTokenRequestDto){
+        authorizer.getAccessToken(accessTokenRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).body("");
     }
 
 }
