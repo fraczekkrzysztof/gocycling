@@ -11,6 +11,7 @@ public class StravaProperties {
     private String baseOAuthAddress;
     private String redirectUri;
     private String baseTokenAddress;
+    private String baseDeauthorizationAddress;
 
     public String getClientId() {
         return clientId;
@@ -32,6 +33,10 @@ public class StravaProperties {
         return baseTokenAddress;
     }
 
+    public String getBaseDeauthorizationAddress() {
+        return baseDeauthorizationAddress;
+    }
+
     public void setClientId(String clientId) {
         this.clientId = clientId;
     }
@@ -50,5 +55,9 @@ public class StravaProperties {
 
     public void setBaseTokenAddress(String baseTokenAddress) {
         this.baseTokenAddress = baseTokenAddress;
+    }
+
+    public void setBaseDeauthorizationAddress(String baseDeauthorizationAddress) {
+        this.baseDeauthorizationAddress = baseDeauthorizationAddress;
     }
 }
