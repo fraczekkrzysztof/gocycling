@@ -12,6 +12,7 @@ import com.fraczekkrzysztof.gocycling.external.strava.model.AccessTokenResponseD
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -26,12 +27,17 @@ public class StravaOAuthAuthorizer implements ExternalOAuthAuthorizer {
     private StravaProperties stravaProperties;
     private UserRepository userRepository;
     private UserExternalAppsRepository userExternalAppsRepository;
+    private RestTemplate restTemplate;
     private static final Logger logger = LoggerFactory.getLogger(StravaOAuthAuthorizer.class);
 
-    public StravaOAuthAuthorizer(StravaProperties stravaProperties, UserRepository userRepository, UserExternalAppsRepository userExternalAppsRepository) {
+    public StravaOAuthAuthorizer(StravaProperties stravaProperties,
+                                 UserRepository userRepository,
+                                 UserExternalAppsRepository userExternalAppsRepository,
+                                 @Qualifier("customRestTemplate") RestTemplate restTemplate) {
         this.stravaProperties = stravaProperties;
         this.userRepository = userRepository;
         this.userExternalAppsRepository = userExternalAppsRepository;
+        this.restTemplate = restTemplate;
     }
 
     @Autowired
@@ -74,7 +80,6 @@ public class StravaOAuthAuthorizer implements ExternalOAuthAuthorizer {
         sb.append("grant_type=");
         sb.append("authorization_code");
 
-        RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<AccessTokenResponseDto> response = restTemplate.postForEntity(sb.toString(),null, AccessTokenResponseDto.class);
         if (!response.getStatusCode().is2xxSuccessful()){
             throw new StravaApiException("There is error during retreiving access token");
@@ -114,7 +119,6 @@ public class StravaOAuthAuthorizer implements ExternalOAuthAuthorizer {
         sb.append("?");
         sb.append("access_token=");
         sb.append(externalApp.getAccessToken());
-        RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.postForEntity(sb.toString(),null, String.class);
         if (!response.getStatusCode().is2xxSuccessful()){
             throw new StravaApiException("There is error during retrieving access token");
@@ -138,7 +142,6 @@ public class StravaOAuthAuthorizer implements ExternalOAuthAuthorizer {
         sb.append("&");
         sb.append("refresh_token=");
         sb.append(externalApp.getRefreshToken());
-        RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<AccessTokenResponseDto> response = restTemplate.postForEntity(sb.toString(),null, AccessTokenResponseDto.class);
         if (!response.getStatusCode().is2xxSuccessful()){
             throw new StravaApiException("There is error during retrieving access token");

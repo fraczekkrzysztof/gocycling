@@ -10,7 +10,7 @@ public class StravaRefreshScheduler {
 
     ExternalOAuthAuthorizer stravaAutorizer;
 
-    public StravaRefreshScheduler(@Qualifier("stravaOAuthAutorizer") ExternalOAuthAuthorizer stravaAutorizer) {
+    public StravaRefreshScheduler(@Qualifier("stravaOAuthAuthorizer") ExternalOAuthAuthorizer stravaAutorizer) {
         this.stravaAutorizer = stravaAutorizer;
     }
 
