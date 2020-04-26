@@ -1,0 +1,10 @@
+package com.fraczekkrzysztof.gocycling.external;
+
+import com.fraczekkrzysztof.gocycling.dto.RouteDto;
+
+import java.util.List;
+
+public interface AllExternalRoutesRetriever {
+
+    List<RouteDto> getExternalRoutes(String userUid);
+}
