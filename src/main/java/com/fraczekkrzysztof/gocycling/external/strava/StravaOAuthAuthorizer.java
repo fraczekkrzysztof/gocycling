@@ -9,6 +9,8 @@ import com.fraczekkrzysztof.gocycling.external.ExternalOAuthAuthorizer;
 import com.fraczekkrzysztof.gocycling.external.strava.exception.StravaApiException;
 import com.fraczekkrzysztof.gocycling.external.strava.model.AccessTokenRequestDto;
 import com.fraczekkrzysztof.gocycling.external.strava.model.AccessTokenResponseDto;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,25 +24,15 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
+@RequiredArgsConstructor
 public class StravaOAuthAuthorizer implements ExternalOAuthAuthorizer {
 
-    private StravaProperties stravaProperties;
-    private UserRepository userRepository;
-    private UserExternalAppsRepository userExternalAppsRepository;
-    private RestTemplate restTemplate;
-    private static final Logger logger = LoggerFactory.getLogger(StravaOAuthAuthorizer.class);
-
-    public StravaOAuthAuthorizer(StravaProperties stravaProperties,
-                                 UserRepository userRepository,
-                                 UserExternalAppsRepository userExternalAppsRepository,
-                                 @Qualifier("customRestTemplate") RestTemplate restTemplate) {
-        this.stravaProperties = stravaProperties;
-        this.userRepository = userRepository;
-        this.userExternalAppsRepository = userExternalAppsRepository;
-        this.restTemplate = restTemplate;
-    }
-
-    @Autowired
+    private final StravaProperties stravaProperties;
+    private final UserRepository userRepository;
+    private final UserExternalAppsRepository userExternalAppsRepository;
+    @Qualifier("customRestTemplate")
+    private final RestTemplate restTemplate;
 
 
     @Override
@@ -59,7 +51,7 @@ public class StravaOAuthAuthorizer implements ExternalOAuthAuthorizer {
        sb.append("approval_prompt=force");
        sb.append("&");
        sb.append("scope=read");
-       logger.debug("Successfully generated authorization link!");
+       log.debug("Successfully generated authorization link!");
        return sb.toString();
     }
 
@@ -85,20 +77,20 @@ public class StravaOAuthAuthorizer implements ExternalOAuthAuthorizer {
             throw new StravaApiException("There is error during retreiving access token");
         }
         User user = userRepository.findById(accessTokenRequestDto.getUserUid()).orElseThrow(() ->  new NoSuchElementException("User doesn't exists"));
-        UserExternalApp userExternalApp = new UserExternalApp();
-        userExternalApp.setUser(user);
-        userExternalApp.setAppUserId(response.getBody().getAthlete().getId().longValue());
-        userExternalApp.setAppType(ExternalApps.STRAVA);
-        userExternalApp.setRefreshToken(response.getBody().getRefreshToken());
-        userExternalApp.setAccessToken(response.getBody().getAccessToken());
-        userExternalApp.setExpiresAt(response.getBody().getExpiresAt().longValue());
+        UserExternalApp userExternalApp = UserExternalApp.builder()
+        .user(user)
+        .appUserId(response.getBody().getAthlete().getId().longValue())
+        .appType(ExternalApps.STRAVA)
+        .refreshToken(response.getBody().getRefreshToken())
+        .accessToken(response.getBody().getAccessToken())
+        .expiresAt(response.getBody().getExpiresAt().longValue()).build();
         userExternalAppsRepository.save(userExternalApp);
-        logger.debug("Successfully retrieve access token and store it in db");
+        log.debug("Successfully retrieve access token and store it in db");
     }
 
     @Override
     public void refreshToken() {
-        logger.debug("Starting refreshing token");
+        log.debug("Starting refreshing token");
         List<UserExternalApp> listOfExternalApp = userExternalAppsRepository.findAll().stream()
                 .filter(e -> e.getAppType() == ExternalApps.STRAVA).collect(Collectors.toList());
         for(UserExternalApp ea : listOfExternalApp){
@@ -107,7 +99,7 @@ public class StravaOAuthAuthorizer implements ExternalOAuthAuthorizer {
             }
         }
         userExternalAppsRepository.saveAll(listOfExternalApp);
-        logger.debug("Refreshing token finished");
+        log.debug("Refreshing token finished");
     }
 
     @Override
@@ -124,7 +116,7 @@ public class StravaOAuthAuthorizer implements ExternalOAuthAuthorizer {
             throw new StravaApiException("There is error during retrieving access token");
         }
         userExternalAppsRepository.delete(externalApp);
-        logger.debug("Successfully deautorize user {0}",userUid);
+        log.debug("Successfully deautorize user {0}",userUid);
     }
 
     private void refreshToken(UserExternalApp externalApp){
@@ -149,6 +141,6 @@ public class StravaOAuthAuthorizer implements ExternalOAuthAuthorizer {
         externalApp.setAccessToken(response.getBody().getAccessToken());
         externalApp.setRefreshToken(response.getBody().getRefreshToken());
         externalApp.setExpiresAt(response.getBody().getExpiresAt().longValue());
-        logger.debug("Successfully refresh token for user {0}",externalApp.getUser().getId());
+        log.debug("Successfully refresh token for user {0}",externalApp.getUser().getId());
     }
 }

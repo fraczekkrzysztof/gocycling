@@ -1,6 +1,7 @@
 package com.fraczekkrzysztof.gocycling.rest;
 
 import com.fraczekkrzysztof.gocycling.service.NotificationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,14 +11,11 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("api/custom/notifications")
+@RequiredArgsConstructor
 public class NotificationController {
 
-    NotificationService notificationService;
+    private final NotificationService notificationService;
 
-    @Autowired
-    public NotificationController(NotificationService notificationService) {
-        this.notificationService = notificationService;
-    }
 
     @PutMapping("/markAsRead")
     public ResponseEntity<String> markNotificationAsRead(@RequestParam("notificationId") long notificationId) throws Exception {

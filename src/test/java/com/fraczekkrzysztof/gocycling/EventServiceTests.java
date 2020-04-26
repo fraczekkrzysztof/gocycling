@@ -31,13 +31,13 @@ public class EventServiceTests {
 
     @Before
     public void before(){
-        Event eventToCancel = new Event.Builder()
-                .setName("test1")
-                .setPlace("place1")
-                .setDateAndTime(LocalDateTime.now().plusDays(5))
-                .setCreated(LocalDateTime.now())
-                .setDetails("Details")
-                .setCanceled(false)
+        Event eventToCancel = Event.builder()
+                .name("test1")
+                .place("place1")
+                .dateAndTime(LocalDateTime.now().plusDays(5))
+                .created(LocalDateTime.now())
+                .details("Details")
+                .canceled(false)
                 .build();
         when(eventRepository.findById(anyLong())).thenReturn(Optional.of(eventToCancel));
         when(eventRepository.save(any(Event.class))).thenReturn(eventToCancel);

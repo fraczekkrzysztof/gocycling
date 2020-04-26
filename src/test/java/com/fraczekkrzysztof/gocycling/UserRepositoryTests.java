@@ -34,15 +34,15 @@ public class UserRepositoryTests {
 
     @Test
     public void shouldReturnTwoUsers(){
-        Event event = new Event.Builder().setName("Test1").setPlace("TestPlace1").setCreated(LocalDateTime.now()).setDateAndTime(LocalDateTime.now().plusDays(5)).build();
+        Event event = Event.builder().name("Test1").place("TestPlace1").created(LocalDateTime.now()).dateAndTime(LocalDateTime.now().plusDays(5)).build();
         User user = new User();
         user.setId("asdf");
         user.setName("Jan");
         User user2 = new User();
         user2.setId("qwer");
         user2.setName("Ziutek");
-        Confirmation confirmation = new Confirmation.Builder().setEvent(event).serUserUid("asdf").build();
-        Confirmation confirmation2 = new Confirmation.Builder().setEvent(event).serUserUid("qwer").build();
+        Confirmation confirmation = Confirmation.builder().event(event).userUid("asdf").build();
+        Confirmation confirmation2 = Confirmation.builder().event(event).userUid("qwer").build();
         event.setConfirmationList(Arrays.asList(confirmation,confirmation2));
         eventRepository.save(event);
         userRepository.save(user);

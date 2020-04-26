@@ -2,6 +2,7 @@ package com.fraczekkrzysztof.gocycling.rest;
 
 import com.fraczekkrzysztof.gocycling.external.ExternalOAuthAuthorizer;
 import com.fraczekkrzysztof.gocycling.external.strava.model.AccessTokenRequestDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,13 +10,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/strava")
+@RequiredArgsConstructor
 public class StravaController {
 
-    ExternalOAuthAuthorizer authorizer;
+    private final ExternalOAuthAuthorizer authorizer;
 
-    public StravaController(@Qualifier("stravaOAuthAuthorizer") ExternalOAuthAuthorizer authorizer) {
-        this.authorizer = authorizer;
-    }
 
     @GetMapping("/authorizationLink")
     public ResponseEntity<String> getAutorizathionLink(){

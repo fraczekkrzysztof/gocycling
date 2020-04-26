@@ -29,11 +29,13 @@ public class EventRepositoryTests {
 
     @Test
     public void testSaveMethod(){
-        Event event = new Event.Builder()
-                .setName("TestName")
-                .setPlace("TestPlace")
-                .setDateAndTime(LocalDateTime.now().plusDays(2))
-                .setCreated((LocalDateTime.now())).build();
+        Event event = Event.builder()
+                .name("TestName")
+                .place("TestPlace")
+                .dateAndTime(LocalDateTime.now().plusDays(2))
+                .created((LocalDateTime.now()))
+                .createdBy("1234")
+                .build();
         eventRepository.save(event);
         Assert.assertTrue(true);
         eventRepository.deleteAll();
@@ -41,11 +43,13 @@ public class EventRepositoryTests {
 
     @Test
     public void findByNameTest(){
-        Event event = new Event.Builder()
-                .setName("TestName")
-                .setPlace("TestPlace")
-                .setDateAndTime(LocalDateTime.now().plusDays(2))
-                .setCreated((LocalDateTime.now())).build();
+        Event event = Event.builder()
+                .name("TestName")
+                .place("TestPlace")
+                .dateAndTime(LocalDateTime.now().plusDays(2))
+                .created((LocalDateTime.now()))
+                .createdBy("1234")
+                .build();
         eventRepository.save(event);
         Event event1 = eventRepository.findByName("TestName",PageRequest.of(0,5)).getContent().get(0);
         Assert.assertEquals(event.getName(),event1.getName());
@@ -54,16 +58,20 @@ public class EventRepositoryTests {
 
     @Test
     public void findCurrent(){
-        Event event = new Event.Builder()
-                .setName("TestName")
-                .setPlace("TestPlace")
-                .setDateAndTime(LocalDateTime.now().plusDays(2))
-                .setCreated((LocalDateTime.now())).build();
-        Event event1 = new Event.Builder()
-                .setName("TestName2")
-                .setPlace("TestPlace")
-                .setDateAndTime(LocalDateTime.now().plusDays(3))
-                .setCreated((LocalDateTime.now())).build();
+        Event event = Event.builder()
+                .name("TestName")
+                .place("TestPlace")
+                .dateAndTime(LocalDateTime.now().plusDays(2))
+                .created((LocalDateTime.now()))
+                .createdBy("1234")
+                .build();
+        Event event1 = Event.builder()
+                .name("TestName2")
+                .place("TestPlace")
+                .dateAndTime(LocalDateTime.now().plusDays(3))
+                .created((LocalDateTime.now()))
+                .createdBy("1234")
+                .build();
         eventRepository.save(event);
         eventRepository.save(event1);
         List<Event> eventList = eventRepository.findCurrent(PageRequest.of(0,5)).getContent();
@@ -73,24 +81,28 @@ public class EventRepositoryTests {
 
     @Test
     public void findByUserUid(){
-        Event event = new Event.Builder()
-                .setName("TestName")
-                .setPlace("TestPlace")
-                .setDateAndTime(LocalDateTime.now().plusDays(2))
-                .setCreated((LocalDateTime.now())).build();
-        Event event1 = new Event.Builder()
-                .setName("TestName2")
-                .setPlace("TestPlace")
-                .setDateAndTime(LocalDateTime.now().plusDays(3))
-                .setCreated((LocalDateTime.now())).build();
+        Event event = Event.builder()
+                .name("TestName")
+                .place("TestPlace")
+                .dateAndTime(LocalDateTime.now().plusDays(2))
+                .created((LocalDateTime.now()))
+                .createdBy("1234")
+                .build();
+        Event event1 = Event.builder()
+                .name("TestName2")
+                .place("TestPlace")
+                .dateAndTime(LocalDateTime.now().plusDays(3))
+                .created((LocalDateTime.now()))
+                .createdBy("1234")
+                .build();
 
-        Confirmation confirmation = new Confirmation.Builder()
-                                .serUserUid("test123")
-                                .setEvent(event)
+        Confirmation confirmation = Confirmation.builder()
+                                .userUid("test123")
+                                .event(event)
                                 .build();
-        Confirmation confirmation1 = new Confirmation.Builder()
-                                .serUserUid("test123")
-                                .setEvent(event1)
+        Confirmation confirmation1 = Confirmation.builder()
+                                .userUid("test123")
+                                .event(event1)
                                 .build();
         eventRepository.save(event);
         eventRepository.save(event1);
