@@ -3,6 +3,7 @@ package com.fraczekkrzysztof.gocycling.aop;
 import com.fraczekkrzysztof.gocycling.dao.EventRepository;
 import com.fraczekkrzysztof.gocycling.entity.Event;
 import com.fraczekkrzysztof.gocycling.service.notification.EventNotificationGenerator;
+import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -15,21 +16,15 @@ import java.util.NoSuchElementException;
 
 @Aspect
 @Component
+@RequiredArgsConstructor
 public class EventAop {
 
+    @Qualifier("updateEventNotificationGenerator")
+    private final EventNotificationGenerator updateEventNotificationGenerator;
+    @Qualifier("cancelEventNotificationGenerator")
+    private final EventNotificationGenerator cancelEventNotificationGenerator;
+    private final EventRepository eventRepository;
 
-    private EventNotificationGenerator updateEventNotificationGenerator;
-    private EventNotificationGenerator cancelEventNotificationGenerator;
-    private EventRepository eventRepository;
-
-    @Autowired
-    public EventAop(@Qualifier("updateEventNotificationGenerator") EventNotificationGenerator updateEventNotificationGenerator,
-                    @Qualifier("cancelEventNotificationGenerator") EventNotificationGenerator cancelEventNotificationGenerator,
-                    EventRepository eventRepository){
-        this.updateEventNotificationGenerator = updateEventNotificationGenerator;
-        this.cancelEventNotificationGenerator = cancelEventNotificationGenerator;
-        this.eventRepository = eventRepository;
-    }
 
     @Pointcut("execution (* com.fraczekkrzysztof.gocycling.dao.EventRepository.save(..))")
     private void forEventUpdate(){

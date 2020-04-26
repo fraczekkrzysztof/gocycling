@@ -30,24 +30,24 @@ public class ConversationRepositoryTests {
 
     @Test
     public void findByEventId(){
-        Event event = new Event.Builder()
-                .setName("TestName")
-                .setPlace("TestPlace")
-                .setDateAndTime(LocalDateTime.now().plusDays(2))
-                .setCreated((LocalDateTime.now()))
-                .setCreatedBy("12345566").build();
+        Event event = Event.builder()
+                .name("TestName")
+                .place("TestPlace")
+                .dateAndTime(LocalDateTime.now().plusDays(2))
+                .created((LocalDateTime.now()))
+                .createdBy("12345566").build();
 
-        Conversation conversation1 = new Conversation.Builder()
-                .setUserUid("12345")
-                .setUsername("Testowy Janusz")
-                .setMessage("ja dziś odpadam")
-                .setEvent(event).build();
+        Conversation conversation1 = Conversation.builder()
+                .userUid("12345")
+                .username("Testowy Janusz")
+                .message("ja dziś odpadam")
+                .event(event).build();
 
-        Conversation conversation2 = new Conversation.Builder()
-                .setUserUid("12345")
-                .setUsername("Testowy Ziutek")
-                .setMessage("Ja dzis mam ochotę pozadupczać")
-                .setEvent(event).build();
+        Conversation conversation2 = Conversation.builder()
+                .userUid("12345")
+                .username("Testowy Ziutek")
+                .message("Ja dzis mam ochotę pozadupczać")
+                .event(event).build();
 
         eventRepository.save(event);
         conversationRepository.saveAll(Arrays.asList(conversation1,conversation2));

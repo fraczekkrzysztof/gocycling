@@ -40,44 +40,44 @@ public class EventNotificationGeneratorTests {
 
     @Before
     public void before(){
-        Event eventToList1 = new Event.Builder()
-                .setId(1)
-                .setName("test1")
-                .setPlace("place1")
-                .setDateAndTime(LocalDateTime.now().plusDays(5))
-                .setCreated(LocalDateTime.now())
-                .setDetails("Details")
-                .setCanceled(false)
+        Event eventToList1 = Event.builder()
+                .id(1)
+                .name("test1")
+                .place("place1")
+                .dateAndTime(LocalDateTime.now().plusDays(5))
+                .created(LocalDateTime.now())
+                .details("Details")
+                .canceled(false)
                 .build();
-        Event eventToList2 = new Event.Builder()
-                .setId(2)
-                .setName("test2")
-                .setPlace("place2")
-                .setDateAndTime(LocalDateTime.now().plusDays(5))
-                .setCreated(LocalDateTime.now())
-                .setDetails("Details")
-                .setCanceled(false)
+        Event eventToList2 = Event.builder()
+                .id(2)
+                .name("test2")
+                .place("place2")
+                .dateAndTime(LocalDateTime.now().plusDays(5))
+                .created(LocalDateTime.now())
+                .details("Details")
+                .canceled(false)
                 .build();
 
-        Confirmation confirmation1 = new Confirmation.Builder()
-                .setId(3)
-                .serUserUid("2345432")
-                .setEvent(eventToList1).build();
+        Confirmation confirmation1 = Confirmation.builder()
+                .id(3)
+                .userUid("2345432")
+                .event(eventToList1).build();
 
-        Confirmation confirmation2 = new Confirmation.Builder()
-                .setId(4)
-                .serUserUid("56546453")
-                .setEvent(eventToList1).build();
+        Confirmation confirmation2 = Confirmation.builder()
+                .id(4)
+                .userUid("56546453")
+                .event(eventToList1).build();
 
-        Confirmation confirmation3 = new Confirmation.Builder()
-                .setId(5)
-                .serUserUid("2345432")
-                .setEvent(eventToList2).build();
+        Confirmation confirmation3 = Confirmation.builder()
+                .id(5)
+                .userUid("2345432")
+                .event(eventToList2).build();
 
-        Confirmation confirmation4 = new Confirmation.Builder()
-                .setId(6)
-                .serUserUid("56546453")
-                .setEvent(eventToList2).build();
+        Confirmation confirmation4 = Confirmation.builder()
+                .id(6)
+                .userUid("56546453")
+                .event(eventToList2).build();
 
         List<Confirmation> listForEvent1 = Arrays.asList(confirmation1,confirmation2);
         List<Confirmation> listForEvent2 = Arrays.asList(confirmation3,confirmation4);

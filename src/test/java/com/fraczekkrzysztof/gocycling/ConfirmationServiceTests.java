@@ -35,7 +35,7 @@ public class ConfirmationServiceTests {
 
     @Before
     public void before(){
-        Confirmation confirmation = new Confirmation.Builder().setId(1).build();
+        Confirmation confirmation = Confirmation.builder().id(1).build();
         Page<Confirmation> confirmationPage = new PageImpl<>(Arrays.asList(confirmation));
         when(confirmationRepository.findByUserUidAndEventId(anyString(),anyLong(),any())).thenReturn(confirmationPage);
         doNothing().when(confirmationRepository).delete(ArgumentMatchers.any(Confirmation.class));

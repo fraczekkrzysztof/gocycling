@@ -27,12 +27,12 @@ public class CancelEventNotificationGenerator extends EventNotificationGenerator
 
     @Override
     Notification generateSingleNotification(Confirmation c, Event e) {
-        return new Notification.Builder()
-                .setUserUid(c.getUserUid())
-                .setTitle(TITLE)
-                .setContent(MessageFormat.format(CONTENT, e.getName()))
-                .setEvent(e)
-                .setCreated(LocalDateTime.now())
-                .setRead(false).build();
+        return Notification.builder()
+                .userUid(c.getUserUid())
+                .title(TITLE)
+                .content(MessageFormat.format(CONTENT, e.getName()))
+                .event(e)
+                .created(LocalDateTime.now())
+                .read(false).build();
     }
 }

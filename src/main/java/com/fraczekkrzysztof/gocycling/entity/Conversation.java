@@ -1,10 +1,19 @@
 package com.fraczekkrzysztof.gocycling.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "conversation")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Conversation {
 
     @Id
@@ -28,17 +37,6 @@ public class Conversation {
     @JoinColumn(name = "cov_ev_id")
     private Event event;
 
-    public Conversation() {
-    }
-
-    public Conversation(long id, String userUid, String username, LocalDateTime created, String message, Event event) {
-        this.id = id;
-        this.userUid = userUid;
-        this.username = username;
-        this.created = created;
-        this.message = message;
-        this.event = event;
-    }
 
     public long getId() {
         return id;
@@ -88,59 +86,4 @@ public class Conversation {
         this.event = event;
     }
 
-    public static class Builder{
-
-        private long id;
-        private String userUid;
-        private String username;
-        private LocalDateTime created = LocalDateTime.now();
-        private String message;
-        private Event event;
-
-        public Builder(){
-            //return new Builder instance
-        }
-
-        public Builder setId(long id){
-            this.id=id;
-            return this;
-        }
-
-        public Builder setUserUid(String userUid){
-            this.userUid=userUid;
-            return this;
-        }
-
-        public Builder setUsername(String username){
-            this.username=username;
-            return this;
-        }
-
-        public Builder setCreated(LocalDateTime created){
-            this.created = created;
-            return this;
-        }
-
-        public Builder setMessage(String message){
-            this.message = message;
-            return this;
-        }
-
-        public Builder setEvent(Event event){
-            this.event = event;
-            return this;
-        }
-
-        public Conversation build(){
-            Conversation conversationToReturn = new Conversation();
-            conversationToReturn.setId(this.id);
-            conversationToReturn.setUserUid(this.userUid);
-            conversationToReturn.setUsername(this.username);
-            conversationToReturn.setCreated(this.created);
-            conversationToReturn.setMessage(this.message);
-            conversationToReturn.setEvent(this.event);
-            return conversationToReturn;
-        }
-
-    }
 }

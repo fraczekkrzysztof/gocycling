@@ -1,6 +1,7 @@
 package com.fraczekkrzysztof.gocycling.rest;
 
 import com.fraczekkrzysztof.gocycling.service.ConfirmationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.http.HttpStatus;
@@ -13,14 +14,11 @@ import org.springframework.web.servlet.resource.HttpResource;
 
 @RestController()
 @RequestMapping("api/custom/confirmations")
+@RequiredArgsConstructor
 public class ConfirmationController {
 
-    ConfirmationService confirmationService;
+    private final ConfirmationService confirmationService;
 
-    @Autowired
-    public ConfirmationController(ConfirmationService confirmationService) {
-        this.confirmationService = confirmationService;
-    }
 
     @DeleteMapping("/deleteByUserUidAndEventId")
     public ResponseEntity<String> deleteByUSerUidAndEventId(@RequestParam("userUid") String userUid, @RequestParam("eventId") long eventId){

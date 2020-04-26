@@ -2,6 +2,11 @@ package com.fraczekkrzysztof.gocycling.entity;
 
 
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -9,6 +14,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "event")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Event implements Serializable {
 
     @Id
@@ -46,197 +55,5 @@ public class Event implements Serializable {
     @OneToMany(mappedBy = "event", cascade = {CascadeType.ALL})
     private List<Confirmation> confirmationList;
 
-    public Event() {
-    }
 
-    public Event(long id, String name, String place, double latitude, double longitude, LocalDateTime dateAndTime, LocalDateTime created, String details, String createdBy, boolean canceled, List<Confirmation> confirmationList) {
-        this.id = id;
-        this.name = name;
-        this.place = place;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.dateAndTime = dateAndTime;
-        this.created = created;
-        this.details = details;
-        this.createdBy = createdBy;
-        this.canceled = canceled;
-        this.confirmationList = confirmationList;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPlace() {
-        return place;
-    }
-
-    public void setPlace(String place) {
-        this.place = place;
-    }
-
-    public LocalDateTime getDateAndTime() {
-        return dateAndTime;
-    }
-
-    public void setDateAndTime(LocalDateTime dateAndTime) {
-        this.dateAndTime = dateAndTime;
-    }
-
-    public LocalDateTime getCreated() {
-        return created;
-    }
-
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
-    }
-
-    public String getDetails() {
-        return details;
-    }
-
-    public void setDetails(String details) {
-        this.details = details;
-    }
-
-    public List<Confirmation> getConfirmationList() {
-        return confirmationList;
-    }
-
-    public void setConfirmationList(List<Confirmation> confirmationList) {
-        this.confirmationList = confirmationList;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public boolean isCanceled() {
-        return canceled;
-    }
-
-    public void setCanceled(boolean canceled) {
-        this.canceled = canceled;
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-    public static class Builder {
-
-        private long id;
-        private String name;
-        private String place;
-        private double latitude;
-        private double longitude;
-        private LocalDateTime dateAndTime;
-        private LocalDateTime created;
-        private String details;
-        private String createdBy;
-        private boolean canceled;
-        private List<Confirmation> confirmationList;
-
-        public Builder(){
-            //get new Builder instance
-        }
-
-        public Builder setId(long id){
-            this.id = id;
-            return this;
-        }
-        public Builder setName(String name){
-            this.name = name;
-            return this;
-        }
-
-        public Builder setPlace(String place){
-            this.place = place;
-            return this;
-        }
-
-        public Builder setLatitude(double latitude){
-            this.latitude = latitude;
-            return this;
-        }
-
-        public Builder setLongitude(double longitude){
-            this.longitude = longitude;
-            return this;
-        }
-
-        public Builder setDateAndTime(LocalDateTime dateAndTime){
-            this.dateAndTime = dateAndTime;
-            return this;
-        }
-
-        public Builder setCreated(LocalDateTime created){
-            this.created = created;
-            return this;
-        }
-
-        public Builder setConfirmationList(List<Confirmation> confirmationList){
-            this.confirmationList = confirmationList;
-            return this;
-        }
-
-        public Builder setDetails(String details){
-            this.details = details;
-            return this;
-        }
-        public Builder setCreatedBy(String createdBy){
-            this.createdBy = createdBy;
-            return this;
-        }
-
-        public Builder setCanceled(boolean canceled){
-            this.canceled = canceled;
-            return this;
-        }
-
-        public Event build(){
-            Event newEvent = new Event();
-            newEvent.setId(id);
-            newEvent.setName(name);
-            newEvent.setPlace(place);
-            newEvent.setLatitude(latitude);
-            newEvent.setLongitude(longitude);
-            newEvent.setDateAndTime(dateAndTime);
-            newEvent.setCreated(created);
-            newEvent.setDetails(details);
-            newEvent.setConfirmationList(confirmationList);
-            newEvent.setCreatedBy(createdBy);
-            newEvent.setCanceled(canceled);
-            return newEvent;
-        }
-
-    }
 }

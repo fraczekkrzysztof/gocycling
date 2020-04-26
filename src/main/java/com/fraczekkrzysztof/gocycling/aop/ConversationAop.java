@@ -2,6 +2,7 @@ package com.fraczekkrzysztof.gocycling.aop;
 
 import com.fraczekkrzysztof.gocycling.entity.Conversation;
 import com.fraczekkrzysztof.gocycling.service.notification.NewConversationNotificationGenerator;
+import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -12,14 +13,11 @@ import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
+@RequiredArgsConstructor
 public class ConversationAop {
 
-    NewConversationNotificationGenerator newConversationNotificationGenerator;
-
-    @Autowired
-    public ConversationAop(@Qualifier("newConversationNotificationGenerator") NewConversationNotificationGenerator newConversationNotificationGenerator ){
-        this.newConversationNotificationGenerator = newConversationNotificationGenerator;
-    }
+    @Qualifier("newConversationNotificationGenerator")
+    private final NewConversationNotificationGenerator newConversationNotificationGenerator;
 
     @Pointcut("execution (* com.fraczekkrzysztof.gocycling.dao.ConversationRepository.save(..))")
     private void forEventUpdate(){

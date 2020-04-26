@@ -26,12 +26,12 @@ public class ConfirmationRepositoryTests {
 
     @Test
     public void findByUSerUid(){
-        Event event = new Event.Builder()
-                .setName("TestName")
-                .setPlace("TestPlace")
-                .setDateAndTime(LocalDateTime.now().plusDays(2))
-                .setCreated((LocalDateTime.now())).build();
-        Confirmation confirmation = new Confirmation.Builder().serUserUid("test123").setEvent(event).build();
+        Event event = Event.builder()
+                .name("TestName")
+                .place("TestPlace")
+                .dateAndTime(LocalDateTime.now().plusDays(2))
+                .created((LocalDateTime.now())).build();
+        Confirmation confirmation = Confirmation.builder().userUid("test123").event(event).build();
         eventRepository.save(event);
         confirmationRepository.save(confirmation);
         Confirmation confirmation1 = confirmationRepository.findByUserUid("test123", PageRequest.of(0,5)).getContent().get(0);
@@ -42,12 +42,12 @@ public class ConfirmationRepositoryTests {
 
     @Test
     public void findByUserUidAndEventId(){
-        Event event = new Event.Builder()
-                .setName("TestName")
-                .setPlace("TestPlace")
-                .setDateAndTime(LocalDateTime.now().plusDays(2))
-                .setCreated((LocalDateTime.now())).build();
-        Confirmation confirmation = new Confirmation.Builder().serUserUid("test123").setEvent(event).build();
+        Event event = Event.builder()
+                .name("TestName")
+                .place("TestPlace")
+                .dateAndTime(LocalDateTime.now().plusDays(2))
+                .created((LocalDateTime.now())).build();
+        Confirmation confirmation = Confirmation.builder().userUid("test123").event(event).build();
         eventRepository.save(event);
         confirmationRepository.save(confirmation);
         long eventId = event.getId();
