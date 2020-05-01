@@ -52,6 +52,9 @@ public class Event implements Serializable {
     @Column(name = "ev_canceled")
     private boolean canceled = false;
 
+    @Column(name ="ev_route_link")
+    private String routeLink;
+
     @OneToMany(mappedBy = "event", cascade = {CascadeType.ALL})
     private List<Confirmation> confirmationList;
 

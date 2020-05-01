@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/custom/externalapps")
 @RequiredArgsConstructor
-public class ExternalAppsService {
+public class ExternalAppsControler {
 
     private final ExternalAppService externalAppService;
 
