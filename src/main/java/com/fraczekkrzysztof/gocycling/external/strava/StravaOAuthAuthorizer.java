@@ -94,7 +94,7 @@ public class StravaOAuthAuthorizer implements ExternalOAuthAuthorizer {
         List<UserExternalApp> listOfExternalApp = userExternalAppsRepository.findAll().stream()
                 .filter(e -> e.getAppType() == ExternalApps.STRAVA).collect(Collectors.toList());
         for(UserExternalApp ea : listOfExternalApp){
-            if ((ea.getExpiresAt()*1000)<System.currentTimeMillis()){
+            if (((ea.getExpiresAt()*1000)-30*60*1000)<System.currentTimeMillis() - 10*60*1000){
                 refreshToken(ea);
             }
         }
