@@ -12,7 +12,7 @@ public class StravaRefreshScheduler {
 
     private final ExternalOAuthAuthorizer stravaAutorizer;
 
-    @Scheduled(fixedRateString = "${strava.refreshInterval}")
+    @Scheduled(initialDelay = 1000, fixedRateString = "${strava.refreshInterval}")
     public void refreshTokensForStrava(){
         stravaAutorizer.refreshToken();
     }
