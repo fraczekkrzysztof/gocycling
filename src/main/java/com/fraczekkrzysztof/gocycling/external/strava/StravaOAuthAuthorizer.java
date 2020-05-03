@@ -132,7 +132,7 @@ public class StravaOAuthAuthorizer implements ExternalOAuthAuthorizer {
             sb.append("&");
             sb.append("refresh_token=");
             sb.append(externalApp.getRefreshToken());
-            log.info("Refreshing access token using address" + sb.toString());
+            log.info("Refreshing access token using address " + sb.toString());
             ResponseEntity<AccessTokenResponseDto> response = restTemplate.postForEntity(sb.toString(),null, AccessTokenResponseDto.class);
             if (!response.getStatusCode().is2xxSuccessful()){
                 throw new StravaApiException("There is error during retrieving access token");
@@ -142,7 +142,7 @@ public class StravaOAuthAuthorizer implements ExternalOAuthAuthorizer {
             externalApp.setExpiresAt(response.getBody().getExpiresAt().longValue());
             log.debug("Successfully refresh token for user {0}",externalApp.getUser().getId());
         } catch (Exception e){
-            log.error("Error during refreshing token for user {0}, at time {1}, using refresh token {2}",externalApp.getUser().getId(),System.currentTimeMillis(),externalApp.getRefreshToken(),e);
+            log.error(String.format("Error during refreshing token for user %s, at time %d, using refresh token %s",externalApp.getUser().getId(),System.currentTimeMillis(),externalApp.getRefreshToken()),e);
         }
     }
 }
