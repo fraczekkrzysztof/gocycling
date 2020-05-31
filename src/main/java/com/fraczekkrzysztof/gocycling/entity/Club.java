@@ -30,9 +30,8 @@ public class Club {
     @Column (name = "cl_longitude", nullable = false)
     private double longitude;
 
-    @JoinColumn(name = "cl_owner", nullable = false)
-    @ManyToOne
-    private User user;
+    @Column(name = "cl_owner", nullable = false)
+    private String owner;
 
     @Column(name = "cl_details")
     private String details;
