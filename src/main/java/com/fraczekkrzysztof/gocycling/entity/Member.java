@@ -2,6 +2,7 @@ package com.fraczekkrzysztof.gocycling.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Data
 public class Member {
 
     @Id
@@ -19,12 +21,11 @@ public class Member {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="mem_cl_id")
+    @JoinColumn(name="mem_cl_id", nullable = false)
     private Club club;
 
-    @ManyToOne
-    @JoinColumn(name="mem_us_id")
-    private User user;
+    @Column(name="mem_user_uid", nullable = false)
+    private String userUid;
 
     @Column(name="mem_confirmed")
     private boolean confirmed;
