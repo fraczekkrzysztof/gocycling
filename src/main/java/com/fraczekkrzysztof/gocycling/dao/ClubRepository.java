@@ -15,6 +15,6 @@ import javax.transaction.Transactional;
 @Transactional
 public interface ClubRepository extends JpaRepository<Club,Long> {
 
-    @Query("select c from Club c where c.owner = :userUid")
-    Page<Club> findAllByUserUid(@Param("userUid") String userUid, Pageable page);
+    @Query("select c from Member m join m.club c where m.userUid = :userUid")
+    Page<Club> findAllWhichUserIsMember(@Param("userUid") String userUid, Pageable page);
 }
