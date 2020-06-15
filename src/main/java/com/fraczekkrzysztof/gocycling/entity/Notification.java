@@ -36,7 +36,7 @@ public class Notification {
     @Column(name = "not_read")
     private boolean read = false;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "not_event_id")
     private Event event;
 }

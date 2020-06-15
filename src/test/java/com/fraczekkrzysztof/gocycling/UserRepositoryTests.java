@@ -1,8 +1,13 @@
 package com.fraczekkrzysztof.gocycling;
 
-import com.fraczekkrzysztof.gocycling.dao.*;
+import com.fraczekkrzysztof.gocycling.dao.ClubRepository;
+import com.fraczekkrzysztof.gocycling.dao.EventRepository;
+import com.fraczekkrzysztof.gocycling.dao.MemberRepository;
+import com.fraczekkrzysztof.gocycling.dao.UserRepository;
 import com.fraczekkrzysztof.gocycling.entity.*;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -36,7 +41,7 @@ public class UserRepositoryTests {
 
     @Test
     public void shouldReturnTwoUsers(){
-        Event event = Event.builder().name("Test1").place("TestPlace1").created(LocalDateTime.now()).dateAndTime(LocalDateTime.now().plusDays(5)).build();
+        Event event = Event.builder().name("Test1").place("TestPlace1").created(LocalDateTime.now()).createdBy("ziutek").dateAndTime(LocalDateTime.now().plusDays(5)).build();
         User user = new User();
         user.setId("asdf");
         user.setName("Jan");
@@ -57,7 +62,7 @@ public class UserRepositoryTests {
 
     @Test
     public void shouldReturnTwoMembers(){
-        Club club = Club.builder().name("Test").location("Location").latitude(11).longitude(12).privateMode(false).details("Details").owner("123").build();
+        Club club = Club.builder().name("Test").location("Location").latitude(11).longitude(12).privateMode(false).details("Details").owner("123").created(LocalDateTime.now()).build();
         User user = new User();
         user.setId("asdf");
         user.setName("Jan");

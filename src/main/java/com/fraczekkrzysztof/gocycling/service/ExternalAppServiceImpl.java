@@ -2,6 +2,7 @@ package com.fraczekkrzysztof.gocycling.service;
 
 import com.fraczekkrzysztof.gocycling.dao.UserExternalAppsRepository;
 import com.fraczekkrzysztof.gocycling.entity.ExternalApps;
+import com.fraczekkrzysztof.gocycling.entity.UserExternalApp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,6 @@ public class ExternalAppServiceImpl implements  ExternalAppService {
     @Override
     public List<ExternalApps> getUserExternalApps(String userUid) {
         return userExternalAppsRepository.findExternalAppByUserUid(userUid).stream()
-                .map(uea -> uea.getAppType()).collect(Collectors.toList());
+                .map(UserExternalApp::getAppType).collect(Collectors.toList());
     }
 }

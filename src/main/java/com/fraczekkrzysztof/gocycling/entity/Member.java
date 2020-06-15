@@ -20,7 +20,7 @@ public class Member {
     @Column(name = "mem_id")
     private long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="mem_cl_id", nullable = false)
     private Club club;
 

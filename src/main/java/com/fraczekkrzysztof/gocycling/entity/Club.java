@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name="club")
@@ -35,10 +37,16 @@ public class Club {
     @Column(name = "cl_owner", nullable = false)
     private String owner;
 
+    @Column(name = "cl_created", nullable = false, columnDefinition = "TIMESTAMP", updatable = false)
+    private LocalDateTime created = LocalDateTime.now();
+
     @Column(name = "cl_details")
     private String details;
 
     @Column(name = "cl_private_mode")
     private boolean privateMode = false;
+
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
+    private List<Event> eventList;
 
 }

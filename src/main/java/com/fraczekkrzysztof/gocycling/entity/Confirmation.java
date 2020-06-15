@@ -30,7 +30,7 @@ public class Confirmation implements Serializable {
     @Column(name = "con_user_uid", nullable = false)
     private String userUid;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "con_ev_id")
     private Event event;
 
