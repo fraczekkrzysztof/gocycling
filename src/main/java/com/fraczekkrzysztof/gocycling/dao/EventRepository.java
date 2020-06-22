@@ -39,4 +39,8 @@ public interface EventRepository extends JpaRepository<Event, Long>, EventReposi
     @Override
     @Query(value = "select e from Event e join e.club c where c.id = :clubId and e.dateAndTime > current_timestamp() and e.canceled=false order by e.dateAndTime")
     Page<Event> findCurrentByClubId(@Param("clubId") long clubId, Pageable pageable);
+
+    @Override
+    @Query(value = "select e from Event e join e.club c where c.id = :clubId and e.dateAndTime > current_timestamp() and e.createdBy = :userUid order by e.dateAndTime")
+    Page<Event> findByUserUidAndClubId(@Param("userUid") String userUid, @Param("clubId") String clubId, Pageable pageable);
 }
