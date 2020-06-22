@@ -10,4 +10,6 @@ public interface EventRepositorySearch {
     Page<Event> findConfirmedByUserUid(String userUid, Pageable pageable);
     Page<Event> findByUserUid(String userUid, Pageable pageable);
     Page<Event> findEventByNotificationId(long notificationId, Pageable pageable);
+
+    Page<Event> findCurrentByClubId(long clubId, Pageable pageable);
 }
