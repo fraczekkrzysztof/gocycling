@@ -6,11 +6,17 @@ import org.springframework.data.domain.Pageable;
 
 public interface EventRepositorySearch {
     Page<Event> findCurrent(Pageable pageable);
+
     Page<Event> findByName(String name, Pageable pageable);
+
     Page<Event> findConfirmedByUserUid(String userUid, Pageable pageable);
+
     Page<Event> findByUserUid(String userUid, Pageable pageable);
+
+    Page<Event> findByUserUidAndClubId(String userUid, long clubId, Pageable pageable);
+
     Page<Event> findEventByNotificationId(long notificationId, Pageable pageable);
+
     Page<Event> findCurrentByClubId(long clubId, Pageable pageable);
 
-    Page<Event> findByUserUidAndClubId(String userUid, String clubId, Pageable pageable);
 }
