@@ -19,4 +19,8 @@ public interface UserRepository extends JpaRepository<User,String>, UserReposito
     @Query("select u from User u join Confirmation c on (c.userUid=u.id) where c.event.id = :eventId")
     Page<User> findUserConfirmedEvent(@Param("eventId") long eventId, Pageable pageable);
 
+    @Override
+    @Query("select u from User u join Member m on (m.userUid=u.id) where m.club.id = :clubId")
+    Page<User> findUserClubMembers(@Param("clubId") long clubId, Pageable pageable);
+
 }

@@ -7,4 +7,7 @@ import org.springframework.data.domain.Pageable;
 public interface UserRepositorySearch {
 
     Page<User> findUserConfirmedEvent(long eventId, Pageable pageable);
+
+    Page<User> findUserClubMembers(long clubId, Pageable pageable);
+
 }

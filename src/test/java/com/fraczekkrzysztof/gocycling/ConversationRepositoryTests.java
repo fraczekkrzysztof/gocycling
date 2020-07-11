@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -35,17 +34,20 @@ public class ConversationRepositoryTests {
                 .place("TestPlace")
                 .dateAndTime(LocalDateTime.now().plusDays(2))
                 .created((LocalDateTime.now()))
+                .createdBy("ziutek")
                 .createdBy("12345566").build();
 
         Conversation conversation1 = Conversation.builder()
                 .userUid("12345")
                 .username("Testowy Janusz")
                 .message("ja dziś odpadam")
+                .created(LocalDateTime.now())
                 .event(event).build();
 
         Conversation conversation2 = Conversation.builder()
                 .userUid("12345")
                 .username("Testowy Ziutek")
+                .created(LocalDateTime.now())
                 .message("Ja dzis mam ochotę pozadupczać")
                 .event(event).build();
 

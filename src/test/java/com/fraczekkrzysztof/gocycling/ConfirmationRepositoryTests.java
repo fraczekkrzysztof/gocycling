@@ -30,6 +30,7 @@ public class ConfirmationRepositoryTests {
                 .name("TestName")
                 .place("TestPlace")
                 .dateAndTime(LocalDateTime.now().plusDays(2))
+                .createdBy("ziutek")
                 .created((LocalDateTime.now())).build();
         Confirmation confirmation = Confirmation.builder().userUid("test123").event(event).build();
         eventRepository.save(event);
@@ -46,6 +47,7 @@ public class ConfirmationRepositoryTests {
                 .name("TestName")
                 .place("TestPlace")
                 .dateAndTime(LocalDateTime.now().plusDays(2))
+                .createdBy("ziutek")
                 .created((LocalDateTime.now())).build();
         Confirmation confirmation = Confirmation.builder().userUid("test123").event(event).build();
         eventRepository.save(event);

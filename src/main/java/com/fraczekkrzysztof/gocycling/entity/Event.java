@@ -58,5 +58,9 @@ public class Event implements Serializable {
     @OneToMany(mappedBy = "event", cascade = {CascadeType.ALL})
     private List<Confirmation> confirmationList;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ev_cl_id")
+    private Club club;
+
 
 }

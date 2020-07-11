@@ -3,7 +3,6 @@ package com.fraczekkrzysztof.gocycling.service;
 import com.fraczekkrzysztof.gocycling.dao.ConfirmationRepository;
 import com.fraczekkrzysztof.gocycling.entity.Confirmation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 

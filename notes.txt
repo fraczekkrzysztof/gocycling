@@ -10,6 +10,17 @@ new event
         "createdBy": "1212",
         "canceled": false
 }
+
+new club
+{
+        "name": "CLUB2",
+        "location": "TEST",
+        "latitude": 12.1,
+        "longitude": 12.1,
+        "owner": "1212",
+        "details": "gsgdfgd44432",
+        "privateMode": false
+}
 new conversation
 {
         "userUid" : "2222",
