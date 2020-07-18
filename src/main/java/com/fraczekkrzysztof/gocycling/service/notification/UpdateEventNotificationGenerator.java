@@ -14,7 +14,7 @@ import java.text.MessageFormat;
 import java.time.LocalDateTime;
 
 @Service
-public class UpdateEventNotificationGenerator extends EventNotificationGenerator {
+public class UpdateEventNotificationGenerator extends EventNotificationGeneratorForConfirmations {
 
     private static final String TITLE = "Event was updated";
     private static final String CONTENT = "Event {0} you confirmed was updated. Check details.";

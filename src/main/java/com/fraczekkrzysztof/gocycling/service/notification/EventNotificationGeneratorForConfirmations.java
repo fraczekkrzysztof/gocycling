@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class EventNotificationGenerator {
+public abstract class EventNotificationGeneratorForConfirmations {
 
     Logger logger = null;
     private Map<Long,List<String>> eventsWithUserToIgnore = new HashMap<>();
@@ -23,7 +23,7 @@ public abstract class EventNotificationGenerator {
     private NotificationRepository notificationRepository;
     private ConfirmationRepository confirmationRepository;
 
-    public EventNotificationGenerator(EventRepository eventRepository, NotificationRepository notificationRepository, ConfirmationRepository confirmationRepository){
+    public EventNotificationGeneratorForConfirmations(EventRepository eventRepository, NotificationRepository notificationRepository, ConfirmationRepository confirmationRepository) {
         this.eventRepository = eventRepository;
         this.notificationRepository = notificationRepository;
         this.confirmationRepository = confirmationRepository;
@@ -62,7 +62,7 @@ public abstract class EventNotificationGenerator {
         eventsWithUserToIgnore.entrySet().removeIf(entry -> toRemoved.keySet().contains(entry.getKey()));
     }
 
-    private List<Notification> generateNotifications(Map<Long,List<String>> idsWithUserToignore){
+    protected List<Notification> generateNotifications(Map<Long, List<String>> idsWithUserToignore) {
         List<Notification> notificationToSave = new ArrayList<>();
         if (!idsWithUserToignore.isEmpty()){
             List<Event> eventsToGenerateNotification = eventRepository.findAllById(idsWithUserToignore.keySet());

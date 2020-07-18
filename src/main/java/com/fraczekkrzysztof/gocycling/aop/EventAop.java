@@ -2,7 +2,7 @@ package com.fraczekkrzysztof.gocycling.aop;
 
 import com.fraczekkrzysztof.gocycling.dao.EventRepository;
 import com.fraczekkrzysztof.gocycling.entity.Event;
-import com.fraczekkrzysztof.gocycling.service.notification.EventNotificationGenerator;
+import com.fraczekkrzysztof.gocycling.service.notification.EventNotificationGeneratorForConfirmations;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -19,9 +19,9 @@ import java.util.NoSuchElementException;
 public class EventAop {
 
     @Qualifier("updateEventNotificationGenerator")
-    private final EventNotificationGenerator updateEventNotificationGenerator;
+    private final EventNotificationGeneratorForConfirmations updateEventNotificationGeneratorForConfirmations;
     @Qualifier("cancelEventNotificationGenerator")
-    private final EventNotificationGenerator cancelEventNotificationGenerator;
+    private final EventNotificationGeneratorForConfirmations cancelEventNotificationGeneratorForConfirmations;
     private final EventRepository eventRepository;
 
 
@@ -41,7 +41,8 @@ public class EventAop {
        if (arg instanceof Event){
            Long id = ((Event)arg).getId();
            boolean isCanceled = ((Event)arg).isCanceled();
-           if (id != 0 && !isCanceled) updateEventNotificationGenerator.addEventIdAndIgnoreUser(((Event)arg).getId(),((Event)arg).getCreatedBy());
+           if (id != 0 && !isCanceled)
+               updateEventNotificationGeneratorForConfirmations.addEventIdAndIgnoreUser(((Event) arg).getId(), ((Event) arg).getCreatedBy());
        }
       }
     }
@@ -52,7 +53,7 @@ public class EventAop {
             if (arg instanceof Long){
                 long id = (long)arg;
                 String userUid = eventRepository.findById(id).orElseThrow(() -> new NoSuchElementException("There is no event of id "+ id)).getCreatedBy();
-                cancelEventNotificationGenerator.addEventIdAndIgnoreUser(id,userUid);
+                cancelEventNotificationGeneratorForConfirmations.addEventIdAndIgnoreUser(id, userUid);
             }
         }
     }

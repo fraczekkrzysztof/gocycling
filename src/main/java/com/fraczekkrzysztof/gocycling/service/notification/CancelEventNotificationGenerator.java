@@ -14,7 +14,7 @@ import java.text.MessageFormat;
 import java.time.LocalDateTime;
 
 @Service
-public class CancelEventNotificationGenerator extends EventNotificationGenerator {
+public class CancelEventNotificationGenerator extends EventNotificationGeneratorForConfirmations {
 
     private static final String TITLE = "Event is canceled";
     private static final String CONTENT = "Event {0} you confirmed is canceled. Check details.";

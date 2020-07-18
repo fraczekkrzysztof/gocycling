@@ -14,7 +14,7 @@ import java.text.MessageFormat;
 import java.time.LocalDateTime;
 
 @Service
-public class NewConversationNotificationGenerator extends EventNotificationGenerator {
+public class NewConversationNotificationGenerator extends EventNotificationGeneratorForConfirmations {
     private static final String TITLE = "New message";
     private static final String CONTENT = "Someone leave the message for event {0} you confirmed.";
 
