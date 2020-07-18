@@ -1,7 +1,7 @@
 package com.fraczekkrzysztof.gocycling.aop;
 
 import com.fraczekkrzysztof.gocycling.entity.Conversation;
-import com.fraczekkrzysztof.gocycling.service.notification.NewConversationNotificationGenerator;
+import com.fraczekkrzysztof.gocycling.service.notification.NewConversationNotificationGeneratorForConfirmation;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ConversationAop {
 
-    @Qualifier("newConversationNotificationGenerator")
-    private final NewConversationNotificationGenerator newConversationNotificationGenerator;
+    @Qualifier("newConversationNotificationGeneratorForConfirmation")
+    private final NewConversationNotificationGeneratorForConfirmation newConversationNotificationGeneratorForConfirmation;
 
     @Pointcut("execution (* com.fraczekkrzysztof.gocycling.dao.ConversationRepository.save(..))")
     private void forEventUpdate(){
@@ -28,7 +28,8 @@ public class ConversationAop {
         for (Object arg : joinPoint.getArgs()){
             if (arg instanceof Conversation){
                 Long id = ((Conversation)arg).getId();
-                if (id == 0 ) newConversationNotificationGenerator.addEventIdAndIgnoreUser(((Conversation)arg).getEvent().getId(),((Conversation)arg).getUserUid());
+                if (id == 0)
+                    newConversationNotificationGeneratorForConfirmation.addEventIdAndIgnoreUser(((Conversation) arg).getEvent().getId(), ((Conversation) arg).getUserUid());
             }
         }
     }
