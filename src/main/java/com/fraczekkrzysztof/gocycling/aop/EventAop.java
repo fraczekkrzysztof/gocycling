@@ -6,11 +6,14 @@ import com.fraczekkrzysztof.gocycling.service.notification.EventNotificationGene
 import com.fraczekkrzysztof.gocycling.service.notification.EventNotificationGeneratorForConfirmations;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 @Aspect
@@ -36,16 +39,17 @@ public class EventAop {
         //define pointcut
     }
 
-    @Before("forEventInsertOrUpdate()")
-    private void beforeUpdate(JoinPoint joinPoint) {
+    @After("forEventInsertOrUpdate()")
+    private void afterInsertOrUpdate(JoinPoint joinPoint) {
         for (Object arg : joinPoint.getArgs()) {
             if (arg instanceof Event) {
                 Long id = ((Event) arg).getId();
                 boolean isCanceled = ((Event) arg).isCanceled();
-                if (id != 0 && !isCanceled) {
+                LocalDateTime updated = ((Event) arg).getUpdated();
+                if (id != 0 && !isCanceled && !ObjectUtils.isEmpty(updated)) {
                     updateEventNotificationGeneratorForConfirmation.addEventIdAndIgnoreUser(((Event) arg).getId(), ((Event) arg).getCreatedBy());
                 }
-                if (id == 0 && !isCanceled) {
+                if (id != 0 && !isCanceled && ObjectUtils.isEmpty(updated)) {
                     newEventForClubNotificationGeneratorForClubMembers.addEventIdAndIgnoreUser(((Event) arg).getId(), ((Event) arg).getCreatedBy());
                 }
             }

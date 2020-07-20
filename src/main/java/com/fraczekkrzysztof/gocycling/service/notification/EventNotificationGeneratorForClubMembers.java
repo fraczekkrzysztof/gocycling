@@ -1,5 +1,6 @@
 package com.fraczekkrzysztof.gocycling.service.notification;
 
+import com.fraczekkrzysztof.gocycling.dao.ClubRepository;
 import com.fraczekkrzysztof.gocycling.dao.EventRepository;
 import com.fraczekkrzysztof.gocycling.dao.MemberRepository;
 import com.fraczekkrzysztof.gocycling.dao.NotificationRepository;
@@ -23,11 +24,13 @@ public abstract class EventNotificationGeneratorForClubMembers {
     private final EventRepository eventRepository;
     private final NotificationRepository notificationRepository;
     private final MemberRepository memberRepository;
+    private final ClubRepository clubRepository;
 
-    public EventNotificationGeneratorForClubMembers(EventRepository eventRepository, NotificationRepository notificationRepository, MemberRepository memberRepository) {
+    public EventNotificationGeneratorForClubMembers(EventRepository eventRepository, NotificationRepository notificationRepository, MemberRepository memberRepository, ClubRepository clubRepository) {
         this.eventRepository = eventRepository;
         this.notificationRepository = notificationRepository;
         this.memberRepository = memberRepository;
+        this.clubRepository = clubRepository;
     }
 
     public void addEventIdAndIgnoreUser(long id, String userUidToIgnore) {
@@ -66,12 +69,14 @@ public abstract class EventNotificationGeneratorForClubMembers {
         if (!idsWithUserToignore.isEmpty()) {
             List<Event> eventsToGenerateNotification = eventRepository.findAllById(idsWithUserToignore.keySet());
             eventsToGenerateNotification.stream().forEach(e -> {
-                List<Member> clubMembers = memberRepository.findAllClubMembers(e.getClub().getId());
+                Club club = clubRepository.findSingleClubForEventId(e.getId());
+                List<Member> clubMembers = memberRepository.findAllClubMembers(club.getId());
                 for (Member m : clubMembers) {
                     if (idsWithUserToignore.get(e.getId()).contains(m.getUserUid())) {
                         continue;
                     }
-                    notificationToSave.add(generateSingleNotification(e.getClub(), m, e));
+
+                    notificationToSave.add(generateSingleNotification(club, m, e));
                 }
             });
         }

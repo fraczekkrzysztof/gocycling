@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.data.rest.core.annotation.RestResource;
 
 import javax.transaction.Transactional;
 
@@ -19,4 +20,8 @@ public interface ClubRepository extends JpaRepository<Club,Long> {
 
     @Query("select c from Event e join e.club c where e.id = :eventId")
     Page<Club> findClubForEventId(@Param("eventId") long eventId, Pageable page);
+
+    @RestResource(exported = false)
+    @Query("select c from Event e join e.club c where e.id = :eventId")
+    Club findSingleClubForEventId(@Param("eventId") long eventId);
 }
