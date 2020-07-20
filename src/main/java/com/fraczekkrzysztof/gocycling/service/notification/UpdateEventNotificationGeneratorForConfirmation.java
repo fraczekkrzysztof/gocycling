@@ -14,15 +14,15 @@ import java.text.MessageFormat;
 import java.time.LocalDateTime;
 
 @Service
-public class UpdateEventNotificationGenerator extends EventNotificationGenerator {
+public class UpdateEventNotificationGeneratorForConfirmation extends EventNotificationGeneratorForConfirmations {
 
     private static final String TITLE = "Event was updated";
     private static final String CONTENT = "Event {0} you confirmed was updated. Check details.";
 
     @Autowired
-    public UpdateEventNotificationGenerator(EventRepository eventRepository, NotificationRepository notificationRepository, ConfirmationRepository confirmationRepository) {
+    public UpdateEventNotificationGeneratorForConfirmation(EventRepository eventRepository, NotificationRepository notificationRepository, ConfirmationRepository confirmationRepository) {
         super(eventRepository, notificationRepository, confirmationRepository);
-        this.logger =  LoggerFactory.getLogger(UpdateEventNotificationGenerator.class);
+        this.logger = LoggerFactory.getLogger(UpdateEventNotificationGeneratorForConfirmation.class);
     }
 
     @Override

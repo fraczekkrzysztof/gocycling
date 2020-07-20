@@ -14,15 +14,14 @@ import java.text.MessageFormat;
 import java.time.LocalDateTime;
 
 @Service
-public class CancelEventNotificationGenerator extends EventNotificationGenerator {
-
-    private static final String TITLE = "Event is canceled";
-    private static final String CONTENT = "Event {0} you confirmed is canceled. Check details.";
+public class NewConversationNotificationGeneratorForConfirmation extends EventNotificationGeneratorForConfirmations {
+    private static final String TITLE = "New message";
+    private static final String CONTENT = "Someone leave the message for event {0} you confirmed.";
 
     @Autowired
-    public CancelEventNotificationGenerator(EventRepository eventRepository, NotificationRepository notificationRepository, ConfirmationRepository confirmationRepository) {
+    public NewConversationNotificationGeneratorForConfirmation(EventRepository eventRepository, NotificationRepository notificationRepository, ConfirmationRepository confirmationRepository) {
         super(eventRepository, notificationRepository, confirmationRepository);
-        this.logger = LoggerFactory.getLogger(CancelEventNotificationGenerator.class);
+        this.logger = LoggerFactory.getLogger(NewConversationNotificationGeneratorForConfirmation.class);
     }
 
     @Override

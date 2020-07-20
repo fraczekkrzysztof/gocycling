@@ -6,7 +6,7 @@ import com.fraczekkrzysztof.gocycling.dao.NotificationRepository;
 import com.fraczekkrzysztof.gocycling.entity.Confirmation;
 import com.fraczekkrzysztof.gocycling.entity.Event;
 import com.fraczekkrzysztof.gocycling.entity.Notification;
-import com.fraczekkrzysztof.gocycling.service.notification.EventNotificationGenerator;
+import com.fraczekkrzysztof.gocycling.service.notification.EventNotificationGeneratorForConfirmations;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,7 +36,7 @@ public class EventNotificationGeneratorTests {
 
     @Autowired
     @Qualifier("updateEventNotificationGenerator")
-    EventNotificationGenerator notificationGenerator;
+    EventNotificationGeneratorForConfirmations notificationGenerator;
 
     @Before
     public void before(){

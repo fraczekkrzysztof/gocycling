@@ -43,6 +43,9 @@ public class Event implements Serializable {
     @Column(name = "ev_created", nullable = false, columnDefinition = "TIMESTAMP", updatable = false)
     private LocalDateTime created = LocalDateTime.now();
 
+    @Column(name = "ev_updated", columnDefinition = "TIMESTAMP")
+    private LocalDateTime updated;
+
     @Column (name = "ev_details", columnDefinition = "text")
     private String details;
 
