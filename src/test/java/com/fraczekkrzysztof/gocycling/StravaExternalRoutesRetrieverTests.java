@@ -49,7 +49,7 @@ public class StravaExternalRoutesRetrieverTests {
                 .build();
 
         StravaRouteDto stravaRouteDto = StravaRouteDto.builder()
-                .id(1233)
+                .id(1233L)
                 .name("test")
                 .distance(1234.45)
                 .elevationGain(567.34)
