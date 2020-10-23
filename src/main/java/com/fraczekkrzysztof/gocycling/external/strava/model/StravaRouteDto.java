@@ -3,7 +3,10 @@ package com.fraczekkrzysztof.gocycling.external.strava.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -39,7 +42,7 @@ public class StravaRouteDto {
     @JsonProperty("elevation_gain")
     public Double elevationGain;
     @JsonProperty("id")
-    public Integer id;
+    public Long id;
     @JsonProperty("map")
     public MapDto map;
     @JsonProperty("name")
