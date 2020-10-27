@@ -4,7 +4,9 @@ import com.fraczekkrzysztof.gocycling.dao.ClubRepository;
 import com.fraczekkrzysztof.gocycling.dao.EventRepository;
 import com.fraczekkrzysztof.gocycling.dao.MemberRepository;
 import com.fraczekkrzysztof.gocycling.dao.UserRepository;
-import com.fraczekkrzysztof.gocycling.entity.*;
+import com.fraczekkrzysztof.gocycling.entity.Confirmation;
+import com.fraczekkrzysztof.gocycling.entity.Event;
+import com.fraczekkrzysztof.gocycling.entity.User;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,25 +62,25 @@ public class UserRepositoryTests {
         eventRepository.deleteAll();
     }
 
-    @Test
-    public void shouldReturnTwoMembers(){
-        Club club = Club.builder().name("Test").location("Location").latitude(11).longitude(12).privateMode(false).details("Details").owner("123").created(LocalDateTime.now()).build();
-        User user = new User();
-        user.setId("asdf");
-        user.setName("Jan");
-        User user2 = new User();
-        user2.setId("qwer");
-        user2.setName("Ziutek");
-        Member member = Member.builder().club(club).userUid("asdf").build();
-        Member member2 = Member.builder().club(club).userUid("asdf").build();
-        clubRepository.save(club);
-        userRepository.saveAll(Arrays.asList(user,user2));
-        memberRepository.saveAll(Arrays.asList(member,member2));
-        List<User> listOfUsers = userRepository.findUserClubMembers(club.getId(),PageRequest.of(0,5)).getContent();
-        Assert.assertEquals(2,listOfUsers.size());
-        memberRepository.deleteAll();
-        clubRepository.deleteAll();
-        userRepository.deleteAll();
-    }
+//    @Test
+//    public void shouldReturnTwoMembers(){
+//        Club club = Club.builder().name("Test").location("Location").latitude(11).longitude(12).privateMode(false).details("Details").owner("123").created(LocalDateTime.now()).build();
+//        User user = new User();
+//        user.setId("asdf");
+//        user.setName("Jan");
+//        User user2 = new User();
+//        user2.setId("qwer");
+//        user2.setName("Ziutek");
+//        Member member = Member.builder().club(club).userUid("asdf").build();
+//        Member member2 = Member.builder().club(club).userUid("asdf").build();
+//        clubRepository.save(club);
+//        userRepository.saveAll(Arrays.asList(user,user2));
+//        memberRepository.saveAll(Arrays.asList(member,member2));
+//        List<User> listOfUsers = userRepository.findUserClubMembers(club.getId(),PageRequest.of(0,5)).getContent();
+//        Assert.assertEquals(2,listOfUsers.size());
+//        memberRepository.deleteAll();
+//        clubRepository.deleteAll();
+//        userRepository.deleteAll();
+//    }
 
 }

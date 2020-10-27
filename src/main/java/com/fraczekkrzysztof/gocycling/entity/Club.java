@@ -49,4 +49,8 @@ public class Club {
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
     private List<Event> eventList;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "mem_cl_id")
+    private List<Member> memberList;
+
 }

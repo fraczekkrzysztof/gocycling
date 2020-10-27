@@ -70,7 +70,7 @@ public abstract class EventNotificationGeneratorForClubMembers {
             List<Event> eventsToGenerateNotification = eventRepository.findAllById(idsWithUserToignore.keySet());
             eventsToGenerateNotification.stream().forEach(e -> {
                 Club club = clubRepository.findSingleClubForEventId(e.getId());
-                List<Member> clubMembers = memberRepository.findAllClubMembers(club.getId());
+                List<Member> clubMembers = null; //TODO replace it with proper one during implementation memberRepository.findAllClubMembers(club.getId());
                 for (Member m : clubMembers) {
                     if (idsWithUserToignore.get(e.getId()).contains(m.getUserUid())) {
                         continue;
