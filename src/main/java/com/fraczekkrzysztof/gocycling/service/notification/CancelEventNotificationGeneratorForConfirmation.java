@@ -1,6 +1,5 @@
 package com.fraczekkrzysztof.gocycling.service.notification;
 
-import com.fraczekkrzysztof.gocycling.dao.ConfirmationRepository;
 import com.fraczekkrzysztof.gocycling.dao.EventRepository;
 import com.fraczekkrzysztof.gocycling.dao.NotificationRepository;
 import com.fraczekkrzysztof.gocycling.entity.Confirmation;
@@ -19,9 +18,10 @@ public class CancelEventNotificationGeneratorForConfirmation extends EventNotifi
     private static final String TITLE = "Event is canceled";
     private static final String CONTENT = "Event {0} you confirmed is canceled. Check details.";
 
+    //TODO make it working after full refactor
     @Autowired
-    public CancelEventNotificationGeneratorForConfirmation(EventRepository eventRepository, NotificationRepository notificationRepository, ConfirmationRepository confirmationRepository) {
-        super(eventRepository, notificationRepository, confirmationRepository);
+    public CancelEventNotificationGeneratorForConfirmation(EventRepository eventRepository, NotificationRepository notificationRepository) {
+        super(eventRepository, notificationRepository);
         this.logger = LoggerFactory.getLogger(CancelEventNotificationGeneratorForConfirmation.class);
     }
 

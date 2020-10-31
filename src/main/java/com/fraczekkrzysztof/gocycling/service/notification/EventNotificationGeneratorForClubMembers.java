@@ -2,7 +2,6 @@ package com.fraczekkrzysztof.gocycling.service.notification;
 
 import com.fraczekkrzysztof.gocycling.dao.ClubRepository;
 import com.fraczekkrzysztof.gocycling.dao.EventRepository;
-import com.fraczekkrzysztof.gocycling.dao.MemberRepository;
 import com.fraczekkrzysztof.gocycling.dao.NotificationRepository;
 import com.fraczekkrzysztof.gocycling.entity.Club;
 import com.fraczekkrzysztof.gocycling.entity.Event;
@@ -23,13 +22,11 @@ public abstract class EventNotificationGeneratorForClubMembers {
 
     private final EventRepository eventRepository;
     private final NotificationRepository notificationRepository;
-    private final MemberRepository memberRepository;
     private final ClubRepository clubRepository;
 
-    public EventNotificationGeneratorForClubMembers(EventRepository eventRepository, NotificationRepository notificationRepository, MemberRepository memberRepository, ClubRepository clubRepository) {
+    public EventNotificationGeneratorForClubMembers(EventRepository eventRepository, NotificationRepository notificationRepository, ClubRepository clubRepository) {
         this.eventRepository = eventRepository;
         this.notificationRepository = notificationRepository;
-        this.memberRepository = memberRepository;
         this.clubRepository = clubRepository;
     }
 
@@ -69,8 +66,8 @@ public abstract class EventNotificationGeneratorForClubMembers {
         if (!idsWithUserToignore.isEmpty()) {
             List<Event> eventsToGenerateNotification = eventRepository.findAllById(idsWithUserToignore.keySet());
             eventsToGenerateNotification.stream().forEach(e -> {
-                Club club = clubRepository.findSingleClubForEventId(e.getId());
-                List<Member> clubMembers = null; //TODO replace it with proper one during implementation memberRepository.findAllClubMembers(club.getId());
+                Club club = e.getClub();
+                List<Member> clubMembers = club.getMemberList();
                 for (Member m : clubMembers) {
                     if (idsWithUserToignore.get(e.getId()).contains(m.getUserUid())) {
                         continue;

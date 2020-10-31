@@ -12,5 +12,6 @@ public class MemberDto {
 
     private long id;
     private String userUid;
+    private String userName;
     private boolean confirmed;
 }

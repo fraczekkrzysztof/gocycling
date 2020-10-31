@@ -1,7 +1,9 @@
 package com.fraczekkrzysztof.gocycling.mapper.club;
 
 import com.fraczekkrzysztof.gocycling.dto.club.ClubDto;
+import com.fraczekkrzysztof.gocycling.dto.club.MemberDto;
 import com.fraczekkrzysztof.gocycling.entity.Club;
+import com.fraczekkrzysztof.gocycling.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -53,5 +55,15 @@ public class ClubMapper {
         return builder.build();
     }
 
+    public ClubDto addUserNameInformationToClubDto(ClubDto club, List<User> userList) {
+        List<MemberDto> updatedList = club.getMemberList().stream()
+                .map(m -> {
+                    String userName = userList.stream().filter(u -> u.getId().equals(m.getUserUid())).map(u -> u.getName()).findFirst().orElse("");
+                    m.setUserName(userName);
+                    return m;
+                }).collect(Collectors.toList());
+        club.setMemberList(updatedList);
+        return club;
+    }
 
 }

@@ -1,6 +1,5 @@
 package com.fraczekkrzysztof.gocycling;
 
-import com.fraczekkrzysztof.gocycling.dao.ConfirmationRepository;
 import com.fraczekkrzysztof.gocycling.dao.EventRepository;
 import com.fraczekkrzysztof.gocycling.dao.NotificationRepository;
 import com.fraczekkrzysztof.gocycling.entity.Confirmation;
@@ -29,8 +28,6 @@ public class EventNotificationGeneratorTests {
 
     @MockBean
     EventRepository eventRepository;
-    @MockBean
-    ConfirmationRepository confirmationRepository;
     @MockBean
     NotificationRepository notificationRepository;
 
@@ -83,8 +80,6 @@ public class EventNotificationGeneratorTests {
         List<Confirmation> listForEvent2 = Arrays.asList(confirmation3,confirmation4);
 
         when(eventRepository.findAllById(any())).thenReturn(Arrays.asList(eventToList1,eventToList2));
-        when(confirmationRepository.findByEventId(1)).thenReturn(listForEvent1);
-        when(confirmationRepository.findByEventId(2)).thenReturn(listForEvent2);
         when(notificationRepository.saveAll(any())).thenReturn(Arrays.asList(new Notification(), new Notification()));
     }
 

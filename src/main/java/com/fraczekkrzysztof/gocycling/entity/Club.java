@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name="club")
+@Table(name = "club")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -19,19 +19,19 @@ public class Club {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="cl_id")
+    @Column(name = "cl_id")
     long id;
 
-    @Column(name="cl_name", nullable = false)
+    @Column(name = "cl_name", nullable = false)
     String name;
 
-    @Column(name="cl_location", nullable = false)
+    @Column(name = "cl_location", nullable = false)
     String location;
 
     @Column(name = "cl_latitude", nullable = false)
     private double latitude;
 
-    @Column (name = "cl_longitude", nullable = false)
+    @Column(name = "cl_longitude", nullable = false)
     private double longitude;
 
     @Column(name = "cl_owner", nullable = false)
@@ -49,7 +49,7 @@ public class Club {
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
     private List<Event> eventList;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "mem_cl_id")
     private List<Member> memberList;
 

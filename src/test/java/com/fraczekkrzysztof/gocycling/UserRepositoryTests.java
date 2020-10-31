@@ -2,7 +2,6 @@ package com.fraczekkrzysztof.gocycling;
 
 import com.fraczekkrzysztof.gocycling.dao.ClubRepository;
 import com.fraczekkrzysztof.gocycling.dao.EventRepository;
-import com.fraczekkrzysztof.gocycling.dao.MemberRepository;
 import com.fraczekkrzysztof.gocycling.dao.UserRepository;
 import com.fraczekkrzysztof.gocycling.entity.Confirmation;
 import com.fraczekkrzysztof.gocycling.entity.Event;
@@ -32,9 +31,6 @@ public class UserRepositoryTests {
 
     @Autowired
     ClubRepository clubRepository;
-
-    @Autowired
-    MemberRepository memberRepository;
 
     @Before
     public  void prepTests(){

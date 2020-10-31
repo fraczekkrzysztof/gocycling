@@ -1,6 +1,5 @@
 package com.fraczekkrzysztof.gocycling.service.notification;
 
-import com.fraczekkrzysztof.gocycling.dao.ConfirmationRepository;
 import com.fraczekkrzysztof.gocycling.dao.EventRepository;
 import com.fraczekkrzysztof.gocycling.dao.NotificationRepository;
 import com.fraczekkrzysztof.gocycling.entity.Confirmation;
@@ -21,12 +20,10 @@ public abstract class EventNotificationGeneratorForConfirmations {
 
     private EventRepository eventRepository;
     private NotificationRepository notificationRepository;
-    private ConfirmationRepository confirmationRepository;
 
-    public EventNotificationGeneratorForConfirmations(EventRepository eventRepository, NotificationRepository notificationRepository, ConfirmationRepository confirmationRepository) {
+    public EventNotificationGeneratorForConfirmations(EventRepository eventRepository, NotificationRepository notificationRepository) {
         this.eventRepository = eventRepository;
         this.notificationRepository = notificationRepository;
-        this.confirmationRepository = confirmationRepository;
     }
 
     public void addEventIdAndIgnoreUser(long id, String userUidToIgnore) {
@@ -67,7 +64,7 @@ public abstract class EventNotificationGeneratorForConfirmations {
         if (!idsWithUserToignore.isEmpty()){
             List<Event> eventsToGenerateNotification = eventRepository.findAllById(idsWithUserToignore.keySet());
             eventsToGenerateNotification.stream().forEach(e -> {
-                List<Confirmation> eventConfirmations = confirmationRepository.findByEventId(e.getId());
+                List<Confirmation> eventConfirmations = null;//TODO replace with proper method after refactor
                 for (Confirmation c : eventConfirmations){
                     if (idsWithUserToignore.get(e.getId()).contains(c.getUserUid())){
                         continue;

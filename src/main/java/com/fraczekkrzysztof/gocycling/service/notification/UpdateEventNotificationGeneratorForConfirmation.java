@@ -1,6 +1,5 @@
 package com.fraczekkrzysztof.gocycling.service.notification;
 
-import com.fraczekkrzysztof.gocycling.dao.ConfirmationRepository;
 import com.fraczekkrzysztof.gocycling.dao.EventRepository;
 import com.fraczekkrzysztof.gocycling.dao.NotificationRepository;
 import com.fraczekkrzysztof.gocycling.entity.Confirmation;
@@ -20,8 +19,8 @@ public class UpdateEventNotificationGeneratorForConfirmation extends EventNotifi
     private static final String CONTENT = "Event {0} you confirmed was updated. Check details.";
 
     @Autowired
-    public UpdateEventNotificationGeneratorForConfirmation(EventRepository eventRepository, NotificationRepository notificationRepository, ConfirmationRepository confirmationRepository) {
-        super(eventRepository, notificationRepository, confirmationRepository);
+    public UpdateEventNotificationGeneratorForConfirmation(EventRepository eventRepository, NotificationRepository notificationRepository) {
+        super(eventRepository, notificationRepository);
         this.logger = LoggerFactory.getLogger(UpdateEventNotificationGeneratorForConfirmation.class);
     }
 
