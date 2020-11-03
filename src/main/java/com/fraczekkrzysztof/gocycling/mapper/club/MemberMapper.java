@@ -17,19 +17,8 @@ public class MemberMapper {
     private MemberDto mapMemberEntityToMemberDto(Member member) {
         return MemberDto.builder()
                 .id(member.getId())
-                .userUid(member.getUserUid())
-                .confirmed(member.isConfirmed())
-                .build();
-    }
-
-    public List<Member> mapMemberDtoListToMemberEntityList(List<MemberDto> memberList) {
-        return memberList.stream().map(this::mapMemberDtoToMemberEntity).collect(Collectors.toList());
-    }
-
-    private Member mapMemberDtoToMemberEntity(MemberDto member) {
-        return Member.builder()
-                .id(member.getId())
-                .userUid(member.getUserUid())
+                .userUid(member.getUser().getId())
+                .userName(member.getUser().getName())
                 .confirmed(member.isConfirmed())
                 .build();
     }

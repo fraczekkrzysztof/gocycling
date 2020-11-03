@@ -69,7 +69,7 @@ public abstract class EventNotificationGeneratorForClubMembers {
                 Club club = e.getClub();
                 List<Member> clubMembers = club.getMemberList();
                 for (Member m : clubMembers) {
-                    if (idsWithUserToignore.get(e.getId()).contains(m.getUserUid())) {
+                    if (idsWithUserToignore.get(e.getId()).contains(m.getUser().getId())) {
                         continue;
                     }
 

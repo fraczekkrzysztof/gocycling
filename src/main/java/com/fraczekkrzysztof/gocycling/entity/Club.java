@@ -34,8 +34,9 @@ public class Club {
     @Column(name = "cl_longitude", nullable = false)
     private double longitude;
 
-    @Column(name = "cl_owner", nullable = false)
-    private String owner;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "cl_owner_id")
+    private User user;
 
     @Column(name = "cl_created", nullable = false, columnDefinition = "TIMESTAMP", updatable = false)
     private LocalDateTime created = LocalDateTime.now();

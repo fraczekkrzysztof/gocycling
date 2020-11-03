@@ -21,7 +21,8 @@ public class ClubDto {
     String location;
     private double latitude;
     private double longitude;
-    private String owner;
+    private String ownerId;
+    private String ownerName;
     private LocalDateTime created;
     private String details;
     private boolean privateMode;

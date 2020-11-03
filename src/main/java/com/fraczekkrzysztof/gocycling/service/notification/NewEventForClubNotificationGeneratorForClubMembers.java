@@ -29,7 +29,7 @@ public class NewEventForClubNotificationGeneratorForClubMembers extends EventNot
     @Override
     Notification generateSingleNotification(Club c, Member m, Event e) {
         return Notification.builder()
-                .userUid(m.getUserUid())
+                .userUid(m.getUser().getId())
                 .title(TITLE)
                 .content(MessageFormat.format(CONTENT, c.getName()))
                 .event(e)

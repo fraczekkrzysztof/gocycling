@@ -20,8 +20,10 @@ public class Member {
     @Column(name = "mem_id")
     private long id;
 
-    @Column(name="mem_user_uid", nullable = false)
-    private String userUid;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "mem_user_id")
+    private User user;
 
     @Column(name="mem_confirmed")
     private boolean confirmed;

@@ -11,6 +11,6 @@ import java.util.List;
 @Transactional
 public interface ClubRepository extends JpaRepository<Club, Long> {
 
-    @Query("select c from Club c join c.memberList m where m.userUid = :userUid")
+    @Query("select c from Club c join c.memberList m where m.user.id = :userUid")
     List<Club> findAllClubsWithUserMembership(@Param("userUid") String userUid);
 }
