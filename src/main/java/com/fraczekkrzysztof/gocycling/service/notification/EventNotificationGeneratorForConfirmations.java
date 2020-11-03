@@ -66,7 +66,7 @@ public abstract class EventNotificationGeneratorForConfirmations {
             eventsToGenerateNotification.stream().forEach(e -> {
                 List<Confirmation> eventConfirmations = null;//TODO replace with proper method after refactor
                 for (Confirmation c : eventConfirmations){
-                    if (idsWithUserToignore.get(e.getId()).contains(c.getUserUid())){
+                    if (idsWithUserToignore.get(e.getId()).contains(c.getUser().getId())) {
                         continue;
                     }
                     notificationToSave.add(generateSingleNotification(c,e));

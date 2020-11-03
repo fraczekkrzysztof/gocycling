@@ -29,7 +29,7 @@ public class ConversationAop {
             if (arg instanceof Conversation){
                 Long id = ((Conversation)arg).getId();
                 if (id == 0)
-                    newConversationNotificationGeneratorForConfirmation.addEventIdAndIgnoreUser(((Conversation) arg).getEvent().getId(), ((Conversation) arg).getUserUid());
+                    newConversationNotificationGeneratorForConfirmation.addEventIdAndIgnoreUser(((Conversation) arg).getEvent().getId(), ((Conversation) arg).getUser().getId());
             }
         }
     }

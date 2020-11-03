@@ -26,7 +26,7 @@ public class NewConversationNotificationGeneratorForConfirmation extends EventNo
     @Override
     Notification generateSingleNotification(Confirmation c, Event e) {
         return Notification.builder()
-                .userUid(c.getUserUid())
+                .userUid(c.getUser().getId())
                 .title(TITLE)
                 .content(MessageFormat.format(CONTENT, e.getName()))
                 .event(e)

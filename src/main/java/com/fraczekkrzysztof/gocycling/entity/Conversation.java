@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,18 +15,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Conversation {
+public class Conversation implements Serializable {
 
     @Id
     @Column(name = "cov_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(name = "cov_useruid")
-    private String userUid;
-
-    @Column(name = "cov_username")
-    private String username;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "cov_user_id")
+    private User user;
 
     @Column(name = "cov_created", nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime created = LocalDateTime.now();

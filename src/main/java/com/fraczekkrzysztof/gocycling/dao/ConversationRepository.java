@@ -12,9 +12,8 @@ import javax.transaction.Transactional;
 
 @RepositoryRestResource(path = "conversations")
 @Transactional
-public interface ConversationRepository extends JpaRepository<Conversation,Long>, ConversationRepositorySearch {
+public interface ConversationRepository extends JpaRepository<Conversation, Long> {
 
-    @Override
     @Query("select c from Conversation c where c.event.id = :eventId")
     Page<Conversation> findByEventId(@Param("eventId") long eventId, Pageable pageable);
 }

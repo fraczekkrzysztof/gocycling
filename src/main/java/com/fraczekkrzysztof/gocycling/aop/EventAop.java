@@ -47,10 +47,10 @@ public class EventAop {
                 boolean isCanceled = ((Event) arg).isCanceled();
                 LocalDateTime updated = ((Event) arg).getUpdated();
                 if (id != 0 && !isCanceled && !ObjectUtils.isEmpty(updated)) {
-                    updateEventNotificationGeneratorForConfirmation.addEventIdAndIgnoreUser(((Event) arg).getId(), ((Event) arg).getCreatedBy());
+                    updateEventNotificationGeneratorForConfirmation.addEventIdAndIgnoreUser(((Event) arg).getId(), ((Event) arg).getUser().getId());
                 }
                 if (id != 0 && !isCanceled && ObjectUtils.isEmpty(updated)) {
-                    newEventForClubNotificationGeneratorForClubMembers.addEventIdAndIgnoreUser(((Event) arg).getId(), ((Event) arg).getCreatedBy());
+                    newEventForClubNotificationGeneratorForClubMembers.addEventIdAndIgnoreUser(((Event) arg).getId(), ((Event) arg).getUser().getId());
                 }
             }
         }
@@ -61,7 +61,7 @@ public class EventAop {
         for (Object arg : joinPoint.getArgs()) {
             if (arg instanceof Long) {
                 long id = (long) arg;
-                String userUid = eventRepository.findById(id).orElseThrow(() -> new NoSuchElementException("There is no event of id " + id)).getCreatedBy();
+                String userUid = eventRepository.findById(id).orElseThrow(() -> new NoSuchElementException("There is no event of id " + id)).getUser().getId();
                 cancelEventNotificationGeneratorForConfirmation.addEventIdAndIgnoreUser(id, userUid);
             }
         }
