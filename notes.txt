@@ -1,3 +1,20 @@
+v2
+new clib
+{
+        "name": "BEZDUPIE1",
+        "location": "Test123",
+        "latitude": 13.1,
+        "longitude": 13.2,
+        "ownerId": "123",
+        "created": "2020-10-27T19:10:00",
+        "details": "test",
+        "privateMode": false}
+
+
+
+
+v1
+
 new event
 {
         "name": "TEST",
