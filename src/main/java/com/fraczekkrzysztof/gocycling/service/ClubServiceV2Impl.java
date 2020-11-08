@@ -11,12 +11,14 @@ import com.fraczekkrzysztof.gocycling.mapper.club.ClubMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ClubServiceV2Impl implements ClubServiceV2 {
 
     private final ClubRepository clubRepository;

@@ -28,6 +28,6 @@ public class EventDto {
     private String routeLink;
     private List<ConfirmationDto> confirmationList;
     private long clubId;
-    private long clubName;
+    private String clubName;
 }
 

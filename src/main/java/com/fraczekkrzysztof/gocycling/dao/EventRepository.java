@@ -2,14 +2,16 @@ package com.fraczekkrzysztof.gocycling.dao;
 
 import com.fraczekkrzysztof.gocycling.entity.Event;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-import javax.transaction.Transactional;
+import java.util.List;
 
 
-@RepositoryRestResource(path = "events")
-@Transactional
 public interface EventRepository extends JpaRepository<Event, Long> {
+
+    @Query("select e from Event e join e.club c where c.id = :id")
+    List<Event> findByClubId(@Param("id") long clubId);
 //    //this endpoint is available for /events/search/findCurrent
 //    @Query(value = "select e from Event e where e.dateAndTime > current_timestamp() and canceled=false order by e.dateAndTime")
 //    Page<Event> findCurrent(Pageable pageable);

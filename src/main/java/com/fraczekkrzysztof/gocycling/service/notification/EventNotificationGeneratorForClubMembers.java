@@ -10,11 +10,13 @@ import com.fraczekkrzysztof.gocycling.entity.Notification;
 import org.slf4j.Logger;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Transactional
 public abstract class EventNotificationGeneratorForClubMembers {
 
     Logger logger = null;
