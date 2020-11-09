@@ -66,7 +66,7 @@ public abstract class EventNotificationGeneratorForConfirmations {
         if (!idsWithUserToignore.isEmpty()){
             List<Event> eventsToGenerateNotification = eventRepository.findAllById(idsWithUserToignore.keySet());
             eventsToGenerateNotification.stream().forEach(e -> {
-                List<Confirmation> eventConfirmations = null;//TODO replace with proper method after refactor
+                List<Confirmation> eventConfirmations = e.getConfirmationList();
                 for (Confirmation c : eventConfirmations){
                     if (idsWithUserToignore.get(e.getId()).contains(c.getUser().getId())) {
                         continue;

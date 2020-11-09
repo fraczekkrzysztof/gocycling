@@ -10,4 +10,8 @@ public interface EventServiceV2 {
     EventDto getEvent(long eventId);
 
     EventDto createEvent(long clubId, EventDto eventDto);
+
+    EventDto updateEvent(long eventId, EventDto eventDto);
+
+    void cancelEvent(long eventId);
 }

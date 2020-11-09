@@ -33,4 +33,17 @@ public class EventControllerV2 {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(EventResponseDto.builder().event(eventService.createEvent(clubId, eventDto)).build());
     }
+
+    @PutMapping("/events/{eventId}")
+    public ResponseEntity<EventResponseDto> updateEvent(@PathVariable("eventId") long eventId, @RequestBody EventDto eventDto) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EventResponseDto.builder().event(eventService.updateEvent(eventId, eventDto)).build());
+    }
+
+    @PatchMapping("/events/{eventId}/cancel")
+    public ResponseEntity<String> cancelEvent(@PathVariable("eventId") long eventId) {
+        eventService.cancelEvent(eventId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body("");
+    }
 }

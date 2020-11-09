@@ -61,5 +61,31 @@ public class EventServiceV2Impl implements EventServiceV2 {
         return eventMapper.mapEventToEventDto(eventToSave, false);
     }
 
+    @Override
+    public EventDto updateEvent(long eventId, EventDto eventDto) {
+        Event eventToUpdate = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NoSuchElementException(String.format("There is no event of id %d", eventId)));
+        modifyEvent(eventToUpdate, eventDto);
+        eventToUpdate.setUpdated(LocalDateTime.now());
+        eventRepository.save(eventToUpdate);
+        return eventMapper.mapEventToEventDto(eventToUpdate, false);
+    }
 
+    private void modifyEvent(Event event, EventDto eventDto) {
+        event.setName(eventDto.getName());
+        event.setPlace(eventDto.getPlace());
+        event.setLatitude(eventDto.getLatitude());
+        event.setLongitude(eventDto.getLongitude());
+        event.setDateAndTime(eventDto.getDateAndTime());
+        event.setDetails(eventDto.getDetails());
+        event.setRouteLink(eventDto.getRouteLink());
+    }
+
+    @Override
+    public void cancelEvent(long eventId) {
+        Event eventToCancel = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NoSuchElementException(String.format("There is no event of id %d", eventId)));
+        eventToCancel.setCanceled(true);
+        eventRepository.save(eventToCancel);
+    }
 }
