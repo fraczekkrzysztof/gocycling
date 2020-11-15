@@ -1,8 +1,9 @@
 package com.fraczekkrzysztof.gocycling.rest;
 
-import com.fraczekkrzysztof.gocycling.dto.club.EventDto;
-import com.fraczekkrzysztof.gocycling.dto.club.EventListResponseDto;
-import com.fraczekkrzysztof.gocycling.dto.club.EventResponseDto;
+import com.fraczekkrzysztof.gocycling.dto.event.ConfirmationResponse;
+import com.fraczekkrzysztof.gocycling.dto.event.EventDto;
+import com.fraczekkrzysztof.gocycling.dto.event.EventListResponseDto;
+import com.fraczekkrzysztof.gocycling.dto.event.EventResponseDto;
 import com.fraczekkrzysztof.gocycling.service.EventServiceV2;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,19 @@ public class EventControllerV2 {
     @PatchMapping("/events/{eventId}/cancel")
     public ResponseEntity<String> cancelEvent(@PathVariable("eventId") long eventId) {
         eventService.cancelEvent(eventId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body("");
+    }
+
+    @PostMapping("/events/{eventId}/confirmations")
+    public ResponseEntity<ConfirmationResponse> addConfirmation(@PathVariable("eventId") long eventId, @RequestParam("userUid") String userUid) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ConfirmationResponse.builder().confirmation(eventService.addConfirmation(eventId, userUid)).build());
+    }
+
+    @DeleteMapping("/events/{eventId}/confirmations")
+    public ResponseEntity<String> deleteConfirmation(@PathVariable("eventId") long eventId, @RequestParam("userUid") String userUid) {
+        eventService.deleteConfirmation(eventId, userUid);
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .body("");
     }

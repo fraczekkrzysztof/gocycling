@@ -41,7 +41,7 @@ public class ClubControllerV2 {
                 body(ClubResponse.builder().club(clubService.addClub(clubDto)).build());
     }
 
-    @PutMapping("clubs/{id}/members")
+    @PostMapping("clubs/{id}/members")
     public ResponseEntity<MemberResponse> addMembership(@PathVariable("id") long clubId, @RequestParam("userUid") String userUid) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(MemberResponse.builder().member(clubService.addMembership(clubId, userUid)).build());

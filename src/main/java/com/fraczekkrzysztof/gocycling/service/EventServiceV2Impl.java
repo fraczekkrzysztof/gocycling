@@ -3,10 +3,13 @@ package com.fraczekkrzysztof.gocycling.service;
 import com.fraczekkrzysztof.gocycling.dao.ClubRepository;
 import com.fraczekkrzysztof.gocycling.dao.EventRepository;
 import com.fraczekkrzysztof.gocycling.dao.UserRepository;
-import com.fraczekkrzysztof.gocycling.dto.club.EventDto;
+import com.fraczekkrzysztof.gocycling.dto.event.ConfirmationDto;
+import com.fraczekkrzysztof.gocycling.dto.event.EventDto;
 import com.fraczekkrzysztof.gocycling.entity.Club;
+import com.fraczekkrzysztof.gocycling.entity.Confirmation;
 import com.fraczekkrzysztof.gocycling.entity.Event;
 import com.fraczekkrzysztof.gocycling.entity.User;
+import com.fraczekkrzysztof.gocycling.mapper.event.ConfirmationMapper;
 import com.fraczekkrzysztof.gocycling.mapper.event.EventMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +29,7 @@ public class EventServiceV2Impl implements EventServiceV2 {
     private final ClubRepository clubRepository;
     private final UserRepository userRepository;
     private final EventMapper eventMapper;
+    private final ConfirmationMapper confirmationMapper;
 
 
     @Override
@@ -87,5 +91,36 @@ public class EventServiceV2Impl implements EventServiceV2 {
                 .orElseThrow(() -> new NoSuchElementException(String.format("There is no event of id %d", eventId)));
         eventToCancel.setCanceled(true);
         eventRepository.save(eventToCancel);
+    }
+
+    @Override
+    public ConfirmationDto addConfirmation(long eventId, String userUid) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NoSuchElementException(String.format("There is no event of id %d", eventId)));
+        User user = userRepository.findById(userUid)
+                .orElseThrow(() -> new NoSuchElementException(String.format("There is no user of id %s", userUid)));
+        Confirmation confirmationToAdd = Confirmation.builder()
+                .id(0)
+                .user(user)
+                .build();
+        event.getConfirmationList().add(confirmationToAdd);
+        eventRepository.save(event);
+        //retrieve last added confirmation
+        Confirmation addedConfirmation = event.getConfirmationList().stream().filter(c -> c.getUser().getId().equals(userUid))
+                .findFirst().orElseThrow(() -> new NoSuchElementException(String.format("Confirmation for user %s wasn't added", userUid)));
+        return confirmationMapper.mapConfirmationToConfirmationDto(addedConfirmation);
+    }
+
+    @Override
+    public void deleteConfirmation(long eventId, String userUid) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NoSuchElementException(String.format("There is no event of id %d", eventId)));
+        Confirmation confirmationToRemove = event.getConfirmationList()
+                .stream()
+                .filter(c -> c.getUser().getId().equals(userUid))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException(String.format("There is no confirmation of event %d, for user %s", eventId, userUid)));
+        event.getConfirmationList().remove(confirmationToRemove);
+        eventRepository.save(event);
     }
 }

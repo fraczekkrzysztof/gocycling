@@ -1,6 +1,6 @@
 package com.fraczekkrzysztof.gocycling.mapper.event;
 
-import com.fraczekkrzysztof.gocycling.dto.club.EventDto;
+import com.fraczekkrzysztof.gocycling.dto.event.EventDto;
 import com.fraczekkrzysztof.gocycling.entity.Club;
 import com.fraczekkrzysztof.gocycling.entity.Event;
 import com.fraczekkrzysztof.gocycling.entity.User;

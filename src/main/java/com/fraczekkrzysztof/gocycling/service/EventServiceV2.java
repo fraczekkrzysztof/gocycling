@@ -1,6 +1,7 @@
 package com.fraczekkrzysztof.gocycling.service;
 
-import com.fraczekkrzysztof.gocycling.dto.club.EventDto;
+import com.fraczekkrzysztof.gocycling.dto.event.ConfirmationDto;
+import com.fraczekkrzysztof.gocycling.dto.event.EventDto;
 
 import java.util.List;
 
@@ -14,4 +15,8 @@ public interface EventServiceV2 {
     EventDto updateEvent(long eventId, EventDto eventDto);
 
     void cancelEvent(long eventId);
+
+    ConfirmationDto addConfirmation(long eventId, String userUid);
+
+    void deleteConfirmation(long eventId, String userUid);
 }

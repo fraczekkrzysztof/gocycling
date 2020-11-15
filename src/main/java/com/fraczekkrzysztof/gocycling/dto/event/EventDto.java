@@ -1,4 +1,4 @@
-package com.fraczekkrzysztof.gocycling.dto.club;
+package com.fraczekkrzysztof.gocycling.dto.event;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
