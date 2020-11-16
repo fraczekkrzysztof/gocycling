@@ -10,7 +10,19 @@ new clib
         "details": "test",
         "privateMode": false}
 
-
+new event
+ {
+            "name": "zrobiłem sobie event",
+            "place": "W dupci",
+            "latitude": 13.5,
+            "longitude": 14.4,
+            "dateAndTime": "2020-11-16T08:00:00",
+            "details": "123",
+            "userId": "456",
+            "canceled": false,
+            "routeLink": null,
+            "clubId": 286
+        }
 
 
 v1

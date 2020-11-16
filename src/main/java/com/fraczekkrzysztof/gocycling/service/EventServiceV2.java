@@ -19,4 +19,8 @@ public interface EventServiceV2 {
     ConfirmationDto addConfirmation(long eventId, String userUid);
 
     void deleteConfirmation(long eventId, String userUid);
+
+    List<EventDto> getEventsOwnByUser(long clubId, String userUid);
+
+    List<EventDto> getEventsConfirmedByUser(long clubId, String userUid);
 }

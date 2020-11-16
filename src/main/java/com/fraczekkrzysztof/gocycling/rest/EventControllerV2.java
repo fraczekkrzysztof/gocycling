@@ -60,4 +60,16 @@ public class EventControllerV2 {
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .body("");
     }
+
+    @GetMapping("/events/createdBy")
+    public ResponseEntity<EventListResponseDto> getEventsCreatedByUser(@PathVariable("id") long clubId, @RequestParam("userUid") String userUid) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EventListResponseDto.builder().events(eventService.getEventsOwnByUser(clubId, userUid)).build());
+    }
+
+    @GetMapping("/events/confirmedBy")
+    public ResponseEntity<EventListResponseDto> getEventsConfirmedByUser(@PathVariable("id") long clubId, @RequestParam("userUid") String userUid) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(EventListResponseDto.builder().events(eventService.getEventsConfirmedByUser(clubId, userUid)).build());
+    }
 }

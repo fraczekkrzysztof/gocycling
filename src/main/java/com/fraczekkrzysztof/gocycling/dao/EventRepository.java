@@ -12,6 +12,13 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Query("select e from Event e join e.club c where c.id = :id")
     List<Event> findByClubId(@Param("id") long clubId);
+
+    @Query("select e from Event e join e.user u join e.club c where c.id = :id and u.id = :userUid")
+    List<Event> findByClubIdAndOwner(@Param("id") long clubId, @Param("userUid") String userUid);
+
+    @Query("select e from Event e join e.club c join e.confirmationList cl join cl.user u where c.id = :id and u.id = :userUid")
+    List<Event> findByClubIdAndUserConfirmation(@Param("id") long clubId, @Param("userUid") String userUid);
+
 //    //this endpoint is available for /events/search/findCurrent
 //    @Query(value = "select e from Event e where e.dateAndTime > current_timestamp() and canceled=false order by e.dateAndTime")
 //    Page<Event> findCurrent(Pageable pageable);

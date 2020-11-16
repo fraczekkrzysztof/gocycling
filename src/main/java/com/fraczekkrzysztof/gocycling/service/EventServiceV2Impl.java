@@ -123,4 +123,19 @@ public class EventServiceV2Impl implements EventServiceV2 {
         event.getConfirmationList().remove(confirmationToRemove);
         eventRepository.save(event);
     }
+
+    @Override
+    public List<EventDto> getEventsOwnByUser(long clubId, String userUid) {
+        List<Event> eventList = filterEventList(eventRepository.findByClubIdAndOwner(clubId, userUid));
+        return eventMapper.mapEventListToEventDtoList(eventList, false);
+
+    }
+
+    @Override
+    public List<EventDto> getEventsConfirmedByUser(long clubId, String userUid) {
+        List<Event> eventList = filterEventList(eventRepository.findByClubIdAndUserConfirmation(clubId, userUid));
+        return eventMapper.mapEventListToEventDtoList(eventList, false);
+    }
+
+
 }
