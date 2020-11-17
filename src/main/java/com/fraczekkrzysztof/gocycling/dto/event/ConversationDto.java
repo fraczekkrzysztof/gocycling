@@ -1,6 +1,5 @@
 package com.fraczekkrzysztof.gocycling.dto.event;
 
-import com.fraczekkrzysztof.gocycling.entity.User;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,8 +13,8 @@ import java.time.LocalDateTime;
 public class ConversationDto {
 
     private long id;
-    private User userId;
-    private User userName;
+    private String userId;
+    private String userName;
     private LocalDateTime created;
     private String message;
 }
