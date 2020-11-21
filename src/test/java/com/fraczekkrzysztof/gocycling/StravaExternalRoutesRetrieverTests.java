@@ -1,7 +1,7 @@
 package com.fraczekkrzysztof.gocycling;
 
 import com.fraczekkrzysztof.gocycling.dao.UserExternalAppsRepository;
-import com.fraczekkrzysztof.gocycling.dto.RouteDto;
+import com.fraczekkrzysztof.gocycling.dto.route.RouteDto;
 import com.fraczekkrzysztof.gocycling.entity.ExternalApps;
 import com.fraczekkrzysztof.gocycling.entity.UserExternalApp;
 import com.fraczekkrzysztof.gocycling.external.ExternalRoutesRetriever;

@@ -36,7 +36,12 @@ public class Notification {
     @Column(name = "not_read")
     private boolean read = false;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "not_event_id")
-    private Event event;
+    @Column(name = "not_type", updatable = false)
+    private NotificationType type;
+
+    @Column(name = "not_cl_id", updatable = false)
+    private long clubId;
+
+    @Column(name = "not_ev_id", updatable = false)
+    private long eventId;
 }

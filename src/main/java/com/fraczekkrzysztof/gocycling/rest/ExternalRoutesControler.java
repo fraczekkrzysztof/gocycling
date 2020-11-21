@@ -1,8 +1,7 @@
 package com.fraczekkrzysztof.gocycling.rest;
 
-import com.fraczekkrzysztof.gocycling.dto.RouteDto;
+import com.fraczekkrzysztof.gocycling.dto.route.RouteDto;
 import com.fraczekkrzysztof.gocycling.external.AllExternalRoutesRetriever;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

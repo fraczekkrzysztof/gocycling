@@ -28,10 +28,11 @@ public class UpdateEventNotificationGeneratorForConfirmation extends EventNotifi
     Notification generateSingleNotification(Confirmation c, Event e) {
         return Notification.builder()
                 .userUid(c.getUser().getId())
-            .title(TITLE)
-            .content(MessageFormat.format(CONTENT, e.getName()))
-            .event(e)
-            .created(LocalDateTime.now())
-            .read(false).build();
+                .title(TITLE)
+                .content(MessageFormat.format(CONTENT, e.getName()))
+                .eventId(e.getId())
+                .clubId(e.getClub().getId())
+                .created(LocalDateTime.now())
+                .read(false).build();
     }
 }

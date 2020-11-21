@@ -29,7 +29,8 @@ public class NewConversationNotificationGeneratorForConfirmation extends EventNo
                 .userUid(c.getUser().getId())
                 .title(TITLE)
                 .content(MessageFormat.format(CONTENT, e.getName()))
-                .event(e)
+                .eventId(e.getId())
+                .clubId(e.getClub().getId())
                 .created(LocalDateTime.now())
                 .read(false).build();
     }

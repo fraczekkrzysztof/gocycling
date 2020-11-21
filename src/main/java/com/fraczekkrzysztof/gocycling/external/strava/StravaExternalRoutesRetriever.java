@@ -1,7 +1,7 @@
 package com.fraczekkrzysztof.gocycling.external.strava;
 
 import com.fraczekkrzysztof.gocycling.dao.UserExternalAppsRepository;
-import com.fraczekkrzysztof.gocycling.dto.RouteDto;
+import com.fraczekkrzysztof.gocycling.dto.route.RouteDto;
 import com.fraczekkrzysztof.gocycling.entity.UserExternalApp;
 import com.fraczekkrzysztof.gocycling.external.ExternalRoutesRetriever;
 import com.fraczekkrzysztof.gocycling.external.strava.exception.StravaApiException;

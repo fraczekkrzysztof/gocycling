@@ -1,4 +1,4 @@
-package com.fraczekkrzysztof.gocycling.dto;
+package com.fraczekkrzysztof.gocycling.dto.route;
 
 import com.fraczekkrzysztof.gocycling.entity.ExternalApps;
 import com.fraczekkrzysztof.gocycling.external.strava.model.StravaRouteDto;
@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.util.ArrayList;
 import java.util.List;
 
