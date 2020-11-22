@@ -1,5 +1,5 @@
 v2
-new clib
+new club
 {
         "name": "BEZDUPIE1",
         "location": "Test123",
@@ -23,6 +23,12 @@ new event
             "routeLink": null,
             "clubId": 286
         }
+
+new conversation
+{
+            "userId" : "123"
+            "message" : "Jakiś test od 123"
+}
 
 
 v1

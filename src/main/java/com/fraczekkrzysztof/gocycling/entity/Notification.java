@@ -37,6 +37,7 @@ public class Notification {
     private boolean read = false;
 
     @Column(name = "not_type", updatable = false)
+    @Enumerated(EnumType.STRING)
     private NotificationType type;
 
     @Column(name = "not_cl_id", updatable = false)

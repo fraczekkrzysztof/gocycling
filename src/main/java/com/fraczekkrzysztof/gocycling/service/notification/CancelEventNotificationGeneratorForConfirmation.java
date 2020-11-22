@@ -5,6 +5,7 @@ import com.fraczekkrzysztof.gocycling.dao.NotificationRepository;
 import com.fraczekkrzysztof.gocycling.entity.Confirmation;
 import com.fraczekkrzysztof.gocycling.entity.Event;
 import com.fraczekkrzysztof.gocycling.entity.Notification;
+import com.fraczekkrzysztof.gocycling.entity.NotificationType;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ public class CancelEventNotificationGeneratorForConfirmation extends EventNotifi
     Notification generateSingleNotification(Confirmation c, Event e) {
         return Notification.builder()
                 .userUid(c.getUser().getId())
+                .type(NotificationType.EVENT)
                 .title(TITLE)
                 .content(MessageFormat.format(CONTENT, e.getName()))
                 .eventId(e.getId())

@@ -34,7 +34,7 @@ public class EventAop {
         //define pointcut
     }
 
-    @Pointcut("execution(* com.fraczekkrzysztof.gocycling.rest.EventController.cancelEvent(..))")
+    @Pointcut("execution(* com.fraczekkrzysztof.gocycling.rest.EventControllerV2.cancelEvent(..))")
     private void forEventCancel() {
         //define pointcut
     }

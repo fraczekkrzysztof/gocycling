@@ -3,10 +3,7 @@ package com.fraczekkrzysztof.gocycling.service.notification;
 import com.fraczekkrzysztof.gocycling.dao.ClubRepository;
 import com.fraczekkrzysztof.gocycling.dao.EventRepository;
 import com.fraczekkrzysztof.gocycling.dao.NotificationRepository;
-import com.fraczekkrzysztof.gocycling.entity.Club;
-import com.fraczekkrzysztof.gocycling.entity.Event;
-import com.fraczekkrzysztof.gocycling.entity.Member;
-import com.fraczekkrzysztof.gocycling.entity.Notification;
+import com.fraczekkrzysztof.gocycling.entity.*;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +28,7 @@ public class NewEventForClubNotificationGeneratorForClubMembers extends EventNot
         return Notification.builder()
                 .userUid(m.getUser().getId())
                 .title(TITLE)
+                .type(NotificationType.EVENT)
                 .content(MessageFormat.format(CONTENT, c.getName()))
                 .eventId(e.getId())
                 .clubId(e.getClub().getId())
