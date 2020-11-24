@@ -36,8 +36,4 @@ public class UserExternalApp {
     @Column(name="ext_app_user_id")
     Long appUserId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ext_int_user_id")
-    User user;
-
 }

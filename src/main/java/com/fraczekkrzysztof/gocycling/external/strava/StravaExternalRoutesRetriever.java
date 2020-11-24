@@ -1,7 +1,8 @@
 package com.fraczekkrzysztof.gocycling.external.strava;
 
-import com.fraczekkrzysztof.gocycling.dao.UserExternalAppsRepository;
+import com.fraczekkrzysztof.gocycling.dao.UserRepository;
 import com.fraczekkrzysztof.gocycling.dto.route.RouteDto;
+import com.fraczekkrzysztof.gocycling.entity.ExternalApps;
 import com.fraczekkrzysztof.gocycling.entity.UserExternalApp;
 import com.fraczekkrzysztof.gocycling.external.ExternalRoutesRetriever;
 import com.fraczekkrzysztof.gocycling.external.strava.exception.StravaApiException;
@@ -23,14 +24,18 @@ import java.util.NoSuchElementException;
 @Service
 public class StravaExternalRoutesRetriever implements ExternalRoutesRetriever {
 
+    private final UserRepository userRepository;
     private final StravaProperties stravaProperties;
-    private final UserExternalAppsRepository userExternalAppsRepository;
     @Qualifier("customRestTemplate")
     private final RestTemplate restTemplate;
     @Override
     public List<RouteDto> getExternalRoutes(String userUid) {
-        UserExternalApp stravaAppDetails = userExternalAppsRepository.findStravaByUserUid(userUid).
-                orElseThrow(() -> new NoSuchElementException("There is no strava for user " + userUid));
+        UserExternalApp stravaAppDetails = userRepository.findById(userUid)
+                .orElseThrow(() -> new NoSuchElementException(String.format("There is no user of id %s ", userUid)))
+                .getExternalAppList().stream()
+                .filter(uea -> ExternalApps.STRAVA.equals(uea.getAppType()))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException(String.format("User %s doesn't have strava connected", userUid)));
         StringBuilder sb = new StringBuilder();
         sb.append(stravaProperties.getApiBaseAddress());
         sb.append(stravaProperties.getApiRoutes());

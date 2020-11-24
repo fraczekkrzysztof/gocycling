@@ -1,3 +1,16 @@
+users
+INSERT INTO public.user_list(
+	us_id, us_name)
+	VALUES ('AHi7swlrN7hClVtcLAyT3YLIOjh2', 'Testowy Developer');
+
+	INSERT INTO public.user_list(
+	us_id, us_name)
+	VALUES ('123', 'Testowy user 1');
+
+	INSERT INTO public.user_list(
+	us_id, us_name)
+	VALUES ('123', 'Testowy user 2');
+
 v2
 new club
 {

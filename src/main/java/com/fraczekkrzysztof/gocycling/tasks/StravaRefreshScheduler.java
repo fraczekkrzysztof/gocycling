@@ -5,8 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
+
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class StravaRefreshScheduler {
 
     private final ExternalOAuthAuthorizer stravaAutorizer;
