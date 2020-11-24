@@ -1,5 +1,6 @@
 package com.fraczekkrzysztof.gocycling.rest;
 
+import com.fraczekkrzysztof.gocycling.dto.route.RouteListResponseDto;
 import com.fraczekkrzysztof.gocycling.dto.user.UserDto;
 import com.fraczekkrzysztof.gocycling.dto.user.UserResponseDto;
 import com.fraczekkrzysztof.gocycling.service.UserServiceV2;
@@ -25,5 +26,11 @@ public class UserControllerV2 {
     public ResponseEntity<UserResponseDto> updateUser(@PathVariable("userUid") String userUid, @RequestBody UserDto userDto) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(UserResponseDto.builder().user(userService.updateUser(userUid, userDto)).build());
+    }
+
+    @GetMapping("/users/{userUid}/externalRoutes")
+    public ResponseEntity<RouteListResponseDto> getExternalRoutes(@PathVariable("userUid") String userUid) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(RouteListResponseDto.builder().routes(userService.getUserExternalRoutes(userUid)).build());
     }
 }

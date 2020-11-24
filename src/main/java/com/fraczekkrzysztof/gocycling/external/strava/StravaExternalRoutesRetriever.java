@@ -7,6 +7,7 @@ import com.fraczekkrzysztof.gocycling.entity.UserExternalApp;
 import com.fraczekkrzysztof.gocycling.external.ExternalRoutesRetriever;
 import com.fraczekkrzysztof.gocycling.external.strava.exception.StravaApiException;
 import com.fraczekkrzysztof.gocycling.external.strava.model.StravaRouteDto;
+import com.fraczekkrzysztof.gocycling.mapper.route.RouteMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
@@ -26,6 +27,7 @@ public class StravaExternalRoutesRetriever implements ExternalRoutesRetriever {
 
     private final UserRepository userRepository;
     private final StravaProperties stravaProperties;
+    private final RouteMapper routeMapper;
     @Qualifier("customRestTemplate")
     private final RestTemplate restTemplate;
     @Override
@@ -49,6 +51,6 @@ public class StravaExternalRoutesRetriever implements ExternalRoutesRetriever {
             throw new StravaApiException("Error during retrieving list of routes");
         }
 
-        return RouteDto.parseStravaApiResponse(listOfStravaRoutesResponseEntity.getBody());
+        return routeMapper.mapStravaListToRouteDtoList(listOfStravaRoutesResponseEntity.getBody());
     }
 }
