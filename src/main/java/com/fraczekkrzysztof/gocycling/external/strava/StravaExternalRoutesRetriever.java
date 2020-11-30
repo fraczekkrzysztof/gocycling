@@ -17,7 +17,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -38,14 +40,18 @@ public class StravaExternalRoutesRetriever implements ExternalRoutesRetriever {
                 .filter(uea -> ExternalApps.STRAVA.equals(uea.getAppType()))
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException(String.format("User %s doesn't have strava connected", userUid)));
+        HashMap<String, Object> variables = new HashMap<>();
+        variables.put("stravaUserId", String.valueOf(stravaAppDetails.getAppUserId()));
+        UriComponentsBuilder routeRequest = UriComponentsBuilder
+                .fromUriString(stravaProperties.getApiBaseAddress() + stravaProperties.getApiRoutes())
+                .uriVariables(variables);
         StringBuilder sb = new StringBuilder();
         sb.append(stravaProperties.getApiBaseAddress());
         sb.append(stravaProperties.getApiRoutes());
-        String routeRequest = String.format(sb.toString(),stravaAppDetails.getAppUserId());
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(stravaAppDetails.getAccessToken());
         ResponseEntity<List<StravaRouteDto>> listOfStravaRoutesResponseEntity = restTemplate.
-                exchange(routeRequest, HttpMethod.GET,new HttpEntity<>(null,headers),new ParameterizedTypeReference<List<StravaRouteDto>>() {
+                exchange(routeRequest.toUriString(), HttpMethod.GET, new HttpEntity<>(null, headers), new ParameterizedTypeReference<List<StravaRouteDto>>() {
         });
         if (!listOfStravaRoutesResponseEntity.getStatusCode().is2xxSuccessful() ){
             throw new StravaApiException("Error during retrieving list of routes");
