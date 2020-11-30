@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v2/strava")
 @RequiredArgsConstructor
-public class StravaController {
+public class StravaControllerV2 {
 
     private final ExternalOAuthAuthorizer authorizer;
 
