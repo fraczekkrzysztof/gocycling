@@ -20,7 +20,6 @@ public class Member {
     @Column(name = "mem_id")
     private long id;
 
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "mem_user_id")
     private User user;

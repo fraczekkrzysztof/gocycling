@@ -42,8 +42,7 @@ public class ClubServiceV2Impl implements ClubServiceV2 {
                 orElseThrow(() -> new NoSuchElementException(String.format("There is no user of id %s", clubDto.getOwnerId())));
         Club club = clubMapper.mapClubDtoToClubEntity(clubDto, owner);
         clubRepository.save(club);
-        clubDto.setId(club.getId());
-        clubDto.setOwnerName(owner.getName());
+        clubMapper.mapClubEntityToClubDto(club, false, false);
         return clubDto;
     }
 
