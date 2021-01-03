@@ -45,9 +45,6 @@ public class StravaExternalRoutesRetriever implements ExternalRoutesRetriever {
         UriComponentsBuilder routeRequest = UriComponentsBuilder
                 .fromUriString(stravaProperties.getApiBaseAddress() + stravaProperties.getApiRoutes())
                 .uriVariables(variables);
-        StringBuilder sb = new StringBuilder();
-        sb.append(stravaProperties.getApiBaseAddress());
-        sb.append(stravaProperties.getApiRoutes());
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(stravaAppDetails.getAccessToken());
         ResponseEntity<List<StravaRouteDto>> listOfStravaRoutesResponseEntity = restTemplate.
