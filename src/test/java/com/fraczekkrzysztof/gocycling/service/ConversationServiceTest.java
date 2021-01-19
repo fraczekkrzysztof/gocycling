@@ -106,6 +106,5 @@ public class ConversationServiceTest {
         assertThat(returnedConversationDto).usingRecursiveComparison().ignoringFields("id", "created").isEqualTo(expectedConversationDto);
         assertThat(returnedConversationDto.getCreated()).isCloseTo(LocalDateTime.now(), within(1, ChronoUnit.MINUTES));
         assertThat(returnedConversationDto.getId()).isNotNull();
-
     }
 }
