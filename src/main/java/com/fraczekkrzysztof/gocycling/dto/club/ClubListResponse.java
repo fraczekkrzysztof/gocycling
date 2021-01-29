@@ -1,5 +1,6 @@
 package com.fraczekkrzysztof.gocycling.dto.club;
 
+import com.fraczekkrzysztof.gocycling.paging.PageDto;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,4 +13,5 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ClubListResponse {
     List<ClubDto> clubs;
+    PageDto page;
 }

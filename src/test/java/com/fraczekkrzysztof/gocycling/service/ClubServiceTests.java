@@ -3,6 +3,7 @@ package com.fraczekkrzysztof.gocycling.service;
 import com.fraczekkrzysztof.gocycling.dao.ClubRepository;
 import com.fraczekkrzysztof.gocycling.dao.UserRepository;
 import com.fraczekkrzysztof.gocycling.dto.club.ClubDto;
+import com.fraczekkrzysztof.gocycling.dto.club.ClubListResponse;
 import com.fraczekkrzysztof.gocycling.dto.club.MemberDto;
 import com.fraczekkrzysztof.gocycling.entity.Club;
 import com.fraczekkrzysztof.gocycling.entity.Member;
@@ -15,6 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -184,12 +187,12 @@ public class ClubServiceTests {
                 .privateMode(false)
                 .build();
 
-        when(clubRepository.findAll()).thenReturn(fakeClubList);
+        when(clubRepository.findAll(PageRequest.of(0, 20))).thenReturn(new PageImpl(fakeClubList));
 
         //when
-        List<ClubDto> returnedList = clubService.getAllClubs();
+        ClubListResponse returnedList = clubService.getAllClubs(PageRequest.of(0, 20));
         //then
-        assertThat(returnedList).containsExactlyInAnyOrder(club1, club2, club3);
+        assertThat(returnedList.getClubs()).containsExactlyInAnyOrder(club1, club2, club3);
     }
 
     @Test

@@ -6,6 +6,7 @@ import com.fraczekkrzysztof.gocycling.dto.club.ClubResponse;
 import com.fraczekkrzysztof.gocycling.dto.club.MemberResponse;
 import com.fraczekkrzysztof.gocycling.service.ClubServiceV2;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,15 +19,15 @@ public class ClubControllerV2 {
     public final ClubServiceV2 clubService;
 
     @GetMapping(path = "clubs", params = {"!userUid"})
-    public ResponseEntity<ClubListResponse> getAllClubs() {
+    public ResponseEntity<ClubListResponse> getAllClubs(Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ClubListResponse.builder().clubs(clubService.getAllClubs()).build());
+                .body(clubService.getAllClubs(pageable));
     }
 
     @GetMapping(path = "clubs", params = {"userUid"})
-    public ResponseEntity<ClubListResponse> getClubByUserMembership(@RequestParam("userUid") String userUid) {
+    public ResponseEntity<ClubListResponse> getClubByUserMembership(@RequestParam("userUid") String userUid, Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ClubListResponse.builder().clubs(clubService.getClubByUSerMembership(userUid)).build());
+                .body(clubService.getClubByUserMembership(userUid, pageable));
     }
 
     @GetMapping("clubs/{id}")

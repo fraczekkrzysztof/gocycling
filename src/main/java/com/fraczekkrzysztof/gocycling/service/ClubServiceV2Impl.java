@@ -3,12 +3,17 @@ package com.fraczekkrzysztof.gocycling.service;
 import com.fraczekkrzysztof.gocycling.dao.ClubRepository;
 import com.fraczekkrzysztof.gocycling.dao.UserRepository;
 import com.fraczekkrzysztof.gocycling.dto.club.ClubDto;
+import com.fraczekkrzysztof.gocycling.dto.club.ClubListResponse;
 import com.fraczekkrzysztof.gocycling.dto.club.MemberDto;
 import com.fraczekkrzysztof.gocycling.entity.Club;
 import com.fraczekkrzysztof.gocycling.entity.Member;
 import com.fraczekkrzysztof.gocycling.entity.User;
 import com.fraczekkrzysztof.gocycling.mapper.club.ClubMapper;
+import com.fraczekkrzysztof.gocycling.paging.PageDto;
+import com.fraczekkrzysztof.gocycling.paging.PagingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -24,9 +29,13 @@ public class ClubServiceV2Impl implements ClubServiceV2 {
     private final ClubRepository clubRepository;
     private final ClubMapper clubMapper;
     private final UserRepository userRepository;
+    private final PagingService pagingService;
 
-    public List<ClubDto> getAllClubs() {
-        return clubMapper.mapClubEntityListToClubDtoList(clubRepository.findAll(), false, false);
+    public ClubListResponse getAllClubs(Pageable pageable) {
+        Page<Club> pagedClubs = clubRepository.findAll(pageable);
+        PageDto pageDto = pagingService.generatePageInfo(pagedClubs);
+        List<ClubDto> mappedClubList = clubMapper.mapClubEntityListToClubDtoList(pagedClubs.getContent(), false, false);
+        return ClubListResponse.builder().clubs(mappedClubList).page(pageDto).build();
     }
 
     public ClubDto getClubById(long id) {
@@ -78,8 +87,10 @@ public class ClubServiceV2Impl implements ClubServiceV2 {
     }
 
     @Override
-    public List<ClubDto> getClubByUSerMembership(String userUid) {
-        List<Club> clubList = clubRepository.findAllClubsWithUserMembership(userUid);
-        return clubMapper.mapClubEntityListToClubDtoList(clubList, false, false);
+    public ClubListResponse getClubByUserMembership(String userUid, Pageable pageable) {
+        Page<Club> pagedClub = clubRepository.findAllClubsWithUserMembership(userUid, pageable);
+        PageDto pageDto = pagingService.generatePageInfo(pagedClub);
+        List<ClubDto> mappedClubList = clubMapper.mapClubEntityListToClubDtoList(pagedClub.getContent(), false, false);
+        return ClubListResponse.builder().clubs(mappedClubList).page(pageDto).build();
     }
 }

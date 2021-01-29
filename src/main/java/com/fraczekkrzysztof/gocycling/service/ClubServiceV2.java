@@ -1,13 +1,13 @@
 package com.fraczekkrzysztof.gocycling.service;
 
 import com.fraczekkrzysztof.gocycling.dto.club.ClubDto;
+import com.fraczekkrzysztof.gocycling.dto.club.ClubListResponse;
 import com.fraczekkrzysztof.gocycling.dto.club.MemberDto;
-
-import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 public interface ClubServiceV2 {
 
-    List<ClubDto> getAllClubs();
+    ClubListResponse getAllClubs(Pageable pageable);
 
     ClubDto getClubById(long id);
 
@@ -17,5 +17,5 @@ public interface ClubServiceV2 {
 
     void deleteMembership(long clubId, String userUid);
 
-    List<ClubDto> getClubByUSerMembership(String userUid);
+    ClubListResponse getClubByUserMembership(String userUid, Pageable pageable);
 }
