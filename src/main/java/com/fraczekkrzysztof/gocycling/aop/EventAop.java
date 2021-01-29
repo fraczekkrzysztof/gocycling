@@ -2,6 +2,7 @@ package com.fraczekkrzysztof.gocycling.aop;
 
 import com.fraczekkrzysztof.gocycling.dao.EventRepository;
 import com.fraczekkrzysztof.gocycling.dto.event.EventDto;
+import com.fraczekkrzysztof.gocycling.entity.Event;
 import com.fraczekkrzysztof.gocycling.service.notification.EventNotificationGeneratorForClubMembers;
 import com.fraczekkrzysztof.gocycling.service.notification.EventNotificationGeneratorForConfirmations;
 import lombok.RequiredArgsConstructor;
@@ -61,7 +62,8 @@ public class EventAop {
         for (Object arg : joinPoint.getArgs()) {
             if (arg instanceof Long) {
                 long id = (long) arg;
-                String userUid = eventRepository.findById(id).orElseThrow(() -> new NoSuchElementException("There is no event of id " + id)).getUser().getId();
+                Event event = eventRepository.findById(id).orElseThrow(() -> new NoSuchElementException("There is no event of id " + id));
+                String userUid = event.getUser().getId();
                 cancelEventNotificationGeneratorForConfirmation.addEventIdAndIgnoreUser(id, userUid);
             }
         }

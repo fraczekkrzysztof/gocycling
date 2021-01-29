@@ -300,11 +300,15 @@ public class EventServiceTest {
     void shouldCancelEvent() {
         //given
         Event eventToCancel = mock(Event.class);
+        User mockUser = mock(User.class);
+        when(mockUser.getId()).thenReturn("12345L");
+        when(eventToCancel.getUser()).thenReturn(mockUser);
         when(eventRepository.findById(333L)).thenReturn(Optional.of(eventToCancel));
 
         //when
-        eventService.cancelEvent(333L);
+        Throwable call = catchThrowable(() -> eventService.cancelEvent(333L));
         //then
+        assertThat(call).doesNotThrowAnyException();
         verify(eventRepository).save(eventToCancel);
     }
 
