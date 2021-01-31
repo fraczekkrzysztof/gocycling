@@ -5,6 +5,7 @@ import com.fraczekkrzysztof.gocycling.dto.event.ConversationListResponseDto;
 import com.fraczekkrzysztof.gocycling.dto.event.ConversationResponseDto;
 import com.fraczekkrzysztof.gocycling.service.ConversationServiceV2;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +18,9 @@ public class ConversationControllerV2 {
     private final ConversationServiceV2 conversationService;
 
     @GetMapping("/conversations")
-    public ResponseEntity<ConversationListResponseDto> getAllEventConversations(@PathVariable("eventId") long eventId) {
+    public ResponseEntity<ConversationListResponseDto> getAllEventConversations(@PathVariable("eventId") long eventId, Pageable pagebale) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ConversationListResponseDto.builder().conversations(conversationService.getAllByEventId(eventId)).build());
+                .body(conversationService.getAllByEventId(eventId, pagebale));
     }
 
     @PostMapping("conversations")

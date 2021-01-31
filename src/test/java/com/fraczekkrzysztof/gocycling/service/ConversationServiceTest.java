@@ -4,6 +4,7 @@ import com.fraczekkrzysztof.gocycling.dao.ConversationRepository;
 import com.fraczekkrzysztof.gocycling.dao.EventRepository;
 import com.fraczekkrzysztof.gocycling.dao.UserRepository;
 import com.fraczekkrzysztof.gocycling.dto.event.ConversationDto;
+import com.fraczekkrzysztof.gocycling.dto.event.ConversationListResponseDto;
 import com.fraczekkrzysztof.gocycling.entity.Conversation;
 import com.fraczekkrzysztof.gocycling.entity.Event;
 import com.fraczekkrzysztof.gocycling.entity.User;
@@ -13,11 +14,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -56,7 +58,7 @@ public class ConversationServiceTest {
                 .message("Panie mamy styczeń! Tlen trzeba robić!")
                 .user(user2).build();
 
-        when(conversationRepository.findByEventId(35L)).thenReturn(Arrays.asList(conversation1, conversation2));
+        when(conversationRepository.findByEventId(35L, PageRequest.of(0, 20))).thenReturn(new PageImpl<>(Arrays.asList(conversation1, conversation2)));
 
         ConversationDto expectedConversation1 = ConversationDto.builder()
                 .id(1L)
@@ -74,10 +76,10 @@ public class ConversationServiceTest {
                 .build();
 
         //when
-        List<ConversationDto> receivedConversationList = conversationService.getAllByEventId(35L);
+        ConversationListResponseDto receivedConversationList = conversationService.getAllByEventId(35L, PageRequest.of(0, 20));
 
         //then
-        assertThat(receivedConversationList).containsExactlyInAnyOrder(expectedConversation1, expectedConversation2);
+        assertThat(receivedConversationList.getConversations()).containsExactlyInAnyOrder(expectedConversation1, expectedConversation2);
     }
 
     @Test

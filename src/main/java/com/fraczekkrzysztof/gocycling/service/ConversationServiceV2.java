@@ -1,11 +1,12 @@
 package com.fraczekkrzysztof.gocycling.service;
 
 import com.fraczekkrzysztof.gocycling.dto.event.ConversationDto;
+import com.fraczekkrzysztof.gocycling.dto.event.ConversationListResponseDto;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 
 public interface ConversationServiceV2 {
-    List<ConversationDto> getAllByEventId(long eventId);
+    ConversationListResponseDto getAllByEventId(long eventId, Pageable pageable);
 
     ConversationDto addConversation(long eventId, ConversationDto conversationDto);
 }

@@ -4,11 +4,16 @@ import com.fraczekkrzysztof.gocycling.dao.ConversationRepository;
 import com.fraczekkrzysztof.gocycling.dao.EventRepository;
 import com.fraczekkrzysztof.gocycling.dao.UserRepository;
 import com.fraczekkrzysztof.gocycling.dto.event.ConversationDto;
+import com.fraczekkrzysztof.gocycling.dto.event.ConversationListResponseDto;
 import com.fraczekkrzysztof.gocycling.entity.Conversation;
 import com.fraczekkrzysztof.gocycling.entity.Event;
 import com.fraczekkrzysztof.gocycling.entity.User;
 import com.fraczekkrzysztof.gocycling.mapper.event.ConversationMapper;
+import com.fraczekkrzysztof.gocycling.paging.PageDto;
+import com.fraczekkrzysztof.gocycling.paging.PagingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -25,10 +30,14 @@ public class ConversationServiceV2Impl implements ConversationServiceV2 {
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final ConversationMapper conversationMapper;
+    private final PagingService pagingService;
 
     @Override
-    public List<ConversationDto> getAllByEventId(long eventId) {
-        return conversationMapper.mapConversationListToConversationDtoList(conversationRepository.findByEventId(eventId));
+    public ConversationListResponseDto getAllByEventId(long eventId, Pageable pageable) {
+        Page<Conversation> pagedConversations = conversationRepository.findByEventId(eventId, pageable);
+        PageDto pageDto = pagingService.generatePageInfo(pagedConversations);
+        List<ConversationDto> mappedConversations = conversationMapper.mapConversationListToConversationDtoList(pagedConversations.getContent());
+        return ConversationListResponseDto.builder().conversations(mappedConversations).pageDto(pageDto).build();
     }
 
     @Override
