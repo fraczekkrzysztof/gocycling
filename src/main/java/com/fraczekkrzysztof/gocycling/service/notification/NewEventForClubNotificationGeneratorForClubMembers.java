@@ -1,6 +1,5 @@
 package com.fraczekkrzysztof.gocycling.service.notification;
 
-import com.fraczekkrzysztof.gocycling.dao.ClubRepository;
 import com.fraczekkrzysztof.gocycling.dao.EventRepository;
 import com.fraczekkrzysztof.gocycling.dao.NotificationRepository;
 import com.fraczekkrzysztof.gocycling.entity.*;
@@ -18,8 +17,8 @@ public class NewEventForClubNotificationGeneratorForClubMembers extends EventNot
     private static final String CONTENT = "There is new Event in club {0}";
 
     @Autowired
-    public NewEventForClubNotificationGeneratorForClubMembers(EventRepository eventRepository, NotificationRepository notificationRepository, ClubRepository clubRepository) {
-        super(eventRepository, notificationRepository, clubRepository);
+    public NewEventForClubNotificationGeneratorForClubMembers(EventRepository eventRepository, NotificationRepository notificationRepository) {
+        super(eventRepository, notificationRepository);
         this.logger = LoggerFactory.getLogger(NewEventForClubNotificationGeneratorForClubMembers.class);
     }
 
