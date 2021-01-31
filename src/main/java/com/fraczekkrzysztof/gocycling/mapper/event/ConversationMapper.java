@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class ConversationMapper {
 
     public List<ConversationDto> mapConversationListToConversationDtoList(List<Conversation> conversationList) {
-        return conversationList.stream().map(c -> mapConversationToConversationDto(c)).collect(Collectors.toList());
+        return conversationList.stream().map(this::mapConversationToConversationDto).collect(Collectors.toList());
     }
 
     public ConversationDto mapConversationToConversationDto(Conversation c) {

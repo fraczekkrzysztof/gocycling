@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class ConfirmationMapper {
 
     public List<ConfirmationDto> mapConfirmationListToConfirmationDtoList(List<Confirmation> confirmationList) {
-        return confirmationList.stream().map(c -> mapConfirmationToConfirmationDto(c)).collect(Collectors.toList());
+        return confirmationList.stream().map(this::mapConfirmationToConfirmationDto).collect(Collectors.toList());
     }
 
     public ConfirmationDto mapConfirmationToConfirmationDto(Confirmation confirmation) {

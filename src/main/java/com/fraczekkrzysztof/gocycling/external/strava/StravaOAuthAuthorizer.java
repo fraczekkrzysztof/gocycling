@@ -73,17 +73,18 @@ public class StravaOAuthAuthorizer implements ExternalOAuthAuthorizer {
         log.debug("Starting refreshing token");
         List<User> usersWithStrava = userRepository.findAllWithStravaConnected();
         for (User u : usersWithStrava) {
-            UserExternalApp externalApp = u.getExternalAppList().stream()
+            u.getExternalAppList().stream()
                     .filter(ea -> ExternalApps.STRAVA.equals(ea.getAppType()))
-                    .findFirst().get(); //NOSONAR in query there is limitation only for user which have strava connected
-            if (((externalApp.getExpiresAt() * 1000) - 40 * 60 * 1000) < System.currentTimeMillis()) {
-                try {
-                    refreshToken(externalApp);
-                    log.debug(String.format("Successfully refresh strava token for user %s", u.getId()));
-                } catch (Exception e) {
-                    log.error(String.format("Error during refreshing token for user %s, at time %d, using refresh token %s", u.getId(), System.currentTimeMillis(), externalApp.getRefreshToken()), e);
+                    .findFirst().ifPresent(externalApp -> {
+                if (((externalApp.getExpiresAt() * 1000) - 40 * 60 * 1000) < System.currentTimeMillis()) {
+                    try {
+                        refreshToken(externalApp);
+                        log.debug(String.format("Successfully refresh strava token for user %s", u.getId()));
+                    } catch (Exception e) {
+                        log.error(String.format("Error during refreshing token for user %s, at time %d, using refresh token %s", u.getId(), System.currentTimeMillis(), externalApp.getRefreshToken()), e);
+                    }
                 }
-            }
+            });
         }
         userRepository.saveAll(usersWithStrava);
         log.debug("Refreshing token finished");

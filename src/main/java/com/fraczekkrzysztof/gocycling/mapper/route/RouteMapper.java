@@ -13,7 +13,7 @@ public class RouteMapper {
 
     public List<RouteDto> mapStravaListToRouteDtoList(List<StravaRouteDto> stravaRoutes) {
         return stravaRoutes.stream()
-                .map(sr -> mapSingleStracaRouteToRouteDto(sr))
+                .map(this::mapSingleStracaRouteToRouteDto)
                 .collect(Collectors.toList());
     }
 

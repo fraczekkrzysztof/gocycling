@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "user_external_app")
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserExternalApp {
+public class UserExternalApp implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

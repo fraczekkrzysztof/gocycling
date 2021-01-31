@@ -6,6 +6,7 @@ import com.fraczekkrzysztof.gocycling.dao.EventRepository;
 import com.fraczekkrzysztof.gocycling.dao.UserRepository;
 import com.fraczekkrzysztof.gocycling.dto.event.ConfirmationDto;
 import com.fraczekkrzysztof.gocycling.dto.event.EventDto;
+import com.fraczekkrzysztof.gocycling.dto.event.EventListResponseDto;
 import com.fraczekkrzysztof.gocycling.entity.Club;
 import com.fraczekkrzysztof.gocycling.entity.Confirmation;
 import com.fraczekkrzysztof.gocycling.entity.Event;
@@ -19,6 +20,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -109,28 +112,12 @@ public class EventServiceTest {
                 .confirmationList(Arrays.asList(cofirmationUser2Event2, cofirmationUser3Event2))
                 .canceled(false)
                 .build();
-
-        Event event3 = Event.builder()
-                .id(3L)
-                .name("Super event 3")
-                .place("Super place 3")
-                .latitude(53.5)
-                .latitude(75.2)
-                .user(user1)
-                .dateAndTime(LocalDateTime.now().plusDays(10))
-                .club(fakeClub)
-                .details("Super details of event 3")
-                .created(LocalDateTime.of(2020, 01, 02, 8, 00))
-                .canceled(true)
-                .build();
-
-        fakeEventsList.addAll(Arrays.asList(event1, event2, event3));
+        fakeEventsList.addAll(Arrays.asList(event1, event2));
     }
 
     @Test
     void shouldRetrieveTwoEvents() {
-        //given
-        when(eventRepository.findByClubId(20)).thenReturn(fakeEventsList);
+        when(eventRepository.findInFutureByClubId(eq(20L), any(LocalDateTime.class), eq(PageRequest.of(0, 20)))).thenReturn(new PageImpl(fakeEventsList));
         EventDto expectedEvent1 = EventDto.builder()
                 .id(1L)
                 .clubId(20L)
@@ -162,10 +149,10 @@ public class EventServiceTest {
                 .userName("Testowy Edward")
                 .build();
         //when
-        List<EventDto> retrievedEventList = eventService.getEventsList(20);
+        EventListResponseDto retrievedEventList = eventService.getEventsList(20, PageRequest.of(0, 20));
         //then
-        assertThat(retrievedEventList).hasSize(2);
-        assertThat(retrievedEventList).usingElementComparatorIgnoringFields("dateAndTime").containsExactlyInAnyOrder(expectedEvent1, expectedEvent2);
+        assertThat(retrievedEventList.getEvents()).hasSize(2);
+        assertThat(retrievedEventList.getEvents()).usingElementComparatorIgnoringFields("dateAndTime").containsExactlyInAnyOrder(expectedEvent1, expectedEvent2);
     }
 
     @Test

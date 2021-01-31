@@ -12,7 +12,7 @@ public class NotificationMapper {
 
     public List<NotificationDto> mapNotificationListToNotificationDtoList(List<Notification> notificationList) {
         return notificationList.stream()
-                .map(n -> mapNotificationToNotificationDto(n))
+                .map(this::mapNotificationToNotificationDto)
                 .collect(Collectors.toList());
     }
 

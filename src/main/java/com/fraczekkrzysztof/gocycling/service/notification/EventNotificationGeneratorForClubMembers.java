@@ -1,6 +1,5 @@
 package com.fraczekkrzysztof.gocycling.service.notification;
 
-import com.fraczekkrzysztof.gocycling.dao.ClubRepository;
 import com.fraczekkrzysztof.gocycling.dao.EventRepository;
 import com.fraczekkrzysztof.gocycling.dao.NotificationRepository;
 import com.fraczekkrzysztof.gocycling.entity.Club;
@@ -24,12 +23,10 @@ public abstract class EventNotificationGeneratorForClubMembers {
 
     private final EventRepository eventRepository;
     private final NotificationRepository notificationRepository;
-    private final ClubRepository clubRepository;
 
-    public EventNotificationGeneratorForClubMembers(EventRepository eventRepository, NotificationRepository notificationRepository, ClubRepository clubRepository) {
+    public EventNotificationGeneratorForClubMembers(EventRepository eventRepository, NotificationRepository notificationRepository) {
         this.eventRepository = eventRepository;
         this.notificationRepository = notificationRepository;
-        this.clubRepository = clubRepository;
     }
 
     public void addEventIdAndIgnoreUser(long id, String userUidToIgnore) {

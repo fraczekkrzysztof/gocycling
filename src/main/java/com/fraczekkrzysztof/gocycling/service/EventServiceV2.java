@@ -2,11 +2,11 @@ package com.fraczekkrzysztof.gocycling.service;
 
 import com.fraczekkrzysztof.gocycling.dto.event.ConfirmationDto;
 import com.fraczekkrzysztof.gocycling.dto.event.EventDto;
-
-import java.util.List;
+import com.fraczekkrzysztof.gocycling.dto.event.EventListResponseDto;
+import org.springframework.data.domain.Pageable;
 
 public interface EventServiceV2 {
-    List<EventDto> getEventsList(long clubId);
+    EventListResponseDto getEventsList(long clubId, Pageable pageable);
 
     EventDto getEvent(long eventId);
 
@@ -20,7 +20,7 @@ public interface EventServiceV2 {
 
     void deleteConfirmation(long eventId, String userUid);
 
-    List<EventDto> getEventsOwnByUser(long clubId, String userUid);
+    EventListResponseDto getEventsOwnByUser(long clubId, String userUid, Pageable pageable);
 
-    List<EventDto> getEventsConfirmedByUser(long clubId, String userUid);
+    EventListResponseDto getEventsConfirmedByUser(long clubId, String userUid, Pageable pageable);
 }

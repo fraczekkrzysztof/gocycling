@@ -19,7 +19,6 @@ public class CancelEventNotificationGeneratorForConfirmation extends EventNotifi
     private static final String TITLE = "Event is canceled";
     private static final String CONTENT = "Event {0} you confirmed is canceled. Check details.";
 
-    //TODO make it working after full refactor
     @Autowired
     public CancelEventNotificationGeneratorForConfirmation(EventRepository eventRepository, NotificationRepository notificationRepository) {
         super(eventRepository, notificationRepository);

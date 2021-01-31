@@ -6,6 +6,7 @@ import com.fraczekkrzysztof.gocycling.dto.event.EventListResponseDto;
 import com.fraczekkrzysztof.gocycling.dto.event.EventResponseDto;
 import com.fraczekkrzysztof.gocycling.service.EventServiceV2;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +19,9 @@ public class EventControllerV2 {
     private final EventServiceV2 eventService;
 
     @GetMapping("/events")
-    public ResponseEntity<EventListResponseDto> getClubsEventList(@PathVariable("id") long clubId) {
+    public ResponseEntity<EventListResponseDto> getClubsEventList(@PathVariable("id") long clubId, Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(EventListResponseDto.builder().events(eventService.getEventsList(clubId)).build());
+                .body(eventService.getEventsList(clubId, pageable));
     }
 
     @GetMapping("/events/{eventId}")
@@ -62,14 +63,14 @@ public class EventControllerV2 {
     }
 
     @GetMapping("/events/createdBy")
-    public ResponseEntity<EventListResponseDto> getEventsCreatedByUser(@PathVariable("id") long clubId, @RequestParam("userUid") String userUid) {
+    public ResponseEntity<EventListResponseDto> getEventsCreatedByUser(@PathVariable("id") long clubId, @RequestParam("userUid") String userUid, Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(EventListResponseDto.builder().events(eventService.getEventsOwnByUser(clubId, userUid)).build());
+                .body(eventService.getEventsOwnByUser(clubId, userUid, pageable));
     }
 
     @GetMapping("/events/confirmedBy")
-    public ResponseEntity<EventListResponseDto> getEventsConfirmedByUser(@PathVariable("id") long clubId, @RequestParam("userUid") String userUid) {
+    public ResponseEntity<EventListResponseDto> getEventsConfirmedByUser(@PathVariable("id") long clubId, @RequestParam("userUid") String userUid, Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(EventListResponseDto.builder().events(eventService.getEventsConfirmedByUser(clubId, userUid)).build());
+                .body(eventService.getEventsConfirmedByUser(clubId, userUid, pageable));
     }
 }
