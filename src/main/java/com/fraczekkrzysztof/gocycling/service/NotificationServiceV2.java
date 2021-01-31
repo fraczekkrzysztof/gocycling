@@ -1,11 +1,10 @@
 package com.fraczekkrzysztof.gocycling.service;
 
-import com.fraczekkrzysztof.gocycling.dto.notification.NotificationDto;
-
-import java.util.List;
+import com.fraczekkrzysztof.gocycling.dto.notification.NotificationListResponseDto;
+import org.springframework.data.domain.Pageable;
 
 public interface NotificationServiceV2 {
-    List<NotificationDto> getUserNotifications(String userUid);
+    NotificationListResponseDto getUserNotifications(String userUid, Pageable pageable);
 
     void markNotificationAsRead(long notificationId);
 

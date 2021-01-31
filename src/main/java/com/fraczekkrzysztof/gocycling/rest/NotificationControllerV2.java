@@ -4,6 +4,7 @@ package com.fraczekkrzysztof.gocycling.rest;
 import com.fraczekkrzysztof.gocycling.dto.notification.NotificationListResponseDto;
 import com.fraczekkrzysztof.gocycling.service.NotificationServiceV2;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +17,9 @@ public class NotificationControllerV2 {
     private final NotificationServiceV2 notificationService;
 
     @GetMapping("/notifications")
-    public ResponseEntity<NotificationListResponseDto> getUserNotification(@PathVariable("userUid") String userUid) {
+    public ResponseEntity<NotificationListResponseDto> getUserNotification(@PathVariable("userUid") String userUid, Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(NotificationListResponseDto.builder().notifications(notificationService.getUserNotifications(userUid)).build());
+                .body(notificationService.getUserNotifications(userUid, pageable));
     }
 
     @GetMapping("/notifications/max")

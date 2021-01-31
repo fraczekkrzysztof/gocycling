@@ -2,12 +2,14 @@ package com.fraczekkrzysztof.gocycling.service;
 
 import com.fraczekkrzysztof.gocycling.dao.NotificationRepository;
 import com.fraczekkrzysztof.gocycling.dto.notification.NotificationDto;
+import com.fraczekkrzysztof.gocycling.dto.notification.NotificationListResponseDto;
 import com.fraczekkrzysztof.gocycling.entity.Notification;
 import com.fraczekkrzysztof.gocycling.mapper.NotificationMapper;
+import com.fraczekkrzysztof.gocycling.paging.PageDto;
+import com.fraczekkrzysztof.gocycling.paging.PagingService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -22,12 +24,14 @@ public class NotificationServiceV2Impl implements NotificationServiceV2 {
 
     private final NotificationRepository notificationRepository;
     private final NotificationMapper notificationMapper;
+    private final PagingService pagingService;
 
     @Override
-    public List<NotificationDto> getUserNotifications(String userUid) {
-        List<Notification> notificationList = notificationRepository.findByUserUid(userUid,
-                PageRequest.of(0, 1000, Sort.by(Sort.Direction.DESC, "created")));
-        return notificationMapper.mapNotificationListToNotificationDtoList(notificationList);
+    public NotificationListResponseDto getUserNotifications(String userUid, Pageable pageable) {
+        Page<Notification> pagedNotification = notificationRepository.findByUserUid(userUid, pageable);
+        PageDto pageDto = pagingService.generatePageInfo(pagedNotification);
+        List<NotificationDto> mappedNotifications = notificationMapper.mapNotificationListToNotificationDtoList(pagedNotification.getContent());
+        return NotificationListResponseDto.builder().notifications(mappedNotifications).page(pageDto).build();
     }
 
     @Override
@@ -40,8 +44,8 @@ public class NotificationServiceV2Impl implements NotificationServiceV2 {
 
     @Override
     public long getMaxNotificationIdForUser(String userUid) {
-        List<Notification> notificationList = notificationRepository.findByUserUid(userUid, Pageable.unpaged());
-        return notificationList.stream()
+        Page<Notification> notificationList = notificationRepository.findByUserUid(userUid, Pageable.unpaged());
+        return notificationList.getContent().stream()
                 .max(Comparator.comparingLong(Notification::getId))
                 .map(Notification::getId)
                 .orElse(-1L);

@@ -2,6 +2,7 @@ package com.fraczekkrzysztof.gocycling.service;
 
 import com.fraczekkrzysztof.gocycling.dao.NotificationRepository;
 import com.fraczekkrzysztof.gocycling.dto.notification.NotificationDto;
+import com.fraczekkrzysztof.gocycling.dto.notification.NotificationListResponseDto;
 import com.fraczekkrzysztof.gocycling.entity.Notification;
 import com.fraczekkrzysztof.gocycling.entity.NotificationType;
 import com.fraczekkrzysztof.gocycling.mapper.NotificationMapper;
@@ -12,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -89,20 +91,20 @@ public class NotificationServiceTest {
                 .id(100500L)
                 .build();
         List<Notification> sortedNotificationList = fakeUserNotificationList.stream().sorted(Comparator.comparing(Notification::getCreated).reversed()).collect(Collectors.toList());
-        when(notificationRepository.findByUserUid("1234", PageRequest.of(0, 1000, Sort.by(Sort.Direction.DESC, "created"))))
-                .thenReturn(sortedNotificationList);
+        when(notificationRepository.findByUserUid("1234", PageRequest.of(0, 20, Sort.by(Sort.Direction.DESC, "created"))))
+                .thenReturn(new PageImpl<>(sortedNotificationList));
 
         //when
-        List<NotificationDto> returnedNotificationList = notificationServiceV2.getUserNotifications("1234");
+        NotificationListResponseDto returnedNotificationList = notificationServiceV2.getUserNotifications("1234", PageRequest.of(0, 20, Sort.by(Sort.Direction.DESC, "created")));
 
         //then
-        assertThat(returnedNotificationList).containsExactly(expectedNotificationDto2, expectedNotificationDto1);
+        assertThat(returnedNotificationList.getNotifications()).containsExactly(expectedNotificationDto2, expectedNotificationDto1);
     }
 
     @Test
     void shouldReturnMaxNotificationIdForUser() {
         long expectedNotificationId = 100500L;
-        when(notificationRepository.findByUserUid("1234", Pageable.unpaged())).thenReturn(fakeUserNotificationList);
+        when(notificationRepository.findByUserUid("1234", Pageable.unpaged())).thenReturn(new PageImpl<>(fakeUserNotificationList));
 
         //when
         long receivedNotificationId = notificationServiceV2.getMaxNotificationIdForUser("1234");
