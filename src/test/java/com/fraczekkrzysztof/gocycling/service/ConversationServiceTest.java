@@ -5,6 +5,7 @@ import com.fraczekkrzysztof.gocycling.dao.EventRepository;
 import com.fraczekkrzysztof.gocycling.dao.UserRepository;
 import com.fraczekkrzysztof.gocycling.dto.event.ConversationDto;
 import com.fraczekkrzysztof.gocycling.dto.event.ConversationListResponseDto;
+import com.fraczekkrzysztof.gocycling.dto.event.ConversationResponseDto;
 import com.fraczekkrzysztof.gocycling.entity.Conversation;
 import com.fraczekkrzysztof.gocycling.entity.Event;
 import com.fraczekkrzysztof.gocycling.entity.User;
@@ -102,11 +103,11 @@ public class ConversationServiceTest {
                 .build();
 
         //when
-        ConversationDto returnedConversationDto = conversationService.addConversation(4444L, givenConversationDto);
+        ConversationResponseDto returnedConversationDto = conversationService.addConversation(4444L, givenConversationDto);
 
         //then
-        assertThat(returnedConversationDto).usingRecursiveComparison().ignoringFields("id", "created").isEqualTo(expectedConversationDto);
-        assertThat(returnedConversationDto.getCreated()).isCloseTo(LocalDateTime.now(), within(1, ChronoUnit.MINUTES));
-        assertThat(returnedConversationDto.getId()).isNotNull();
+        assertThat(returnedConversationDto.getConversation()).usingRecursiveComparison().ignoringFields("id", "created").isEqualTo(expectedConversationDto);
+        assertThat(returnedConversationDto.getConversation().getCreated()).isCloseTo(LocalDateTime.now(), within(1, ChronoUnit.MINUTES));
+        assertThat(returnedConversationDto.getConversation().getId()).isNotNull();
     }
 }

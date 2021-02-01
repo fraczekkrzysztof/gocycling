@@ -27,19 +27,19 @@ public class EventControllerV2 {
     @GetMapping("/events/{eventId}")
     public ResponseEntity<EventResponseDto> getEvent(@PathVariable("eventId") long eventId) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(EventResponseDto.builder().event(eventService.getEvent(eventId)).build());
+                .body(eventService.getEvent(eventId));
     }
 
     @PostMapping("/events")
     public ResponseEntity<EventResponseDto> createEvent(@PathVariable("id") long clubId, @RequestBody EventDto eventDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(EventResponseDto.builder().event(eventService.createEvent(clubId, eventDto)).build());
+                .body(eventService.createEvent(clubId, eventDto));
     }
 
     @PutMapping("/events/{eventId}")
     public ResponseEntity<EventResponseDto> updateEvent(@PathVariable("eventId") long eventId, @RequestBody EventDto eventDto) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(EventResponseDto.builder().event(eventService.updateEvent(eventId, eventDto)).build());
+                .body(eventService.updateEvent(eventId, eventDto));
     }
 
     @PatchMapping("/events/{eventId}/cancel")
@@ -52,7 +52,7 @@ public class EventControllerV2 {
     @PostMapping("/events/{eventId}/confirmations")
     public ResponseEntity<ConfirmationResponse> addConfirmation(@PathVariable("eventId") long eventId, @RequestParam("userUid") String userUid) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ConfirmationResponse.builder().confirmation(eventService.addConfirmation(eventId, userUid)).build());
+                .body(eventService.addConfirmation(eventId, userUid));
     }
 
     @DeleteMapping("/events/{eventId}/confirmations")

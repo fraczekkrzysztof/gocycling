@@ -33,19 +33,19 @@ public class ClubControllerV2 {
     @GetMapping("clubs/{id}")
     public ResponseEntity<ClubResponse> getClubById(@PathVariable("id") long id) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ClubResponse.builder().club(clubService.getClubById(id)).build());
+                .body(clubService.getClubById(id));
     }
 
     @PostMapping("clubs")
     public ResponseEntity<ClubResponse> addClub(@RequestBody ClubDto clubDto) {
         return ResponseEntity.status(HttpStatus.CREATED).
-                body(ClubResponse.builder().club(clubService.addClub(clubDto)).build());
+                body(clubService.addClub(clubDto));
     }
 
     @PostMapping("clubs/{id}/members")
     public ResponseEntity<MemberResponse> addMembership(@PathVariable("id") long clubId, @RequestParam("userUid") String userUid) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(MemberResponse.builder().member(clubService.addMembership(clubId, userUid)).build());
+                .body(clubService.addMembership(clubId, userUid));
     }
 
     @DeleteMapping("clubs/{id}/members")

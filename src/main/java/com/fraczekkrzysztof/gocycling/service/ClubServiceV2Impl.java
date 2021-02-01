@@ -2,9 +2,7 @@ package com.fraczekkrzysztof.gocycling.service;
 
 import com.fraczekkrzysztof.gocycling.dao.ClubRepository;
 import com.fraczekkrzysztof.gocycling.dao.UserRepository;
-import com.fraczekkrzysztof.gocycling.dto.club.ClubDto;
-import com.fraczekkrzysztof.gocycling.dto.club.ClubListResponse;
-import com.fraczekkrzysztof.gocycling.dto.club.MemberDto;
+import com.fraczekkrzysztof.gocycling.dto.club.*;
 import com.fraczekkrzysztof.gocycling.entity.Club;
 import com.fraczekkrzysztof.gocycling.entity.Member;
 import com.fraczekkrzysztof.gocycling.entity.User;
@@ -38,24 +36,26 @@ public class ClubServiceV2Impl implements ClubServiceV2 {
         return ClubListResponse.builder().clubs(mappedClubList).page(pageDto).build();
     }
 
-    public ClubDto getClubById(long id) {
-        return clubMapper
+    public ClubResponse getClubById(long id) {
+        ClubDto club = clubMapper
                 .mapClubEntityToClubDto(clubRepository.findById(id).orElseThrow(() -> new NoSuchElementException(String.format("There is no club of id %d", id))), false, true);
+        return ClubResponse.builder().club(club).build();
     }
 
     @Override
-    public ClubDto addClub(ClubDto clubDto) {
+    public ClubResponse addClub(ClubDto clubDto) {
         clubDto.setId(0L);
         clubDto.setCreated(LocalDateTime.now());
         User owner = userRepository.findById(clubDto.getOwnerId()).
                 orElseThrow(() -> new NoSuchElementException(String.format("There is no user of id %s", clubDto.getOwnerId())));
         Club club = clubMapper.mapClubDtoToClubEntity(clubDto, owner);
         clubRepository.save(club);
-        return clubMapper.mapClubEntityToClubDto(club, false, false);
+        ClubDto mappedAddedClub = clubMapper.mapClubEntityToClubDto(club, false, false);
+        return ClubResponse.builder().club(mappedAddedClub).build();
     }
 
     @Override
-    public MemberDto addMembership(long clubId, String userUid) {
+    public MemberResponse addMembership(long clubId, String userUid) {
         Club club = clubRepository.findById(clubId).orElseThrow(() -> new NoSuchElementException(String.format("There is no club of id %d", clubId)));
         User user = userRepository.findById(userUid).orElseThrow(() -> new NoSuchElementException(String.format("There is no user of id %s", userUid)));
         Member newMember = Member.builder()
@@ -66,12 +66,13 @@ public class ClubServiceV2Impl implements ClubServiceV2 {
         clubRepository.save(club);
         //get an id of new element
         long newMemberId = club.getMemberList().stream().filter(m -> m.getUser() == user).map(Member::getId).findFirst().orElse(-1L);
-        return MemberDto.builder()
+        MemberDto mappedAddedMember = MemberDto.builder()
                 .id(newMemberId)
                 .userUid(user.getId())
                 .userName(user.getName())
                 .confirmed(newMember.isConfirmed())
                 .build();
+        return MemberResponse.builder().member(mappedAddedMember).build();
     }
 
     @Override

@@ -4,9 +4,7 @@ package com.fraczekkrzysztof.gocycling.service;
 import com.fraczekkrzysztof.gocycling.dao.ClubRepository;
 import com.fraczekkrzysztof.gocycling.dao.EventRepository;
 import com.fraczekkrzysztof.gocycling.dao.UserRepository;
-import com.fraczekkrzysztof.gocycling.dto.event.ConfirmationDto;
-import com.fraczekkrzysztof.gocycling.dto.event.EventDto;
-import com.fraczekkrzysztof.gocycling.dto.event.EventListResponseDto;
+import com.fraczekkrzysztof.gocycling.dto.event.*;
 import com.fraczekkrzysztof.gocycling.entity.Club;
 import com.fraczekkrzysztof.gocycling.entity.Confirmation;
 import com.fraczekkrzysztof.gocycling.entity.Event;
@@ -187,10 +185,10 @@ public class EventServiceTest {
                 .build();
 
         //when
-        EventDto retrievedEvent = eventService.getEvent(1L);
+        EventResponseDto retrievedEvent = eventService.getEvent(1L);
 
         //then
-        assertThat(retrievedEvent).usingRecursiveComparison().ignoringFields("dateAndTime").isEqualTo(expectedEvent);
+        assertThat(retrievedEvent.getEvent()).usingRecursiveComparison().ignoringFields("dateAndTime").isEqualTo(expectedEvent);
     }
 
     @Test
@@ -227,10 +225,10 @@ public class EventServiceTest {
                 .build();
 
         //when
-        EventDto createdEvent = eventService.createEvent(30L, givenEvent);
+        EventResponseDto createdEvent = eventService.createEvent(30L, givenEvent);
 
         //then
-        assertThat(createdEvent).usingRecursiveComparison().ignoringFields("id", "created").isEqualTo(expectedEvent);
+        assertThat(createdEvent.getEvent()).usingRecursiveComparison().ignoringFields("id", "created").isEqualTo(expectedEvent);
     }
 
     @Test
@@ -277,10 +275,10 @@ public class EventServiceTest {
                 .build();
 
         //when
-        EventDto updatedEvent = eventService.updateEvent(789L, dataGivenToUpdate);
+        EventResponseDto updatedEvent = eventService.updateEvent(789L, dataGivenToUpdate);
         //then
-        assertThat(updatedEvent).usingRecursiveComparison().ignoringFields("updated").isEqualTo(expectedEventDto);
-        assertThat(updatedEvent.getUpdated()).isCloseTo(LocalDateTime.now(), within(1, ChronoUnit.MINUTES));
+        assertThat(updatedEvent.getEvent()).usingRecursiveComparison().ignoringFields("updated").isEqualTo(expectedEventDto);
+        assertThat(updatedEvent.getEvent().getUpdated()).isCloseTo(LocalDateTime.now(), within(1, ChronoUnit.MINUTES));
     }
 
     @Test
@@ -321,9 +319,9 @@ public class EventServiceTest {
                 .build();
 
         //when
-        ConfirmationDto addedConfirmation = eventService.addConfirmation(999, "222");
+        ConfirmationResponse addedConfirmation = eventService.addConfirmation(999, "222");
         //then
-        assertThat(addedConfirmation).usingRecursiveComparison().ignoringFields("id").isEqualTo(expectedCOnfirmation);
+        assertThat(addedConfirmation.getConfirmation()).usingRecursiveComparison().ignoringFields("id").isEqualTo(expectedCOnfirmation);
     }
 
     @Test

@@ -2,7 +2,9 @@ package com.fraczekkrzysztof.gocycling.service;
 
 import com.fraczekkrzysztof.gocycling.dao.UserRepository;
 import com.fraczekkrzysztof.gocycling.dto.route.RouteDto;
+import com.fraczekkrzysztof.gocycling.dto.route.RouteListResponseDto;
 import com.fraczekkrzysztof.gocycling.dto.user.UserDto;
+import com.fraczekkrzysztof.gocycling.dto.user.UserResponseDto;
 import com.fraczekkrzysztof.gocycling.entity.User;
 import com.fraczekkrzysztof.gocycling.external.AllExternalRoutesRetriever;
 import com.fraczekkrzysztof.gocycling.mapper.user.UserMapper;
@@ -21,24 +23,35 @@ public class UserServiceV2Impl implements UserServiceV2 {
     private final AllExternalRoutesRetriever routesRetriever;
 
     @Override
-    public UserDto getUserDetails(String userUid) {
+    public UserResponseDto getUserDetails(String userUid) {
         User user = userRepository.findById(userUid)
                 .orElseThrow(() -> new NoSuchElementException(String.format("There is no user of if %s", userUid)));
-        return userMapper.mapUserToUserDto(user);
+        UserDto mappedUser = userMapper.mapUserToUserDto(user);
+        return UserResponseDto.builder().user(mappedUser).build();
     }
 
     @Override
-    public UserDto updateUser(String userUid, UserDto userDto) {
+    public UserResponseDto createUser(UserDto userDto) {
+        User userToAdd = userMapper.mapUserDtoToUser(userDto);
+        userRepository.save(userToAdd);
+        UserDto addedUser = userMapper.mapUserToUserDto(userToAdd);
+        return UserResponseDto.builder().user(addedUser).build();
+    }
+
+    @Override
+    public UserResponseDto updateUser(String userUid, UserDto userDto) {
         User user = userRepository.findById(userUid)
                 .orElseThrow(() -> new NoSuchElementException(String.format("There is no user of if %s", userUid)));
         updateUserFields(user, userDto);
         userRepository.save(user);
-        return userMapper.mapUserToUserDto(user);
+        UserDto mappedUpdatedUser = userMapper.mapUserToUserDto(user);
+        return UserResponseDto.builder().user(userDto).build();
     }
 
     @Override
-    public List<RouteDto> getUserExternalRoutes(String userUid) {
-        return routesRetriever.getExternalRoutes(userUid);
+    public RouteListResponseDto getUserExternalRoutes(String userUid) {
+        List<RouteDto> userExternalRoutes = routesRetriever.getExternalRoutes(userUid);
+        return RouteListResponseDto.builder().routes(userExternalRoutes).build();
     }
 
     private void updateUserFields(User user, UserDto userDto) {

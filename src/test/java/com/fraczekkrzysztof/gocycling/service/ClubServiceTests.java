@@ -2,9 +2,7 @@ package com.fraczekkrzysztof.gocycling.service;
 
 import com.fraczekkrzysztof.gocycling.dao.ClubRepository;
 import com.fraczekkrzysztof.gocycling.dao.UserRepository;
-import com.fraczekkrzysztof.gocycling.dto.club.ClubDto;
-import com.fraczekkrzysztof.gocycling.dto.club.ClubListResponse;
-import com.fraczekkrzysztof.gocycling.dto.club.MemberDto;
+import com.fraczekkrzysztof.gocycling.dto.club.*;
 import com.fraczekkrzysztof.gocycling.entity.Club;
 import com.fraczekkrzysztof.gocycling.entity.Member;
 import com.fraczekkrzysztof.gocycling.entity.User;
@@ -236,11 +234,11 @@ public class ClubServiceTests {
         when(clubRepository.findById(1L)).thenReturn(fakeClubList.stream().filter(c -> c.getId() == 1L).findFirst());
 
         //when
-        ClubDto returnedClub = clubService.getClubById(1L);
+        ClubResponse returnedClub = clubService.getClubById(1L);
         //then
-        assertThat(returnedClub)
+        assertThat(returnedClub.getClub())
                 .isEqualTo(club1);
-        assertThat(returnedClub.getMemberList())
+        assertThat(returnedClub.getClub().getMemberList())
                 .containsExactlyInAnyOrder(user1OfClub1, user2OfClub1, user3OfClub1);
 
     }
@@ -285,9 +283,9 @@ public class ClubServiceTests {
                 .build();
         when(userRepository.findById("999")).thenReturn(Optional.of(owner));
         //when
-        ClubDto addedClub = clubService.addClub(clubToAdd);
+        ClubResponse addedClub = clubService.addClub(clubToAdd);
         //then
-        assertThat(addedClub).usingRecursiveComparison().ignoringFields("created", "id").
+        assertThat(addedClub.getClub()).usingRecursiveComparison().ignoringFields("created", "id").
                 isEqualTo(expectedClubDto);
     }
 
@@ -316,10 +314,10 @@ public class ClubServiceTests {
                 .build();
 
         //when
-        MemberDto newMember = clubService.addMembership(10, "666");
+        MemberResponse newMember = clubService.addMembership(10, "666");
 
         //then
-        assertThat(newMember).isEqualTo(expectedMember);
+        assertThat(newMember.getMember()).isEqualTo(expectedMember);
     }
 
     @Test

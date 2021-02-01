@@ -19,18 +19,24 @@ public class UserControllerV2 {
     @GetMapping("/users/{userUid}")
     public ResponseEntity<UserResponseDto> getUserDetails(@PathVariable("userUid") String userUid) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(UserResponseDto.builder().user(userService.getUserDetails(userUid)).build());
+                .body(userService.getUserDetails(userUid));
+    }
+
+    @PostMapping("/users")
+    public ResponseEntity<UserResponseDto> addUser(@RequestBody UserDto userDto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(userService.createUser(userDto));
     }
 
     @PatchMapping("/users/{userUid}")
     public ResponseEntity<UserResponseDto> updateUser(@PathVariable("userUid") String userUid, @RequestBody UserDto userDto) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(UserResponseDto.builder().user(userService.updateUser(userUid, userDto)).build());
+                .body(userService.updateUser(userUid, userDto));
     }
 
     @GetMapping("/users/{userUid}/externalRoutes")
     public ResponseEntity<RouteListResponseDto> getExternalRoutes(@PathVariable("userUid") String userUid) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(RouteListResponseDto.builder().routes(userService.getUserExternalRoutes(userUid)).build());
+                .body(userService.getUserExternalRoutes(userUid));
     }
 }

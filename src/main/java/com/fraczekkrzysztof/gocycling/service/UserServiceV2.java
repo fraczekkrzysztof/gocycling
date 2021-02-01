@@ -1,14 +1,15 @@
 package com.fraczekkrzysztof.gocycling.service;
 
-import com.fraczekkrzysztof.gocycling.dto.route.RouteDto;
+import com.fraczekkrzysztof.gocycling.dto.route.RouteListResponseDto;
 import com.fraczekkrzysztof.gocycling.dto.user.UserDto;
-
-import java.util.List;
+import com.fraczekkrzysztof.gocycling.dto.user.UserResponseDto;
 
 public interface UserServiceV2 {
-    UserDto getUserDetails(String userUid);
+    UserResponseDto getUserDetails(String userUid);
 
-    UserDto updateUser(String userUid, UserDto userDto);
+    UserResponseDto createUser(UserDto userDto);
 
-    List<RouteDto> getUserExternalRoutes(String userUid);
+    UserResponseDto updateUser(String userUid, UserDto userDto);
+
+    RouteListResponseDto getUserExternalRoutes(String userUid);
 }

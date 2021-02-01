@@ -3,9 +3,7 @@ package com.fraczekkrzysztof.gocycling.service;
 import com.fraczekkrzysztof.gocycling.dao.ClubRepository;
 import com.fraczekkrzysztof.gocycling.dao.EventRepository;
 import com.fraczekkrzysztof.gocycling.dao.UserRepository;
-import com.fraczekkrzysztof.gocycling.dto.event.ConfirmationDto;
-import com.fraczekkrzysztof.gocycling.dto.event.EventDto;
-import com.fraczekkrzysztof.gocycling.dto.event.EventListResponseDto;
+import com.fraczekkrzysztof.gocycling.dto.event.*;
 import com.fraczekkrzysztof.gocycling.entity.Club;
 import com.fraczekkrzysztof.gocycling.entity.Confirmation;
 import com.fraczekkrzysztof.gocycling.entity.Event;
@@ -50,13 +48,14 @@ public class EventServiceV2Impl implements EventServiceV2 {
     }
 
     @Override
-    public EventDto getEvent(long eventId) {
+    public EventResponseDto getEvent(long eventId) {
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new NoSuchElementException(String.format(NO_EVENT_ERROR_MESSAGE, eventId)));
-        return eventMapper.mapEventToEventDto(event, true);
+        EventDto mappedEvent = eventMapper.mapEventToEventDto(event, true);
+        return EventResponseDto.builder().event(mappedEvent).build();
     }
 
     @Override
-    public EventDto createEvent(long clubId, EventDto eventDto) {
+    public EventResponseDto createEvent(long clubId, EventDto eventDto) {
         Club club = clubRepository.findById(clubId)
                 .orElseThrow(() -> new NoSuchElementException(String.format("There is no club of id %d", clubId)));
         User user = userRepository.findById(eventDto.getUserId())
@@ -69,17 +68,19 @@ public class EventServiceV2Impl implements EventServiceV2 {
         eventDto.setUpdated(null);
         Event eventToSave = eventMapper.mapEventDtoToEvent(eventDto, club, user);
         eventRepository.save(eventToSave);
-        return eventMapper.mapEventToEventDto(eventToSave, false);
+        EventDto mappedAddedEvent = eventMapper.mapEventToEventDto(eventToSave, false);
+        return EventResponseDto.builder().event(mappedAddedEvent).build();
     }
 
     @Override
-    public EventDto updateEvent(long eventId, EventDto eventDto) {
+    public EventResponseDto updateEvent(long eventId, EventDto eventDto) {
         Event eventToUpdate = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NoSuchElementException(String.format(NO_EVENT_ERROR_MESSAGE, eventId)));
         modifyEvent(eventToUpdate, eventDto);
         eventToUpdate.setUpdated(LocalDateTime.now());
         eventRepository.save(eventToUpdate);
-        return eventMapper.mapEventToEventDto(eventToUpdate, false);
+        EventDto mappedUpdatedEvent = eventMapper.mapEventToEventDto(eventToUpdate, false);
+        return EventResponseDto.builder().event(mappedUpdatedEvent).build();
     }
 
     private void modifyEvent(Event event, EventDto eventDto) {
@@ -101,7 +102,7 @@ public class EventServiceV2Impl implements EventServiceV2 {
     }
 
     @Override
-    public ConfirmationDto addConfirmation(long eventId, String userUid) {
+    public ConfirmationResponse addConfirmation(long eventId, String userUid) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NoSuchElementException(String.format(NO_EVENT_ERROR_MESSAGE, eventId)));
         User user = userRepository.findById(userUid)
@@ -115,7 +116,8 @@ public class EventServiceV2Impl implements EventServiceV2 {
         //retrieve last added confirmation
         Confirmation addedConfirmation = event.getConfirmationList().stream().filter(c -> c.getUser().getId().equals(userUid))
                 .findFirst().orElseThrow(() -> new NoSuchElementException(String.format("Confirmation for user %s wasn't added", userUid)));
-        return confirmationMapper.mapConfirmationToConfirmationDto(addedConfirmation);
+        ConfirmationDto mappedAddedConfirmation = confirmationMapper.mapConfirmationToConfirmationDto(addedConfirmation);
+        return ConfirmationResponse.builder().confirmation(mappedAddedConfirmation).build();
     }
 
     @Override

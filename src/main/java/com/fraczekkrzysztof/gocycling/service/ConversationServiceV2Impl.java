@@ -5,6 +5,7 @@ import com.fraczekkrzysztof.gocycling.dao.EventRepository;
 import com.fraczekkrzysztof.gocycling.dao.UserRepository;
 import com.fraczekkrzysztof.gocycling.dto.event.ConversationDto;
 import com.fraczekkrzysztof.gocycling.dto.event.ConversationListResponseDto;
+import com.fraczekkrzysztof.gocycling.dto.event.ConversationResponseDto;
 import com.fraczekkrzysztof.gocycling.entity.Conversation;
 import com.fraczekkrzysztof.gocycling.entity.Event;
 import com.fraczekkrzysztof.gocycling.entity.User;
@@ -41,7 +42,7 @@ public class ConversationServiceV2Impl implements ConversationServiceV2 {
     }
 
     @Override
-    public ConversationDto addConversation(long eventId, ConversationDto conversationDto) {
+    public ConversationResponseDto addConversation(long eventId, ConversationDto conversationDto) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NoSuchElementException(String.format("There is no event of id %d", eventId)));
         User user = userRepository.findById(conversationDto.getUserId())
@@ -50,7 +51,8 @@ public class ConversationServiceV2Impl implements ConversationServiceV2 {
         conversationDto.setCreated(LocalDateTime.now());
         Conversation conversation = conversationMapper.mapConversationDtoToConversation(conversationDto, event, user);
         conversationRepository.save(conversation);
-        return conversationMapper.mapConversationToConversationDto(conversation);
+        ConversationDto mappedAddedConversation = conversationMapper.mapConversationToConversationDto(conversation);
+        return ConversationResponseDto.builder().conversation(mappedAddedConversation).build();
     }
 
 

@@ -17,4 +17,11 @@ public class UserMapper {
                 .externalApps(user.getExternalAppList().stream().map(UserExternalApp::getAppType).collect(Collectors.toList()))
                 .build();
     }
+
+    public User mapUserDtoToUser(UserDto userDto) {
+        return User.builder()
+                .id(userDto.getId())
+                .name(userDto.getName())
+                .build();
+    }
 }

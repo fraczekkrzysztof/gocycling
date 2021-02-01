@@ -26,6 +26,6 @@ public class ConversationControllerV2 {
     @PostMapping("conversations")
     public ResponseEntity<ConversationResponseDto> addConversation(@PathVariable("eventId") long eventId, @RequestBody ConversationDto conversationDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ConversationResponseDto.builder().conversation(conversationService.addConversation(eventId, conversationDto)).build());
+                .body(conversationService.addConversation(eventId, conversationDto));
     }
 }
