@@ -20,4 +20,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Query("select e from Event e join e.club c join e.confirmationList cl join cl.user u where c.id = :id and u.id = :userUid and e.dateAndTime >= :dateTime and e.canceled = false")
     Page<Event> findByClubIdAndUserConfirmation(@Param("id") long clubId, @Param("userUid") String userUid, @Param("dateTime") LocalDateTime dateTime, Pageable pageable);
+
+    @Query("select e from Event e where e.dateAndTime < :dateTime")
+    Page<Event> findEventsOlderThan(@Param("dateTime") LocalDateTime dateTime, Pageable pageable);
 }
