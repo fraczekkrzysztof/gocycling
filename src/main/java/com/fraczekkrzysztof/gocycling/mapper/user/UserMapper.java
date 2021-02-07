@@ -4,6 +4,7 @@ import com.fraczekkrzysztof.gocycling.dto.user.UserDto;
 import com.fraczekkrzysztof.gocycling.entity.User;
 import com.fraczekkrzysztof.gocycling.entity.UserExternalApp;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.stream.Collectors;
 
@@ -11,11 +12,13 @@ import java.util.stream.Collectors;
 public class UserMapper {
 
     public UserDto mapUserToUserDto(User user) {
-        return UserDto.builder()
+        UserDto.UserDtoBuilder userDto = UserDto.builder()
                 .id(user.getId())
-                .name(user.getName())
-                .externalApps(user.getExternalAppList().stream().map(UserExternalApp::getAppType).collect(Collectors.toList()))
-                .build();
+                .name(user.getName());
+        if (!CollectionUtils.isEmpty(user.getExternalAppList())) {
+            userDto.externalApps(user.getExternalAppList().stream().map(UserExternalApp::getAppType).collect(Collectors.toList()));
+        }
+        return userDto.build();
     }
 
     public User mapUserDtoToUser(UserDto userDto) {

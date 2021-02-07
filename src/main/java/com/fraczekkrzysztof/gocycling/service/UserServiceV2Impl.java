@@ -45,7 +45,7 @@ public class UserServiceV2Impl implements UserServiceV2 {
         updateUserFields(user, userDto);
         userRepository.save(user);
         UserDto mappedUpdatedUser = userMapper.mapUserToUserDto(user);
-        return UserResponseDto.builder().user(userDto).build();
+        return UserResponseDto.builder().user(mappedUpdatedUser).build();
     }
 
     @Override
