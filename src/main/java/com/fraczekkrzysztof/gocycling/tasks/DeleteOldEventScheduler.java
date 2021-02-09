@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -30,11 +31,13 @@ public class DeleteOldEventScheduler {
     public void deleteOldEvents() {
         log.info("Deleting old even started");
         List<Event> eventsListToDelete = eventRepository.findEventsOlderThan(LocalDateTime.now().minusDays(properties.getDeleteOldEventsAfterDays()), Pageable.unpaged()).getContent();
-        eventRepository.deleteAll(eventsListToDelete);
-        List<Long> deletedEvents = eventsListToDelete.stream().map(Event::getId).collect(Collectors.toList());
-        List<Notification> notificationsToDelete = notificationRepository.findByEventIdList(deletedEvents, Pageable.unpaged()).getContent();
-        notificationRepository.deleteAll(notificationsToDelete);
-        log.info(String.format("Deleting old events finished successfully. %d events deleted", deletedEvents.size()));
+        if (!CollectionUtils.isEmpty(eventsListToDelete)) {
+            eventRepository.deleteAll(eventsListToDelete);
+            List<Long> deletedEvents = eventsListToDelete.stream().map(Event::getId).collect(Collectors.toList());
+            List<Notification> notificationsToDelete = notificationRepository.findByEventIdList(deletedEvents, Pageable.unpaged()).getContent();
+            notificationRepository.deleteAll(notificationsToDelete);
+            log.info(String.format("Deleting old events finished successfully. %d events deleted", deletedEvents.size()));
+        }
     }
 
 }
