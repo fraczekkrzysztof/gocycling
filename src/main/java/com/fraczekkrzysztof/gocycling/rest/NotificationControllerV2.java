@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v2/user/{userUid}")
+@RequestMapping("/api/v2/users/{userUid}")
 public class NotificationControllerV2 {
 
     private final NotificationServiceV2 notificationService;
