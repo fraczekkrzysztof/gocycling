@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -78,6 +79,19 @@ public class UserServiceTest {
 
         //then
         assertThat(createdUser.getUser()).isEqualTo(expectedCreatedUser);
+    }
+
+    @Test
+    void shouldThrowIllegalArgumentExceptionWhenTryToCreateUserWhichAlreadyExists() {
+        //given
+        UserDto givenUserToCreate = UserDto.builder()
+                .id("456")
+                .name("Testowy Sylwester").build();
+        when(userRepository.findById("456")).thenReturn(Optional.of(new User()));
+        //when
+        Throwable call = catchThrowable(() -> userService.createUser(givenUserToCreate));
+        //then
+        assertThat(call).isInstanceOf(IllegalArgumentException.class).hasMessage("User already exists!");
     }
 
     @Test

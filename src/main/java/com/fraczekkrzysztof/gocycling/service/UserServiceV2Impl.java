@@ -33,6 +33,9 @@ public class UserServiceV2Impl implements UserServiceV2 {
     @Override
     public UserResponseDto createUser(UserDto userDto) {
         User userToAdd = userMapper.mapUserDtoToUser(userDto);
+        if (userRepository.findById(userToAdd.getId()).isPresent()) {
+            throw new IllegalArgumentException("User already exists!");
+        }
         userRepository.save(userToAdd);
         UserDto addedUser = userMapper.mapUserToUserDto(userToAdd);
         return UserResponseDto.builder().user(addedUser).build();

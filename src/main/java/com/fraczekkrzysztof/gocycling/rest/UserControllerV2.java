@@ -24,8 +24,13 @@ public class UserControllerV2 {
 
     @PostMapping("/users")
     public ResponseEntity<UserResponseDto> addUser(@RequestBody UserDto userDto) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(userService.createUser(userDto));
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(userService.createUser(userDto));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(null);
+        }
     }
 
     @PatchMapping("/users/{userUid}")
