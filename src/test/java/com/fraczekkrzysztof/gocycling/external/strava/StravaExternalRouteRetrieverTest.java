@@ -23,6 +23,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -49,6 +50,8 @@ public class StravaExternalRouteRetrieverTest {
     StravaProperties stravaProperties;
     @Autowired
     StravaExternalRoutesRetriever stravaRouteRetriever;
+    @Autowired
+    StravaOAuthAuthorizer stravaOAuthAuthorizer;
 
     @Test
     void shouldRetrieveOneRoute() {
@@ -58,6 +61,7 @@ public class StravaExternalRouteRetrieverTest {
         when(stravaApp.getAppType()).thenReturn(ExternalApps.STRAVA);
         when(stravaApp.getAccessToken()).thenReturn("fakeAccessToken");
         when(stravaApp.getAppUserId()).thenReturn(1000500100900L);
+        when(stravaApp.getExpiresAt()).thenReturn(Instant.now().getEpochSecond() + 100 * 60);
         List<UserExternalApp> listOfExternalApps = new ArrayList<>();
         listOfExternalApps.add(stravaApp);
         when(userWithStravaConnected.getExternalAppList()).thenReturn(listOfExternalApps);

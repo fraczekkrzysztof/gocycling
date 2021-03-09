@@ -29,11 +29,13 @@ public class StravaExternalRoutesRetriever implements ExternalRoutesRetriever {
 
     private final UserRepository userRepository;
     private final StravaProperties stravaProperties;
+    private final StravaOAuthAuthorizer stravaOAuthAuthorizer;
     private final RouteMapper routeMapper;
     @Qualifier("customRestTemplate")
     private final RestTemplate restTemplate;
     @Override
     public List<RouteDto> getExternalRoutes(String userUid) {
+        stravaOAuthAuthorizer.refreshToken(userUid);
         UserExternalApp stravaAppDetails = userRepository.findById(userUid)
                 .orElseThrow(() -> new NoSuchElementException(String.format("There is no user of id %s ", userUid)))
                 .getExternalAppList().stream()

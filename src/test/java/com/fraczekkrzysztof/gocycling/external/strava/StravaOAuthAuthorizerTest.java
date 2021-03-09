@@ -80,17 +80,14 @@ public class StravaOAuthAuthorizerTest {
     void shouldRefreshToken() {
         //given
         User userWithStravaConnected = mock(User.class);
-        when(userWithStravaConnected.getId()).thenReturn("someUserId");
         UserExternalApp stravaApp = mock(UserExternalApp.class);
         when(stravaApp.getAppType()).thenReturn(ExternalApps.STRAVA);
-        when(stravaApp.getExpiresAt()).thenReturn(Instant.now().getEpochSecond() + 5 * 60);
+        when(stravaApp.getExpiresAt()).thenReturn(Instant.now().getEpochSecond() - 5 * 60);
         when(stravaApp.getRefreshToken()).thenReturn("fakeRefreshToken");
         List<UserExternalApp> userExternalAppsList = new ArrayList<>();
         userExternalAppsList.add(stravaApp);
         when(userWithStravaConnected.getExternalAppList()).thenReturn(userExternalAppsList);
-        List<User> usersWithStravaConnected = new ArrayList<>();
-        usersWithStravaConnected.add(userWithStravaConnected);
-        when(userRepository.findAllWithStravaConnected()).thenReturn(usersWithStravaConnected);
+        when(userRepository.findById("someUserId")).thenReturn(Optional.of(userWithStravaConnected));
         AccessTokenResponseDto mockAccessTokenResponse = mock(AccessTokenResponseDto.class);
         when(mockAccessTokenResponse.getAccessToken()).thenReturn("fakeAccessToken");
         when(mockAccessTokenResponse.getRefreshToken()).thenReturn("fakeRefreshToken");
@@ -99,13 +96,13 @@ public class StravaOAuthAuthorizerTest {
                 .thenReturn(ResponseEntity.ok(mockAccessTokenResponse));
 
         //when
-        Throwable thrown = catchThrowable(() -> stravaAutorizer.refreshToken());
+        Throwable thrown = catchThrowable(() -> stravaAutorizer.refreshToken("someUserId"));
         //then
         assertThat(thrown)
                 .doesNotThrowAnyException();
         verify(restTemplate).postForEntity("https://www.strava.com/oauth/token?client_id=33057&client_secret=eb3369fc1257a83b1d846a3db8b374e3e8068300&grant_type=refresh_token&refresh_token=fakeRefreshToken", null, AccessTokenResponseDto.class);
-        verify(userRepository).findAllWithStravaConnected();
-        verify(userRepository).saveAll(usersWithStravaConnected);
+        verify(userRepository).findById("someUserId");
+        verify(userRepository).save(userWithStravaConnected);
     }
 
     @Test

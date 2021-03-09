@@ -26,12 +26,6 @@ public class StravaControllerV2 {
         return ResponseEntity.status(HttpStatus.OK).body("");
     }
 
-    @PostMapping("/refresh")
-    public ResponseEntity<String> refreshToken(){
-        authorizer.refreshToken();
-        return ResponseEntity.status(HttpStatus.OK).body("");
-    }
-
     @PostMapping("/deauthorize")
     public ResponseEntity<String> deautorize(@RequestParam("userUid") String userUid){
         authorizer.deauthorize(userUid);
