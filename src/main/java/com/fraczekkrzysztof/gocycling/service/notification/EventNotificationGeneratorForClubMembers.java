@@ -45,7 +45,7 @@ public abstract class EventNotificationGeneratorForClubMembers {
 
     @Scheduled(initialDelay = 1000, fixedRate = 60000)
     public void generateNotification() {
-        logger.debug("Starting generating notification");
+        logger.info("Starting generating notification");
         Map<Long, List<String>> eventIdsToGenerateNotificationForUpdate = eventsWithUserToIgnore;
         List<Notification> toSaveNotification = new ArrayList<>();
         toSaveNotification.addAll(generateNotifications(eventIdsToGenerateNotificationForUpdate));
@@ -53,7 +53,7 @@ public abstract class EventNotificationGeneratorForClubMembers {
             notificationRepository.saveAll(toSaveNotification);
         }
         removeElementFromMap(eventIdsToGenerateNotificationForUpdate);
-        logger.debug("Generating finished");
+        logger.info("Generating finished");
     }
 
     private void removeElementFromMap(Map<Long, List<String>> toRemoved) {

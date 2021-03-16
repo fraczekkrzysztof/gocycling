@@ -2,6 +2,7 @@ package com.fraczekkrzysztof.gocycling.aop;
 
 import com.fraczekkrzysztof.gocycling.dao.EventRepository;
 import com.fraczekkrzysztof.gocycling.dto.event.EventDto;
+import com.fraczekkrzysztof.gocycling.dto.event.EventResponseDto;
 import com.fraczekkrzysztof.gocycling.entity.Event;
 import com.fraczekkrzysztof.gocycling.service.notification.EventNotificationGeneratorForClubMembers;
 import com.fraczekkrzysztof.gocycling.service.notification.EventNotificationGeneratorForConfirmations;
@@ -45,15 +46,17 @@ public class EventAop {
 
     @AfterReturning(pointcut = "forEventInsert()", returning = "retVal")
     private void forEventInsert(Object retVal) {
-        if (retVal instanceof EventDto) {
-            newEventForClubNotificationGeneratorForClubMembers.addEventIdAndIgnoreUser(((EventDto) retVal).getId(), ((EventDto) retVal).getUserId());
+        if (retVal instanceof EventResponseDto) {
+            EventDto createdEvent = ((EventResponseDto) retVal).getEvent();
+            newEventForClubNotificationGeneratorForClubMembers.addEventIdAndIgnoreUser(createdEvent.getId(), createdEvent.getUserId());
             }
     }
 
     @AfterReturning(pointcut = "forEventUpdate()", returning = "retVal")
     private void forEventUpdate(Object retVal) {
-        if (retVal instanceof EventDto) {
-            updateEventNotificationGeneratorForConfirmation.addEventIdAndIgnoreUser(((EventDto) retVal).getId(), ((EventDto) retVal).getUserId());
+        if (retVal instanceof EventResponseDto) {
+            EventDto createdEvent = ((EventResponseDto) retVal).getEvent();
+            updateEventNotificationGeneratorForConfirmation.addEventIdAndIgnoreUser(createdEvent.getId(), createdEvent.getUserId());
         }
     }
 
