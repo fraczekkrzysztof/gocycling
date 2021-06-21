@@ -1,6 +1,6 @@
 package com.fraczekkrzysztof.gocycling.external;
 
-import com.fraczekkrzysztof.gocycling.dto.RouteDto;
+import com.fraczekkrzysztof.gocycling.dto.route.RouteDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,5 @@
 package com.fraczekkrzysztof.gocycling.entity;
 
-
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +11,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "event")
+@Table(name = "event", indexes = {@Index(columnList = "ev_cl_id", name = "ev_cl_id_index"),
+        @Index(columnList = "ev_owner_id", name = "ev_owner_id_index")})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,7 +33,7 @@ public class Event implements Serializable {
     @Column(name = "ev_latitude", nullable = false)
     private double latitude;
 
-    @Column (name = "ev_longitude", nullable = false)
+    @Column(name = "ev_longitude", nullable = false)
     private double longitude;
 
     @Column(name = "ev_dateAndTime", nullable = false, columnDefinition = "TIMESTAMP ")
@@ -46,24 +45,27 @@ public class Event implements Serializable {
     @Column(name = "ev_updated", columnDefinition = "TIMESTAMP")
     private LocalDateTime updated;
 
-    @Column (name = "ev_details", columnDefinition = "text")
+    @Column(name = "ev_details", columnDefinition = "text")
     private String details;
 
-    @Column(name = "ev_created_by", nullable = false)
-    private String createdBy;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ev_owner_id")
+    private User user;
 
     @Column(name = "ev_canceled")
     private boolean canceled = false;
 
-    @Column(name ="ev_route_link")
+    @Column(name = "ev_route_link")
     private String routeLink;
 
-    @OneToMany(mappedBy = "event", cascade = {CascadeType.ALL})
+    @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @JoinColumn(name = "con_ev_id")
     private List<Confirmation> confirmationList;
+
+    @OneToMany(mappedBy = "event", orphanRemoval = true, fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    private List<Conversation> conversationList;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ev_cl_id")
     private Club club;
-
-
 }

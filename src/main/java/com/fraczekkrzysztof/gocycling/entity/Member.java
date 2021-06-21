@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name="member")
@@ -13,19 +14,16 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 @Data
-public class Member {
+public class Member implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "mem_id")
     private long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="mem_cl_id", nullable = false)
-    private Club club;
-
-    @Column(name="mem_user_uid", nullable = false)
-    private String userUid;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "mem_user_id")
+    private User user;
 
     @Column(name="mem_confirmed")
     private boolean confirmed;

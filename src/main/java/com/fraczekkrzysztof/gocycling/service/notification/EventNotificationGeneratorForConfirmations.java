@@ -1,6 +1,5 @@
 package com.fraczekkrzysztof.gocycling.service.notification;
 
-import com.fraczekkrzysztof.gocycling.dao.ConfirmationRepository;
 import com.fraczekkrzysztof.gocycling.dao.EventRepository;
 import com.fraczekkrzysztof.gocycling.dao.NotificationRepository;
 import com.fraczekkrzysztof.gocycling.entity.Confirmation;
@@ -9,11 +8,13 @@ import com.fraczekkrzysztof.gocycling.entity.Notification;
 import org.slf4j.Logger;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Transactional
 public abstract class EventNotificationGeneratorForConfirmations {
 
     Logger logger = null;
@@ -21,12 +22,10 @@ public abstract class EventNotificationGeneratorForConfirmations {
 
     private EventRepository eventRepository;
     private NotificationRepository notificationRepository;
-    private ConfirmationRepository confirmationRepository;
 
-    public EventNotificationGeneratorForConfirmations(EventRepository eventRepository, NotificationRepository notificationRepository, ConfirmationRepository confirmationRepository) {
+    public EventNotificationGeneratorForConfirmations(EventRepository eventRepository, NotificationRepository notificationRepository) {
         this.eventRepository = eventRepository;
         this.notificationRepository = notificationRepository;
-        this.confirmationRepository = confirmationRepository;
     }
 
     public void addEventIdAndIgnoreUser(long id, String userUidToIgnore) {
@@ -47,7 +46,7 @@ public abstract class EventNotificationGeneratorForConfirmations {
 
     @Scheduled(initialDelay = 1000, fixedRate = 60000)
     public void generateNotification() {
-        logger.debug("Starting generating notification");
+        logger.info("Starting generating notification");
         Map<Long,List<String>> eventIdsToGenerateNotificationForUpdate = eventsWithUserToIgnore;
         List<Notification> toSaveNotification = new ArrayList<>();
         toSaveNotification.addAll(generateNotifications(eventIdsToGenerateNotificationForUpdate));
@@ -55,7 +54,7 @@ public abstract class EventNotificationGeneratorForConfirmations {
             notificationRepository.saveAll(toSaveNotification);
         }
         removeElementFromMap(eventIdsToGenerateNotificationForUpdate);
-        logger.debug("Generating finished");
+        logger.info("Generating finished");
     }
 
     private void removeElementFromMap(Map<Long,List<String>> toRemoved){
@@ -67,9 +66,9 @@ public abstract class EventNotificationGeneratorForConfirmations {
         if (!idsWithUserToignore.isEmpty()){
             List<Event> eventsToGenerateNotification = eventRepository.findAllById(idsWithUserToignore.keySet());
             eventsToGenerateNotification.stream().forEach(e -> {
-                List<Confirmation> eventConfirmations = confirmationRepository.findByEventId(e.getId());
+                List<Confirmation> eventConfirmations = e.getConfirmationList();
                 for (Confirmation c : eventConfirmations){
-                    if (idsWithUserToignore.get(e.getId()).contains(c.getUserUid())){
+                    if (idsWithUserToignore.get(e.getId()).contains(c.getUser().getId())) {
                         continue;
                     }
                     notificationToSave.add(generateSingleNotification(c,e));

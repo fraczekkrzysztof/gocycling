@@ -1,13 +1,8 @@
 package com.fraczekkrzysztof.gocycling.service.notification;
 
-import com.fraczekkrzysztof.gocycling.dao.ClubRepository;
 import com.fraczekkrzysztof.gocycling.dao.EventRepository;
-import com.fraczekkrzysztof.gocycling.dao.MemberRepository;
 import com.fraczekkrzysztof.gocycling.dao.NotificationRepository;
-import com.fraczekkrzysztof.gocycling.entity.Club;
-import com.fraczekkrzysztof.gocycling.entity.Event;
-import com.fraczekkrzysztof.gocycling.entity.Member;
-import com.fraczekkrzysztof.gocycling.entity.Notification;
+import com.fraczekkrzysztof.gocycling.entity.*;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,18 +17,20 @@ public class NewEventForClubNotificationGeneratorForClubMembers extends EventNot
     private static final String CONTENT = "There is new Event in club {0}";
 
     @Autowired
-    public NewEventForClubNotificationGeneratorForClubMembers(EventRepository eventRepository, NotificationRepository notificationRepository, MemberRepository memberRepository, ClubRepository clubRepository) {
-        super(eventRepository, notificationRepository, memberRepository, clubRepository);
+    public NewEventForClubNotificationGeneratorForClubMembers(EventRepository eventRepository, NotificationRepository notificationRepository) {
+        super(eventRepository, notificationRepository);
         this.logger = LoggerFactory.getLogger(NewEventForClubNotificationGeneratorForClubMembers.class);
     }
 
     @Override
     Notification generateSingleNotification(Club c, Member m, Event e) {
         return Notification.builder()
-                .userUid(m.getUserUid())
+                .userUid(m.getUser().getId())
                 .title(TITLE)
+                .type(NotificationType.EVENT)
                 .content(MessageFormat.format(CONTENT, c.getName()))
-                .event(e)
+                .eventId(e.getId())
+                .clubId(e.getClub().getId())
                 .created(LocalDateTime.now())
                 .read(false).build();
     }

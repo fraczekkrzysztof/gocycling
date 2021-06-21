@@ -6,6 +6,7 @@ public interface ExternalOAuthAuthorizer {
 
     String generateAuthorizationLink();
     void getAccessToken(AccessTokenRequestDto authorizationCode);
-    void refreshToken();
+
+    void refreshToken(String userUid);
     void deauthorize(String userUid);
 }

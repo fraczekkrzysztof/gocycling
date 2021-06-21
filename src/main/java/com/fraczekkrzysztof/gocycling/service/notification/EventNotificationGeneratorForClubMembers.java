@@ -1,8 +1,6 @@
 package com.fraczekkrzysztof.gocycling.service.notification;
 
-import com.fraczekkrzysztof.gocycling.dao.ClubRepository;
 import com.fraczekkrzysztof.gocycling.dao.EventRepository;
-import com.fraczekkrzysztof.gocycling.dao.MemberRepository;
 import com.fraczekkrzysztof.gocycling.dao.NotificationRepository;
 import com.fraczekkrzysztof.gocycling.entity.Club;
 import com.fraczekkrzysztof.gocycling.entity.Event;
@@ -11,11 +9,13 @@ import com.fraczekkrzysztof.gocycling.entity.Notification;
 import org.slf4j.Logger;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Transactional
 public abstract class EventNotificationGeneratorForClubMembers {
 
     Logger logger = null;
@@ -23,14 +23,10 @@ public abstract class EventNotificationGeneratorForClubMembers {
 
     private final EventRepository eventRepository;
     private final NotificationRepository notificationRepository;
-    private final MemberRepository memberRepository;
-    private final ClubRepository clubRepository;
 
-    public EventNotificationGeneratorForClubMembers(EventRepository eventRepository, NotificationRepository notificationRepository, MemberRepository memberRepository, ClubRepository clubRepository) {
+    public EventNotificationGeneratorForClubMembers(EventRepository eventRepository, NotificationRepository notificationRepository) {
         this.eventRepository = eventRepository;
         this.notificationRepository = notificationRepository;
-        this.memberRepository = memberRepository;
-        this.clubRepository = clubRepository;
     }
 
     public void addEventIdAndIgnoreUser(long id, String userUidToIgnore) {
@@ -49,7 +45,7 @@ public abstract class EventNotificationGeneratorForClubMembers {
 
     @Scheduled(initialDelay = 1000, fixedRate = 60000)
     public void generateNotification() {
-        logger.debug("Starting generating notification");
+        logger.info("Starting generating notification");
         Map<Long, List<String>> eventIdsToGenerateNotificationForUpdate = eventsWithUserToIgnore;
         List<Notification> toSaveNotification = new ArrayList<>();
         toSaveNotification.addAll(generateNotifications(eventIdsToGenerateNotificationForUpdate));
@@ -57,7 +53,7 @@ public abstract class EventNotificationGeneratorForClubMembers {
             notificationRepository.saveAll(toSaveNotification);
         }
         removeElementFromMap(eventIdsToGenerateNotificationForUpdate);
-        logger.debug("Generating finished");
+        logger.info("Generating finished");
     }
 
     private void removeElementFromMap(Map<Long, List<String>> toRemoved) {
@@ -69,10 +65,10 @@ public abstract class EventNotificationGeneratorForClubMembers {
         if (!idsWithUserToignore.isEmpty()) {
             List<Event> eventsToGenerateNotification = eventRepository.findAllById(idsWithUserToignore.keySet());
             eventsToGenerateNotification.stream().forEach(e -> {
-                Club club = clubRepository.findSingleClubForEventId(e.getId());
-                List<Member> clubMembers = memberRepository.findAllClubMembers(club.getId());
+                Club club = e.getClub();
+                List<Member> clubMembers = club.getMemberList();
                 for (Member m : clubMembers) {
-                    if (idsWithUserToignore.get(e.getId()).contains(m.getUserUid())) {
+                    if (idsWithUserToignore.get(e.getId()).contains(m.getUser().getId())) {
                         continue;
                     }
 

@@ -6,36 +6,38 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name="club")
+@Table(name = "club")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Data
-public class Club {
+public class Club implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="cl_id")
+    @Column(name = "cl_id")
     long id;
 
-    @Column(name="cl_name", nullable = false)
+    @Column(name = "cl_name", nullable = false)
     String name;
 
-    @Column(name="cl_location", nullable = false)
+    @Column(name = "cl_location", nullable = false)
     String location;
 
     @Column(name = "cl_latitude", nullable = false)
     private double latitude;
 
-    @Column (name = "cl_longitude", nullable = false)
+    @Column(name = "cl_longitude", nullable = false)
     private double longitude;
 
-    @Column(name = "cl_owner", nullable = false)
-    private String owner;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "cl_owner_id")
+    private User user;
 
     @Column(name = "cl_created", nullable = false, columnDefinition = "TIMESTAMP", updatable = false)
     private LocalDateTime created = LocalDateTime.now();
@@ -48,5 +50,9 @@ public class Club {
 
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
     private List<Event> eventList;
+
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name = "mem_cl_id")
+    private List<Member> memberList;
 
 }

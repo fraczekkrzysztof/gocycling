@@ -1,6 +1,5 @@
 package com.fraczekkrzysztof.gocycling.external.strava;
 
-import com.fraczekkrzysztof.gocycling.dao.UserExternalAppsRepository;
 import com.fraczekkrzysztof.gocycling.dao.UserRepository;
 import com.fraczekkrzysztof.gocycling.entity.ExternalApps;
 import com.fraczekkrzysztof.gocycling.entity.User;
@@ -15,134 +14,116 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @Component
 @Slf4j
 @RequiredArgsConstructor
 public class StravaOAuthAuthorizer implements ExternalOAuthAuthorizer {
 
+    public static final String CLIENT_ID = "client_id";
     private final StravaProperties stravaProperties;
     private final UserRepository userRepository;
-    private final UserExternalAppsRepository userExternalAppsRepository;
     @Qualifier("customRestTemplate")
     private final RestTemplate restTemplate;
 
 
     @Override
     public String generateAuthorizationLink() {
-       StringBuilder sb = new StringBuilder();
-       sb.append(stravaProperties.getBaseOAuthAddress());
-       sb.append("?");
-       sb.append("client_id=");
-       sb.append(stravaProperties.getClientId());
-       sb.append("&");
-       sb.append("response_type=code");
-       sb.append("&");
-       sb.append("redirect_uri=");
-       sb.append(stravaProperties.getRedirectUri());
-       sb.append("&");
-       sb.append("approval_prompt=force");
-       sb.append("&");
-       sb.append("scope=read");
-       log.debug("Successfully generated authorization link!");
-       return sb.toString();
+        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
+                .fromUriString(stravaProperties.getBaseOAuthAddress())
+                .queryParam(CLIENT_ID, stravaProperties.getClientId())
+                .queryParam("response_type", "code")
+                .queryParam("redirect_uri", stravaProperties.getRedirectUri())
+                .queryParam("approval_prompt", "force")
+                .queryParam("scope", "read");
+        log.info("Successfully generated authorization link!");
+        return uriComponentsBuilder.toUriString();
     }
 
     @Override
-    public void getAccessToken(AccessTokenRequestDto accessTokenRequestDto){
-        StringBuilder sb = new StringBuilder();
-        sb.append(stravaProperties.getBaseTokenAddress());
-        sb.append("?");
-        sb.append("client_id=");
-        sb.append(stravaProperties.getClientId());
-        sb.append("&");
-        sb.append("client_secret=");
-        sb.append(stravaProperties.getClientSecret());
-        sb.append("&");
-        sb.append("code=");
-        sb.append(accessTokenRequestDto.getAccessToken());
-        sb.append("&");
-        sb.append("grant_type=");
-        sb.append("authorization_code");
+    public void getAccessToken(AccessTokenRequestDto accessTokenRequestDto) {
+        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
+                .fromUriString(stravaProperties.getBaseTokenAddress())
+                .queryParam(CLIENT_ID, stravaProperties.getClientId())
+                .queryParam("client_secret", stravaProperties.getClientSecret())
+                .queryParam("code", accessTokenRequestDto.getAccessToken())
+                .queryParam("grant_type", "authorization_code");
 
-        ResponseEntity<AccessTokenResponseDto> response = restTemplate.postForEntity(sb.toString(),null, AccessTokenResponseDto.class);
-        if (!response.getStatusCode().is2xxSuccessful()){
+        ResponseEntity<AccessTokenResponseDto> response = restTemplate.postForEntity(uriComponentsBuilder.toUriString(), null, AccessTokenResponseDto.class);
+        if (!response.getStatusCode().is2xxSuccessful()) {
             throw new StravaApiException("There is error during retreiving access token");
         }
-        User user = userRepository.findById(accessTokenRequestDto.getUserUid()).orElseThrow(() ->  new NoSuchElementException("User doesn't exists"));
+        User user = userRepository.findById(accessTokenRequestDto.getUserUid()).orElseThrow(() -> new NoSuchElementException("User doesn't exists"));
         UserExternalApp userExternalApp = UserExternalApp.builder()
-        .user(user)
-        .appUserId(response.getBody().getAthlete().getId().longValue())
-        .appType(ExternalApps.STRAVA)
-        .refreshToken(response.getBody().getRefreshToken())
-        .accessToken(response.getBody().getAccessToken())
-        .expiresAt(response.getBody().getExpiresAt().longValue()).build();
-        userExternalAppsRepository.save(userExternalApp);
-        log.debug("Successfully retrieve access token and store it in db");
+                .appUserId(response.getBody().getAthlete().getId().longValue())
+                .appType(ExternalApps.STRAVA)
+                .refreshToken(response.getBody().getRefreshToken())
+                .accessToken(response.getBody().getAccessToken())
+                .expiresAt(response.getBody().getExpiresAt().longValue()).build();
+        user.getExternalAppList().add(userExternalApp);
+        userRepository.save(user);
+        log.info("Successfully retrieve access token and store it in db");
     }
 
     @Override
-    public void refreshToken() {
-        log.debug("Starting refreshing token");
-        List<UserExternalApp> listOfExternalApp = userExternalAppsRepository.findAll().stream()
-                .filter(e -> e.getAppType() == ExternalApps.STRAVA).collect(Collectors.toList());
-        for(UserExternalApp ea : listOfExternalApp){
-            if (((ea.getExpiresAt()*1000)-40*60*1000)<System.currentTimeMillis()){
-                refreshToken(ea);
+    public void refreshToken(String userUid) {
+        log.info("Starting refreshing token");
+        User user = userRepository.findById(userUid).orElseThrow(() -> new NoSuchElementException(String.format("There is no user of id %s", userUid)));
+        UserExternalApp stravaAppDetails = user.getExternalAppList()
+                .stream()
+                .filter(e -> ExternalApps.STRAVA.equals(e.getAppType()))
+                .findFirst().orElseThrow(() -> new NoSuchElementException(String.format("User %s has no Strava connected", userUid)));
+        if (stravaAppDetails.getExpiresAt() * 1000 < System.currentTimeMillis()) {
+            try {
+                refreshToken(stravaAppDetails);
+                log.info(String.format("Successfully refresh strava token for user %s", userUid));
+            } catch (Exception e) {
+                log.error(String.format("Error during refreshing token for user %s, at time %d, using refresh token %s", userUid, System.currentTimeMillis(), stravaAppDetails.getRefreshToken()), e);
             }
         }
-        userExternalAppsRepository.saveAll(listOfExternalApp);
-        log.debug("Refreshing token finished");
+        userRepository.save(user);
+        log.info("Refreshing token finished");
     }
 
     @Override
     public void deauthorize(String userUid) {
-        UserExternalApp externalApp = userExternalAppsRepository.findStravaByUserUid(userUid)
-                .orElseThrow(() -> new NoSuchElementException("There is no strava connection for user"));
-        StringBuilder sb = new StringBuilder();
-        sb.append(stravaProperties.getBaseDeauthorizationAddress());
-        sb.append("?");
-        sb.append("access_token=");
-        sb.append(externalApp.getAccessToken());
-        ResponseEntity<String> response = restTemplate.postForEntity(sb.toString(),null, String.class);
-        if (!response.getStatusCode().is2xxSuccessful()){
+        User user = userRepository.findById(userUid)
+                .orElseThrow(() -> new NoSuchElementException(String.format("There is no user of id %s ", userUid)));
+        UserExternalApp externalApp = user
+                .getExternalAppList().stream()
+                .filter(uea -> ExternalApps.STRAVA.equals(uea.getAppType()))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException(String.format("User %s doesn't have strava connected", userUid)));
+        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
+                .fromUriString(stravaProperties.getBaseDeauthorizationAddress())
+                .queryParam("access_token", externalApp.getAccessToken());
+        ResponseEntity<String> response = restTemplate.postForEntity(uriComponentsBuilder.toUriString(), null, String.class);
+        if (!response.getStatusCode().is2xxSuccessful()) {
             throw new StravaApiException("There is error during retrieving access token");
         }
-        userExternalAppsRepository.delete(externalApp);
-        log.debug("Successfully deautorize user {0}",userUid);
+        user.getExternalAppList().remove(externalApp);
+        userRepository.save(user);
+        log.info("Successfully deautorize user {0}", userUid);
     }
 
-    private void refreshToken(UserExternalApp externalApp){
-        try {
-            StringBuilder sb = new StringBuilder();
-            sb.append(stravaProperties.getBaseTokenAddress());
-            sb.append("?");
-            sb.append("client_id=");
-            sb.append(stravaProperties.getClientId());
-            sb.append("&");
-            sb.append("client_secret=");
-            sb.append(stravaProperties.getClientSecret());
-            sb.append("&");
-            sb.append("grant_type=");
-            sb.append("refresh_token");
-            sb.append("&");
-            sb.append("refresh_token=");
-            sb.append(externalApp.getRefreshToken());
-            log.info("Refreshing access token using address " + sb.toString());
-            ResponseEntity<AccessTokenResponseDto> response = restTemplate.postForEntity(sb.toString(),null, AccessTokenResponseDto.class);
-            if (!response.getStatusCode().is2xxSuccessful()){
-                throw new StravaApiException("There is error during retrieving access token");
-            }
-            externalApp.setAccessToken(response.getBody().getAccessToken());
-            externalApp.setRefreshToken(response.getBody().getRefreshToken());
-            externalApp.setExpiresAt(response.getBody().getExpiresAt().longValue());
-            log.debug("Successfully refresh token for user {0}",externalApp.getUser().getId());
-        } catch (Exception e){
-            log.error(String.format("Error during refreshing token for user %s, at time %d, using refresh token %s",externalApp.getUser().getId(),System.currentTimeMillis(),externalApp.getRefreshToken()),e);
+    private void refreshToken(UserExternalApp externalApp) {
+        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
+                .fromUriString(stravaProperties.getBaseTokenAddress())
+                .queryParam(CLIENT_ID, stravaProperties.getClientId())
+                .queryParam("client_secret", stravaProperties.getClientSecret())
+                .queryParam("grant_type", "refresh_token")
+                .queryParam("refresh_token", externalApp.getRefreshToken());
+        String refreshUrl = uriComponentsBuilder.toUriString();
+        log.debug("Refreshing access token using address " + refreshUrl);
+        ResponseEntity<AccessTokenResponseDto> response = restTemplate.postForEntity(refreshUrl, null, AccessTokenResponseDto.class);
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            throw new StravaApiException("There is error during retrieving access token");
         }
+        externalApp.setAccessToken(response.getBody().getAccessToken());
+        externalApp.setRefreshToken(response.getBody().getRefreshToken());
+        externalApp.setExpiresAt(response.getBody().getExpiresAt().longValue());
     }
 }

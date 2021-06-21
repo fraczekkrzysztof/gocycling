@@ -1,3 +1,51 @@
+users
+INSERT INTO public.user_list(
+	us_id, us_name)
+	VALUES ('AHi7swlrN7hClVtcLAyT3YLIOjh2', 'Testowy Developer');
+
+	INSERT INTO public.user_list(
+	us_id, us_name)
+	VALUES ('123', 'Testowy user 1');
+
+	INSERT INTO public.user_list(
+	us_id, us_name)
+	VALUES ('123', 'Testowy user 2');
+
+v2
+new club
+{
+        "name": "BEZDUPIE1",
+        "location": "Test123",
+        "latitude": 13.1,
+        "longitude": 13.2,
+        "ownerId": "123",
+        "created": "2020-10-27T19:10:00",
+        "details": "test",
+        "privateMode": false}
+
+new event
+ {
+            "name": "zrobiłem sobie event",
+            "place": "W dupci",
+            "latitude": 13.5,
+            "longitude": 14.4,
+            "dateAndTime": "2020-11-16T08:00:00",
+            "details": "123",
+            "userId": "456",
+            "canceled": false,
+            "routeLink": null,
+            "clubId": 286
+        }
+
+new conversation
+{
+            "userId" : "123"
+            "message" : "Jakiś test od 123"
+}
+
+
+v1
+
 new event
 {
         "name": "TEST",

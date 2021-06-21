@@ -6,15 +6,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-import javax.transaction.Transactional;
+import java.util.List;
 
-@RepositoryRestResource(path = "notifications")
-@Transactional
-public interface NotificationRepository extends JpaRepository<Notification, Long>, NotificationRepositorySearch {
+public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
-    @Override
-    @Query("select n from Notification n join n.event e where e.dateAndTime > current_timestamp() and n.userUid = :userUid order by n.created desc")
+    @Query("select n from Notification n where n.userUid = :userUid")
     Page<Notification> findByUserUid(@Param("userUid") String userUid, Pageable pageable);
+
+    @Query("select n from Notification n where n.eventId in (:ids)")
+    Page<Notification> findByEventIdList(@Param("ids") List<Long> ids, Pageable pageable);
 }
