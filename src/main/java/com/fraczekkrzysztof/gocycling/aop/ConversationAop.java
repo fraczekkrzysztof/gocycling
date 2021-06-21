@@ -1,6 +1,6 @@
 package com.fraczekkrzysztof.gocycling.aop;
 
-import com.fraczekkrzysztof.gocycling.dto.event.ConversationDto;
+import com.fraczekkrzysztof.gocycling.dto.event.ConversationResponseDto;
 import com.fraczekkrzysztof.gocycling.service.notification.NewConversationNotificationGeneratorForConfirmation;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
@@ -34,8 +34,8 @@ public class ConversationAop {
                 eventId = (Long) arg;
             }
         }
-        if (retVal instanceof ConversationDto) {
-            userUid = ((ConversationDto) retVal).getUserId();
+        if (retVal instanceof ConversationResponseDto) {
+            userUid = ((ConversationResponseDto) retVal).getConversation().getUserId();
         }
 
         if (!ObjectUtils.isEmpty(eventId) && !StringUtils.isEmpty(userUid)) {
